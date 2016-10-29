@@ -20,7 +20,7 @@ set(
 set(HEXAGO_ESCAPED_VERSION_STRING "\"${HEXAGO_VERSION_STRING}\"")
 # end basic metadata
 
-# pass in version of library as preprocessor definitions
+# pass in version of program as preprocessor definitions
 add_definitions(-DHEXAGO_VERSION_MAJOR=${PROJECT_VERSION_MAJOR})
 add_definitions(-DHEXAGO_VERSION_MINOR=${PROJECT_VERSION_MINOR})
 add_definitions(-DHEXAGO_VERSION_PATCH=${PROJECT_VERSION_PATCH})
@@ -58,9 +58,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # SDL2
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
-
-# C++ source files
-# ???
 
 add_executable(hexago hexago.cpp)
 
