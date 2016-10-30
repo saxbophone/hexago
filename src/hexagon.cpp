@@ -47,12 +47,10 @@ namespace hexago {
             // convert angle from degress to radians
             double radians = (PI() / 180.0) * ((60.0 * (double)i) + 30);
             // set values of x/y co-ords in points struct array
-            points.points[i].x = this->centre.x + (
-                this->current_size * cos(radians)
-            );
-            points.points[i].y = this->centre.y + (
-                this->current_size * sin(radians)
-            );
+            points.points[i] = {
+                this->centre.x + (int)((double)this->current_size * cos(radians)),
+                this->centre.y + (int)((double)this->current_size * sin(radians))
+            };
         }
         return points;
     }
