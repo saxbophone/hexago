@@ -11,7 +11,8 @@ namespace hexago {
         sdl_timestamp_t birth_time
     ) :
         centre(centre), start_size(start_size), decay_rate(decay_rate),
-        birth_time(birth_time) {}
+        birth_time(birth_time), now_time(birth_time), seconds_alive(0.0),
+        current_size(start_size) {}
 
     Hexagon::Hexagon(
         screen_size_t x, screen_size_t y, hexagon_size_t start_size,
@@ -28,23 +29,23 @@ namespace hexago {
          * start size
          */
         this->current_size = (
-            this->start_size - (hexagon_size_t)(
-                this->decay_rate * this->seconds_alive
+            (hexagon_size_t)(
+                (seconds_alive_t)this->start_size - (
+                    (seconds_alive_t)this->decay_rate * this->seconds_alive
+                )
             )
         );
     }
 
     hexagon_points_t Hexagon::points() {
         // build empty hexagon_points struct
-        hexagon_points_t points = {
-            Point(), Point(), Point(), Point(), Point(), Point()
-        };
+        hexagon_points_t points;
         // construct the co-ordinates of each point of the hexagon
         for(uint8_t i = 0; i < 6; i++) {
             // convert angle from degress to radians
             double radians = (PI() / 180.0) * ((60.0 * (double)i) + 30);
             // set values of x/y co-ords in points struct array
-            points.points[i].update(
+            points.points[i] = Point(
                 this->centre.x + (this->current_size * cos(radians)),
                 this->centre.y + (this->current_size * sin(radians))
             );
@@ -57,7 +58,7 @@ namespace hexago {
          * TODO: Return true/false on whether this hexagon is finished, based
          * on birth time, current time, start size and decay time
          */
-        return (this->seconds_alive <= 0.0) ? true : false;
+        return (this->current_size <= 0) ? true : false;
     }
 
 }

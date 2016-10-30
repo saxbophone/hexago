@@ -7,7 +7,7 @@
 
 namespace hexago {
 
-    typedef uint16_t screen_size_t;
+    typedef int32_t screen_size_t;
     typedef uint32_t sdl_timestamp_t;
 
     // a handy constant value for PI
