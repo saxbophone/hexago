@@ -8,8 +8,8 @@
 
 namespace hexago {
 
-    typedef uint16_t hexagon_size_t;
-    typedef uint8_t hexagon_decay_t;
+    typedef uint32_t hexagon_size_t;
+    typedef uint16_t hexagon_decay_t;
     typedef double seconds_alive_t;
 
     typedef struct hexagon_points_t {
