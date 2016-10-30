@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+#include <SDL2/SDL.h>
+
 #include "types.hpp"
 
 
@@ -13,13 +15,13 @@ namespace hexago {
     typedef double seconds_alive_t;
 
     typedef struct hexagon_points_t {
-        Point points[6];
+        SDL_Point points[6];
     } hexagon_points_t;
 
     class Hexagon {
         private:
             // the location of the hexagon on screen
-            Point centre;
+            SDL_Point centre;
             // the start size of the hexagon (radius in pixels)
             hexagon_size_t start_size;
             // how many pixels smaller the hexagon should get in 1 second
@@ -40,7 +42,7 @@ namespace hexago {
             );
             // constructor using a Point object for the hexagon position
             Hexagon(
-                Point centre, hexagon_size_t start_size,
+                SDL_Point centre, hexagon_size_t start_size,
                 hexagon_decay_t decay_rate, sdl_timestamp_t birth_time
             );
             // updates the hexagon's internal millisecond clock

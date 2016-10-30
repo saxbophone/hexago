@@ -1,13 +1,15 @@
 #include <cmath>
 #include <cstdint>
 
+#include <SDL2/SDL.h>
+
 #include "hexagon.hpp"
 
 
 namespace hexago {
 
     Hexagon::Hexagon(
-        Point centre, hexagon_size_t start_size, hexagon_decay_t decay_rate,
+        SDL_Point centre, hexagon_size_t start_size, hexagon_decay_t decay_rate,
         sdl_timestamp_t birth_time
     ) :
         centre(centre), start_size(start_size), decay_rate(decay_rate),
@@ -17,7 +19,7 @@ namespace hexago {
     Hexagon::Hexagon(
         screen_size_t x, screen_size_t y, hexagon_size_t start_size,
         hexagon_decay_t decay_rate, sdl_timestamp_t birth_time
-    ) : Hexagon(Point(x, y), start_size, decay_rate, birth_time) {}
+    ) : Hexagon({ x, y}, start_size, decay_rate, birth_time) {}
 
     void Hexagon::update(sdl_timestamp_t now) {
         // get milliseconds that have elapsed since birth
@@ -45,9 +47,11 @@ namespace hexago {
             // convert angle from degress to radians
             double radians = (PI() / 180.0) * ((60.0 * (double)i) + 30);
             // set values of x/y co-ords in points struct array
-            points.points[i] = Point(
-                this->centre.x + (this->current_size * cos(radians)),
-                this->centre.y + (this->current_size * sin(radians))
+            points.points[i].x = this->centre.x + (
+                this->current_size * cos(radians)
+            );
+            points.points[i].y = this->centre.y + (
+                this->current_size * sin(radians)
             );
         }
         return points;

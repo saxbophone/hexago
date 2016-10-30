@@ -13,15 +13,6 @@ namespace hexago {
     // a handy constant value for PI
     constexpr double PI() { return atan(1) * 4; }
 
-    class Point {
-        public:
-            screen_size_t x;
-            screen_size_t y;
-            Point();
-            Point(screen_size_t x, screen_size_t y);
-            void update(screen_size_t x, screen_size_t y);
-    };
-
 }
 
 #endif // include guard
