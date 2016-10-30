@@ -59,7 +59,12 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 
-add_executable(hexago hexago.cpp)
+# C++ Sources
+file(GLOB HEXAGO_SOURCES "src/*.cpp")
+# C++ Headers
+file(GLOB HEXAGO_HEADERS "src/*.hpp")
+
+add_executable(hexago ${HEXAGO_SOURCES})
 
 target_link_libraries(hexago ${SDL2_LIBRARY})
 
