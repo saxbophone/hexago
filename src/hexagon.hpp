@@ -30,6 +30,8 @@ namespace hexago {
             sdl_timestamp_t now_time;
             // stores the fractional seconds this hexagon has been alive for
             seconds_alive_t seconds_alive;
+            // stores the current size of the hexagon's radius
+            hexagon_size_t current_size;
         public:
             // constructor using x and y co-ordinates for the hexagon position
             Hexagon(

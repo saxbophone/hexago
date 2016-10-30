@@ -1,3 +1,6 @@
+#include <cmath>
+#include <cstdint>
+
 #include "hexagon.hpp"
 
 
@@ -20,12 +23,32 @@ namespace hexago {
         sdl_timestamp_t alive_time_milliseconds = now - this->birth_time;
         // convert to fractional seconds and store in instance variable
         this->seconds_alive = alive_time_milliseconds / 1000.0;
+        /*
+         * update current size based on current time, birth time, decay time and
+         * start size
+         */
+        this->current_size = (
+            this->start_size - (hexagon_size_t)(
+                this->decay_rate * this->seconds_alive
+            )
+        );
     }
 
     hexagon_points_t Hexagon::points() {
+        // build empty hexagon_points struct
         hexagon_points_t points = {
             Point(), Point(), Point(), Point(), Point(), Point()
         };
+        // construct the co-ordinates of each point of the hexagon
+        for(uint8_t i = 0; i < 6; i++) {
+            // convert angle from degress to radians
+            double radians = (PI() / 180.0) * ((60.0 * (double)i) + 30);
+            // set values of x/y co-ords in points struct array
+            points.points[i].update(
+                this->centre.x + (this->current_size * cos(radians)),
+                this->centre.y + (this->current_size * sin(radians))
+            );
+        }
         return points;
     }
 
@@ -34,7 +57,7 @@ namespace hexago {
          * TODO: Return true/false on whether this hexagon is finished, based
          * on birth time, current time, start size and decay time
          */
-        return false;
+        return (this->seconds_alive <= 0.0) ? true : false;
     }
 
 }
