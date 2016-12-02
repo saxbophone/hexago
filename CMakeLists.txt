@@ -56,8 +56,8 @@ endif()
 # add custom dependencies directory
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # SDL2
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIR})
+find_package(SFML 2 REQUIRED system window graphics network audio)
+include_directories(${SFML_INCLUDE_DIR})
 
 # C++ Sources
 file(GLOB HEXAGO_SOURCES "src/*.cpp")
@@ -66,6 +66,6 @@ file(GLOB HEXAGO_HEADERS "src/*.hpp")
 
 add_executable(hexago ${HEXAGO_SOURCES})
 
-target_link_libraries(hexago ${SDL2_LIBRARY})
+target_link_libraries(hexago ${SFML_LIBRARIES})
 
 install(TARGETS hexago DESTINATION bin)
