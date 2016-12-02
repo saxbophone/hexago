@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "hexago.hpp"
+#include "main.hpp"
 
 // Version numbers are passed as preprocessor definitions by CMake
 const hexago::version_t hexago::VERSION = {
