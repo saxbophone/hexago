@@ -22,7 +22,7 @@ namespace hexago {
         colour_channel_range(0, 255) {
         // seed the random number engine
         std::random_device random_device;
-        this->random_number_engine = std::default_random_engine(
+        this->random_number_engine = std::mt19937(
             random_device()
         );
     }

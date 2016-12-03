@@ -30,7 +30,7 @@ namespace hexago {
             Hexagon next();
         private:
             // the random number engine we'll be using
-            std::default_random_engine random_number_engine;
+            std::mt19937 random_number_engine;
             // the x co-ordinate range within which Hexagons may be spawned
             std::uniform_real_distribution<float> x_spawn_range;
             // the y co-ordinate range within which Hexagons may be spawned
