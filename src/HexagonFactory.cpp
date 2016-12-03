@@ -18,7 +18,8 @@ namespace hexago {
     ) : x_spawn_range(spawn_lower_bound.x, spawn_upper_bound.x),
         y_spawn_range(spawn_lower_bound.y, spawn_upper_bound.y),
         start_size_range(start_size_min, start_size_max),
-        decay_speed_range(decay_speed_min, decay_speed_max) {
+        decay_speed_range(decay_speed_min, decay_speed_max),
+        colour_channel_range(0, 255) {
         // seed the random number engine
         std::random_device random_device;
         this->random_number_engine = std::default_random_engine(
@@ -35,8 +36,11 @@ namespace hexago {
             ),
             start_size_range(this->random_number_engine),
             decay_speed_range(this->random_number_engine),
-            // TODO: Make colour random too
-            sf::Color::White
+            sf::Color(
+                colour_channel_range(this->random_number_engine),
+                colour_channel_range(this->random_number_engine),
+                colour_channel_range(this->random_number_engine)
+            )
         );
     }
 
