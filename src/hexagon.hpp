@@ -21,7 +21,8 @@ namespace hexago {
             Hexagon(
                 sf::Vector2f centre,
                 hexagon_size_t start_size,
-                hexagon_decay_t decay_rate
+                hexagon_decay_t decay_rate,
+                sf::Color colour
             );
             // returns a SFML shape which can be used to render this hexagon
             sf::CircleShape shape();
@@ -36,6 +37,8 @@ namespace hexago {
             hexagon_decay_t decay_rate;
             // counter referencing the time that the hexagon was 'born'
             sf::Clock birth_time;
+            // the colour of this hexagon
+            sf::Color colour;
             /*
              * returns fractional seconds count of how long this hexagon has
              * been 'alive' for
