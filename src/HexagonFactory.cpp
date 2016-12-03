@@ -30,12 +30,16 @@ namespace hexago {
     // returns a randomly-generated Hexagon instance from the factory
     Hexagon HexagonFactory::next() {
         return Hexagon(
+            // random starting position
             sf::Vector2f(
                 x_spawn_range(this->random_number_engine),
                 y_spawn_range(this->random_number_engine)
             ),
+            // random starting size
             start_size_range(this->random_number_engine),
+            // random decay speed
             decay_speed_range(this->random_number_engine),
+            // a random opaque colour
             sf::Color(
                 colour_channel_range(this->random_number_engine),
                 colour_channel_range(this->random_number_engine),
