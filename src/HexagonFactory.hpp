@@ -1,6 +1,8 @@
 #ifndef SAXBOPHONE_HEXAGO_HEXAGON_FACTORY_HPP
 #define SAXBOPHONE_HEXAGO_HEXAGON_FACTORY_HPP
 
+#include <random>
+
 #include <SFML/System/Vector2.hpp>
 
 #include "Hexagon.hpp"
@@ -24,21 +26,19 @@ namespace hexago {
                 hexagon_decay_t decay_speed_min,
                 hexagon_decay_t decay_speed_max
             );
-            // returns a new Hexagon instance from the factory
+            // returns a randomly-generated Hexagon instance from the factory
             Hexagon next();
         private:
-            // the lower bound of the area which Hexagons may be spawned in
-            sf::Vector2f spawn_lower_bound;
-            // the upper bound of the area which Hexagons may be spawned in
-            sf::Vector2f spawn_upper_bound;
-            // the minimum starting size for any new Hexagon
-            hexagon_size_t start_size_min;
-            // the maximum starting size for any new Hexagon
-            hexagon_size_t start_size_max;
-            // the minimum decay speed for any new Hexagon
-            hexagon_decay_t decay_speed_min;
-            // the maximum decay speed for any new Hexagon
-            hexagon_decay_t decay_speed_max;
+            // the random number engine we'll be using
+            std::default_random_engine random_number_engine;
+            // the x co-ordinate range within which Hexagons may be spawned
+            std::uniform_real_distribution<float> x_spawn_range;
+            // the y co-ordinate range within which Hexagons may be spawned
+            std::uniform_real_distribution<float> y_spawn_range;
+            // the range within which start sizes of new Hexagons may fall
+            std::uniform_int_distribution<hexagon_size_t> start_size_range;
+            // the range within which decay speeds of new Hexagons may fall
+            std::uniform_int_distribution<hexagon_size_t> decay_speed_range;
     };
 
 }

@@ -40,12 +40,12 @@ int main() {
 
     // instantiate a HexagonFactory object
     hexago::HexagonFactory factory(
-        sf::Vector2f(0.0f, 0.0f),
-        window_size,
-        window_size.y / 16.0f,
-        window_size.y / 2.0f,
-        window_size.y / 8.0f,
-        (hexago::hexagon_decay_t)(window_size.y / 4.0f)
+        sf::Vector2f(0.0f, 0.0f), // spawn lower bounds
+        window_size, // spawn upper bounds
+        window_size.y / 16.0f, // minimum starting size
+        window_size.y / 2.0f, // maximum starting size
+        window_size.y / 8.0f, // minimum decay speed
+        (hexago::hexagon_decay_t)(window_size.y / 4.0f) // maximum decay speed
     );
     // retrieve a new hexagon object from the factory
     hexago::Hexagon hexagon = factory.next();
