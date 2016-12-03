@@ -15,6 +15,12 @@ namespace hexago {
     typedef uint16_t hexagon_decay_t;
     typedef float seconds_alive_t;
 
+    /*
+     * A class used to represent a Hexagon shape that currently exists on the
+     * screen. Hexagons have a starting size, shrink rate, colour and position.
+     * All of these attributes are set at instantiation and are used to render
+     * an image of the Hexagon at any current point in time.
+     */
     class Hexagon {
         public:
             // constructor
