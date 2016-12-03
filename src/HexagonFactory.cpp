@@ -24,6 +24,8 @@ namespace hexago {
 
     // returns a new Hexagon instance from the factory
     Hexagon HexagonFactory::next() {
+        // seed the random device
+        std::random_device rd;
         // get ranges for random numbers
         std::uniform_real_distribution<float> x_spawn_range(
             this->spawn_lower_bound.x, this->spawn_upper_bound.x
@@ -38,7 +40,7 @@ namespace hexago {
             this->decay_speed_min, this->decay_speed_max
         );
         // get the default random number generator
-        std::default_random_engine generator;
+        std::default_random_engine generator(rd());
         // return a random Hexagon based on these random ranges
         return Hexagon(
             sf::Vector2f(x_spawn_range(generator), y_spawn_range(generator)),

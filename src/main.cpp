@@ -7,6 +7,8 @@
 
 #include "main.hpp"
 #include "Hexagon.hpp"
+#include "HexagonFactory.hpp"
+
 
 // Version numbers are passed as preprocessor definitions by CMake
 const hexago::version_t hexago::VERSION = {
@@ -36,10 +38,17 @@ int main() {
     // get window dimensions
     sf::Vector2f window_size = sf::Vector2f(window.getSize());
 
-    // construct a Hexagon object
-    hexago::Hexagon hexagon(
-        window_size / 2.0f, window_size.y / 2.0f, 60, sf::Color::Red
+    // instantiate a HexagonFactory object
+    hexago::HexagonFactory factory(
+        sf::Vector2f(0.0f, 0.0f),
+        window_size,
+        window_size.y / 16.0f,
+        window_size.y / 2.0f,
+        window_size.y / 8.0f,
+        (hexago::hexagon_decay_t)(window_size.y / 4.0f)
     );
+    // retrieve a new hexagon object from the factory
+    hexago::Hexagon hexagon = factory.next();
 
     while(window.isOpen()) {
         sf::Event Event;
@@ -50,9 +59,7 @@ int main() {
         }
         // check if the hexagon needs 're-birthing'
         if(hexagon.is_dead()) {
-            hexagon = hexago::Hexagon(
-                window_size / 2.0f, window_size.y / 2.0f, 60, sf::Color::Green
-            );
+            hexagon = factory.next();
         }
         // clear the window with black color
         window.clear(sf::Color::Black);
