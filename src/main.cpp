@@ -17,16 +17,25 @@ const hexago::version_t hexago::VERSION = {
 };
 
 int main() {
+    // build window title / console 'greet' message
     const std::string window_title = (
         (std::string)"Hexago v" + hexago::VERSION.string
     );
     printf("%s\n", window_title.c_str());
-    sf::RenderWindow window(sf::VideoMode(800, 600), window_title);
+    // get supported fullscreen video modes
+    std::vector<sf::VideoMode> video_modes = sf::VideoMode::getFullscreenModes();
+    // set anti-aliasing
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 16;
+    // get first (best) fullscreen videomode and init window with it
+    sf::RenderWindow window(video_modes[0], window_title, sf::Style::Default, settings);
     // enable vertical sync so we don't have to worry about framerate sync
     window.setVerticalSyncEnabled(true);
+    // get window dimensions
+    sf::Vector2f window_size = sf::Vector2f(window.getSize());
 
     // construct a Hexagon object
-    hexago::Hexagon hexagon(sf::Vector2f(400, 300), 300, 60);
+    hexago::Hexagon hexagon(window_size / 2.0f, 300, 60);
 
     while(window.isOpen()) {
         sf::Event Event;
@@ -37,7 +46,7 @@ int main() {
         }
         // check if the hexagon needs 're-birthing'
         if(hexagon.is_dead()) {
-            hexagon = hexago::Hexagon(sf::Vector2f(400, 300), 300, 60);
+            hexagon = hexago::Hexagon(window_size / 2.0f, 300, 60);
         }
         // clear the window with black color
         window.clear(sf::Color::Black);
