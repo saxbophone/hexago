@@ -29,10 +29,13 @@ int main() {
     // set anti-aliasing
     sf::ContextSettings settings;
     settings.antialiasingLevel = 16;
+    printf("Starting Screen Saver\n");
     // get first (best) fullscreen videomode and init window with it
     sf::RenderWindow window(
-        video_modes[0], window_title, sf::Style::Default, settings
+        video_modes[0], window_title, sf::Style::None, settings
     );
+    // hide the mouse cursor
+    window.setMouseCursorVisible(false);
     // enable vertical sync so we don't have to worry about framerate sync
     window.setVerticalSyncEnabled(true);
     // get window dimensions
@@ -60,10 +63,30 @@ int main() {
     while(window.isOpen()) {
         sf::Event Event;
         while(window.pollEvent(Event)) {
-            if(Event.type == sf::Event::Closed) {
-                window.close();
-                // skip frame
-                continue;
+            switch(Event.type) {
+                /*
+                 * any of the following event types in this series of case
+                 * fall-throughs warrant a program exit.
+                 */
+                case sf::Event::Closed:
+                case sf::Event::LostFocus:
+                case sf::Event::KeyPressed:
+                case sf::Event::KeyReleased:
+                case sf::Event::MouseWheelScrolled:
+                case sf::Event::MouseButtonPressed:
+                case sf::Event::MouseButtonReleased:
+                case sf::Event::MouseMoved:
+                case sf::Event::MouseEntered:
+                case sf::Event::MouseLeft:
+                case sf::Event::TouchBegan:
+                case sf::Event::TouchMoved:
+                case sf::Event::TouchEnded:
+                    printf("User interrupt!\n");
+                    window.close();
+                    continue;
+                default:
+                    // do nothing;
+                    break;
             }
         }
         // clear the window with black color
@@ -80,5 +103,6 @@ int main() {
         // draw out the rendered frame
         window.display();
     }
+    printf("Exit.\n");
     return 0;
 }
