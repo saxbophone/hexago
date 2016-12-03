@@ -28,14 +28,16 @@ int main() {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 16;
     // get first (best) fullscreen videomode and init window with it
-    sf::RenderWindow window(video_modes[0], window_title, sf::Style::Default, settings);
+    sf::RenderWindow window(
+        video_modes[0], window_title, sf::Style::Default, settings
+    );
     // enable vertical sync so we don't have to worry about framerate sync
     window.setVerticalSyncEnabled(true);
     // get window dimensions
     sf::Vector2f window_size = sf::Vector2f(window.getSize());
 
     // construct a Hexagon object
-    hexago::Hexagon hexagon(window_size / 2.0f, 300, 60);
+    hexago::Hexagon hexagon(window_size / 2.0f, window_size.y / 2.0f, 60);
 
     while(window.isOpen()) {
         sf::Event Event;
@@ -46,7 +48,9 @@ int main() {
         }
         // check if the hexagon needs 're-birthing'
         if(hexagon.is_dead()) {
-            hexagon = hexago::Hexagon(window_size / 2.0f, 300, 60);
+            hexagon = hexago::Hexagon(
+                window_size / 2.0f, window_size.y / 2.0f, 60
+            );
         }
         // clear the window with black color
         window.clear(sf::Color::Black);
