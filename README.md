@@ -1,2 +1,2 @@
 # hexago
-An SDL Screensaver that draws shrinking hexagons of random size and colour
+A Screensaver that draws shrinking hexagons of random size and colour
