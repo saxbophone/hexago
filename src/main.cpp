@@ -37,7 +37,9 @@ int main() {
     sf::Vector2f window_size = sf::Vector2f(window.getSize());
 
     // construct a Hexagon object
-    hexago::Hexagon hexagon(window_size / 2.0f, window_size.y / 2.0f, 60);
+    hexago::Hexagon hexagon(
+        window_size / 2.0f, window_size.y / 2.0f, 60, sf::Color::Red
+    );
 
     while(window.isOpen()) {
         sf::Event Event;
@@ -49,15 +51,13 @@ int main() {
         // check if the hexagon needs 're-birthing'
         if(hexagon.is_dead()) {
             hexagon = hexago::Hexagon(
-                window_size / 2.0f, window_size.y / 2.0f, 60
+                window_size / 2.0f, window_size.y / 2.0f, 60, sf::Color::Green
             );
         }
         // clear the window with black color
         window.clear(sf::Color::Black);
         // create a hexagon shape to render from the Hexagon object
         sf::CircleShape hexagon_shape = hexagon.shape();
-        // set render colour to white
-        hexagon_shape.setFillColor(sf::Color::White);
         // draw the shape on the window
         window.draw(hexagon_shape);
         // draw out the rendered frame

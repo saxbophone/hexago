@@ -10,9 +10,13 @@ namespace hexago {
     Hexagon::Hexagon(
         sf::Vector2f centre,
         hexagon_size_t start_size,
-        hexagon_decay_t decay_rate
+        hexagon_decay_t decay_rate,
+        sf::Color colour
         // all the properties are set via an initialiser list
-    ) : centre(centre), start_size(start_size), decay_rate(decay_rate) {}
+    ) : centre(centre),
+        start_size(start_size),
+        decay_rate(decay_rate),
+        colour(colour) {}
 
     // returns a SFML shape which can be used to render this hexagon
     sf::CircleShape Hexagon::shape() {
@@ -31,6 +35,8 @@ namespace hexago {
         shape.setOrigin(current_size, current_size);
         // now set the shape's position to that of this Hexagon object's centre
         shape.setPosition(this->centre);
+        // finally, set the fill colour of this shape before returning it
+        shape.setFillColor(this->colour);
         return shape;
     }
 
