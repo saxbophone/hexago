@@ -20,12 +20,20 @@ namespace hexago {
 
     // returns a SFML shape which can be used to render this hexagon
     sf::CircleShape Hexagon::shape() {
+        // grab the current size right now as it's used a few times
+        hexagon_size_t current_size = this->current_size();
         /*
          * construct a CircleShape object with a radius of this Hexagon's size
          * and 6 sides (a hexagon)
          */
-        sf::CircleShape shape(this->current_size(), 6);
-        // set the shape's position to that of this Hexagon object
+        sf::CircleShape shape(current_size, 6);
+        /*
+         * set the origin to the centre of the shape, as we want it to remain
+         * anchored to the centre, not the top-left.
+         * the centre is always the radius of the shape
+         */
+        shape.setOrigin(current_size, current_size);
+        // now set the shape's position to that of this Hexagon object's centre
         shape.setPosition(this->centre);
         return shape;
     }
