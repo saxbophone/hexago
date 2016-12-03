@@ -6,7 +6,7 @@
 #include <SFML/System/Vector2.hpp>
 
 #include "main.hpp"
-#include "hexagon.hpp"
+#include "Hexagon.hpp"
 
 // Version numbers are passed as preprocessor definitions by CMake
 const hexago::version_t hexago::VERSION = {
