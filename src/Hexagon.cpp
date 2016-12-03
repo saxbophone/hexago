@@ -6,6 +6,9 @@
 
 namespace hexago {
 
+    // default constructor, does nothing. Provided as convenience.
+    Hexagon::Hexagon() {}
+
     // constructor
     Hexagon::Hexagon(
         sf::Vector2f centre,

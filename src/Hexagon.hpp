@@ -23,6 +23,8 @@ namespace hexago {
      */
     class Hexagon {
         public:
+            // default constructor, does nothing. Provided as convenience.
+            Hexagon();
             // constructor
             Hexagon(
                 sf::Vector2f centre,

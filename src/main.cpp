@@ -42,31 +42,41 @@ int main() {
     hexago::HexagonFactory factory(
         sf::Vector2f(0.0f, 0.0f), // spawn lower bounds
         window_size, // spawn upper bounds
-        window_size.y / 16.0f, // minimum starting size
-        window_size.y / 2.0f, // maximum starting size
-        window_size.y / 8.0f, // minimum decay speed
-        (hexago::hexagon_decay_t)(window_size.y / 4.0f) // maximum decay speed
+        window_size.y / 12.0f, // minimum starting size
+        window_size.y / 6.0f, // maximum starting size
+        window_size.y / 32.0f, // minimum decay speed
+        (hexago::hexagon_decay_t)(window_size.y / 16.0f) // maximum decay speed
     );
-    // retrieve a new hexagon object from the factory
-    hexago::Hexagon hexagon = factory.next();
+
+    const size_t HEXAGON_COUNT = 1024;
+    // this is the array where we store Hexagons.
+    hexago::Hexagon hexagons[HEXAGON_COUNT];
+    // instantiate all the Hexagons in the array
+    for(size_t i = 0; i < HEXAGON_COUNT; i++) {
+        // use the factory to get random hexagons, yay!
+        hexagons[i] = factory.next();
+    }
 
     while(window.isOpen()) {
         sf::Event Event;
         while(window.pollEvent(Event)) {
             if(Event.type == sf::Event::Closed) {
                 window.close();
+                // skip frame
+                continue;
             }
-        }
-        // check if the hexagon needs 're-birthing'
-        if(hexagon.is_dead()) {
-            hexagon = factory.next();
         }
         // clear the window with black color
         window.clear(sf::Color::Black);
-        // create a hexagon shape to render from the Hexagon object
-        sf::CircleShape hexagon_shape = hexagon.shape();
-        // draw the shape on the window
-        window.draw(hexagon_shape);
+        // loop over all the hexagons in the array
+        for(size_t i = 0; i < HEXAGON_COUNT; i++) {
+            // check if the hexagon needs 're-birthing'
+            if(hexagons[i].is_dead()) {
+                hexagons[i] = factory.next();
+            }
+            // render the hexagon to screen
+            window.draw(hexagons[i].shape());
+        }
         // draw out the rendered frame
         window.display();
     }
