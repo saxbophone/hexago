@@ -1,6 +1,5 @@
 #include <string>
 
-#include <cstdint>
 #include <cstdio>
 
 #include <SFML/Graphics.hpp>
