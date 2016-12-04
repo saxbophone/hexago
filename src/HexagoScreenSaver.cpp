@@ -1,3 +1,4 @@
+#include <cmath>
 #include <vector>
 
 #include <SFML/Window.hpp>
@@ -44,8 +45,8 @@ namespace hexago {
             window_size.y * this->config.minimum_hexagon_decay_speed,
             window_size.y * this->config.maximum_hexagon_decay_speed
         );
-        // TODO: Rewrite to actually calculate the count based on screen size
-        this->hexagon_count = 1024;
+        // get the calculated number of hexagons required
+        this->hexagon_count = this->required_number_of_hexagons();
         // initialise the hexagons vector to this many elements
         this->hexagons = std::vector<Hexagon>(this->hexagon_count);
         // populate the array with Hexagon instances from the factory
@@ -96,6 +97,40 @@ namespace hexago {
         }
         // draw out the rendered frame
         this->window.display();
+    }
+
+    float HexagoScreenSaver::HEXAGON_NUMBER_TUNING_CONSTANT = 30.0f;
+
+    size_t HexagoScreenSaver::required_number_of_hexagons() const {
+        // get the screen area first
+        sf::Vector2u screen_size = this->window.getSize();
+        size_t screen_area = screen_size.x * screen_size.y;
+        // now get the average hexagon radius
+        float average_hexagon_radius = (
+            ((float)screen_size.y * this->config.minimum_hexagon_size)
+            +
+            ((float)screen_size.y * this->config.maximum_hexagon_size)
+        ) / 2.0f;
+        /*
+         * the area of a regular hexagon may be found with the side length or 
+         * radius as follows, where r is the radius length of the hexagon:
+         *
+         * a = {[3 * sqrt(3)] * (r ^ 2)} / 2
+         */
+        float average_hexagon_area = (
+            ((3.0f * sqrt(3.0f)) * pow(average_hexagon_radius, 2.0f)) / 2.0f
+        );
+        /*
+         * The number of hexagons needed to attain a given amount of screen
+         * cover may be calculated with the following formula:
+         *
+         * (screen_area / average_hexagon_area) * cover_amount * TUNING_CONSTANT
+         */
+        return (size_t)(
+            ((float)screen_area / average_hexagon_area)
+            * this->config.minimum_screen_cover
+            * HEXAGON_NUMBER_TUNING_CONSTANT
+        );
     }
 
 }

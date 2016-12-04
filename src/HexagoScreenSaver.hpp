@@ -81,6 +81,17 @@ namespace hexago {
             size_t hexagon_count;
             // vector array to store the Hexagons in
             std::vector<Hexagon> hexagons;
+            /*
+             * a tuning constant for the mechanics which calculates the number
+             * of hexagons which need to be drawn
+             */
+            static float HEXAGON_NUMBER_TUNING_CONSTANT;
+            /*
+             * calculates the number of Hexagons that this instance of the
+             * screensaver should have, based on the screen area, number of
+             * Hexagons and average size of them.
+             */
+            size_t required_number_of_hexagons() const;
     };
 
 }
