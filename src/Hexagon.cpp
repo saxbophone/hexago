@@ -48,7 +48,7 @@ namespace hexago {
          * TODO: Return true/false on whether this hexagon is finished, based
          * on birth time, current time, start size and decay time
          */
-        return (bool)(this->current_size() <= 0);
+        return (this->current_size() <= 0);
     }
 
     /*
