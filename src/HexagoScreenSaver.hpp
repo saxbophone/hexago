@@ -54,15 +54,22 @@ namespace hexago {
      */
     class HexagoScreenSaver {
         public:
-            // default constructor - needs a sf::RenderWindow instance at least
-            HexagoScreenSaver(sf::RenderWindow window);
+            // simple constructor - needs a sf::RenderWindow instance at least
+            HexagoScreenSaver(sf::RenderWindow& window);
             // customisation constructor - allows different options to be set
             HexagoScreenSaver(
-                sf::RenderWindow window, screen_saver_config_t config
+                sf::RenderWindow& window, screen_saver_config_t config
             );
             // updates internal state and renders results
             void update();
         private:
+            /*
+             * a reference to the window instance that this application is bound
+             * to, and which it will draw to. This needs to be a reference so
+             * that mutation operations which are done on the Window affect the
+             * actual window instance in the scope it was originally declared.
+             */
+            sf::RenderWindow& window;
             // where we store the config settings
             screen_saver_config_t config;
             // a HexagonFactory instance which will be used to produce Hexagons
