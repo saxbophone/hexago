@@ -1,9 +1,12 @@
 #ifndef SAXBOPHONE_HEXAGO_HEXAGO_SCREEN_SAVER_HPP
 #define SAXBOPHONE_HEXAGO_HEXAGO_SCREEN_SAVER_HPP
 
+#include <vector>
+
 #include <SFML/Graphics.hpp>
 
 #include "HexagonFactory.hpp"
+#include "Hexagon.hpp"
 
 
 namespace hexago {
@@ -60,7 +63,7 @@ namespace hexago {
             HexagoScreenSaver(
                 sf::RenderWindow& window, screen_saver_config_t config
             );
-            // updates internal state and renders results
+            // updates internal state and renders the hexagons to window
             void update();
         private:
             /*
@@ -76,6 +79,8 @@ namespace hexago {
             HexagonFactory hexagon_factory;
             // the maximum number of Hexagons to draw to the screen at once
             size_t hexagon_count;
+            // vector array to store the Hexagons in
+            std::vector<Hexagon> hexagons;
     };
 
 }
