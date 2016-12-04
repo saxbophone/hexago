@@ -1,6 +1,5 @@
 #include <cmath>
 #include <vector>
-#include <iostream>
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
@@ -48,7 +47,6 @@ namespace hexago {
         );
         // get the calculated number of hexagons required
         this->hexagon_count = this->required_number_of_hexagons();
-        std::cout << this->hexagon_count << std::endl;
         // initialise the hexagons vector to this many elements
         this->hexagons = std::vector<Hexagon>(this->hexagon_count);
         // populate the array with Hexagon instances from the factory
