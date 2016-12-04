@@ -1,7 +1,7 @@
 # begin basic metadata
 cmake_minimum_required(VERSION 3.0)
 
-project(hexago VERSION 0.1.1 LANGUAGES CXX)
+project(hexago VERSION 0.2.0 LANGUAGES CXX)
 
 # set default C++ standard to use (C++11)
 set(HEXAGO_CXX_STANDARD "11")
