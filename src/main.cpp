@@ -2,12 +2,10 @@
 
 #include <cstdio>
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System/Vector2.hpp>
+#include <SFML/Window.hpp>
 
 #include "main.hpp"
-#include "Hexagon.hpp"
-#include "HexagonFactory.hpp"
+#include "HexagoScreenSaver.hpp"
 
 
 // Version numbers are passed as preprocessor definitions by CMake
@@ -24,6 +22,8 @@ int main() {
         (std::string)"Hexago v" + hexago::VERSION.string
     );
     printf("%s\n", window_title.c_str());
+
+    /* Now we set up the window instance */
     // get supported fullscreen video modes
     std::vector<sf::VideoMode> video_modes = sf::VideoMode::getFullscreenModes();
     // set anti-aliasing
@@ -38,70 +38,14 @@ int main() {
     window.setMouseCursorVisible(false);
     // enable vertical sync so we don't have to worry about framerate sync
     window.setVerticalSyncEnabled(true);
-    // get window dimensions
-    sf::Vector2f window_size = sf::Vector2f(window.getSize());
 
-    // instantiate a HexagonFactory object
-    hexago::HexagonFactory factory(
-        sf::Vector2f(0.0f, 0.0f), // spawn lower bounds
-        window_size, // spawn upper bounds
-        window_size.y / 12.0f, // minimum starting size
-        window_size.y / 6.0f, // maximum starting size
-        window_size.y / 32.0f, // minimum decay speed
-        (hexago::hexagon_decay_t)(window_size.y / 16.0f) // maximum decay speed
-    );
+    // now we instantiate a HexagoScreenSaver object, handing it our window
+    hexago::HexagoScreenSaver app(window);
 
-    const size_t HEXAGON_COUNT = 1024;
-    // this is the array where we store Hexagons.
-    hexago::Hexagon hexagons[HEXAGON_COUNT];
-    // instantiate all the Hexagons in the array
-    for(size_t i = 0; i < HEXAGON_COUNT; i++) {
-        // use the factory to get random hexagons, yay!
-        hexagons[i] = factory.next();
-    }
-
+    // loop while window remains open
     while(window.isOpen()) {
-        sf::Event Event;
-        while(window.pollEvent(Event)) {
-            switch(Event.type) {
-                /*
-                 * any of the following event types in this series of case
-                 * fall-throughs warrant a program exit.
-                 */
-                case sf::Event::Closed:
-                case sf::Event::LostFocus:
-                case sf::Event::KeyPressed:
-                case sf::Event::KeyReleased:
-                case sf::Event::MouseWheelScrolled:
-                case sf::Event::MouseButtonPressed:
-                case sf::Event::MouseButtonReleased:
-                case sf::Event::MouseMoved:
-                case sf::Event::MouseEntered:
-                case sf::Event::MouseLeft:
-                case sf::Event::TouchBegan:
-                case sf::Event::TouchMoved:
-                case sf::Event::TouchEnded:
-                    printf("User interrupt!\n");
-                    window.close();
-                    continue;
-                default:
-                    // do nothing;
-                    break;
-            }
-        }
-        // clear the window with black color
-        window.clear(sf::Color::Black);
-        // loop over all the hexagons in the array
-        for(size_t i = 0; i < HEXAGON_COUNT; i++) {
-            // check if the hexagon needs 're-birthing'
-            if(hexagons[i].is_dead()) {
-                hexagons[i] = factory.next();
-            }
-            // render the hexagon to screen
-            window.draw(hexagons[i].shape());
-        }
-        // draw out the rendered frame
-        window.display();
+        // call the update method to update internal state and draw the frame
+        app.update();
     }
     printf("Exit.\n");
     return 0;
