@@ -22,7 +22,7 @@ namespace hexago {
         y_spawn_range(spawn_lower_bound.y, spawn_upper_bound.y),
         start_size_range(start_size_min, start_size_max),
         decay_speed_range(decay_speed_min, decay_speed_max),
-        colour_channel_range(0, 255) {
+        colour_channel_range(0, 1) {
         // seed the random number engine
         std::random_device random_device;
         this->random_number_engine = std::mt19937(random_device());
@@ -42,9 +42,10 @@ namespace hexago {
             decay_speed_range(this->random_number_engine),
             // a random opaque colour
             sf::Color(
-                colour_channel_range(this->random_number_engine),
-                colour_channel_range(this->random_number_engine),
-                colour_channel_range(this->random_number_engine)
+                colour_channel_range(this->random_number_engine) * 255,
+                colour_channel_range(this->random_number_engine) * 255,
+                colour_channel_range(this->random_number_engine) * 255,
+                64
             )
         );
     }

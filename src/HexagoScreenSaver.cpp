@@ -22,11 +22,11 @@ namespace hexago {
             // they are written as fractions like this to aid human readability
             {
                 (1.0f / 12.0f), // minimum_hexagon_size
-                (1.0f / 6.0f), // maximum_hexagon_size
+                (1.0f / 12.0f), // maximum_hexagon_size
                 (1.0f / 32.0f), // minimum_hexagon_decay_speed
                 (1.0f / 16.0f), // maximum_hexagon_decay_speed
                 (100.0f / 100.0f), // minimum_screen_cover
-                SPAWN_MODE_DEFAULT, // spawn_mode
+                SPAWN_MODE_BOTTOM, // spawn_mode
                 BG_MODE_BLACK, // background_mode
             }
         ) {}
