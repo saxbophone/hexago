@@ -91,10 +91,27 @@ namespace hexago {
         for(size_t i = 0; i < this->hexagon_count; i++) {
             // check if the hexagon needs 're-birthing'
             if(this->hexagons[i].is_dead()) {
-                // remove it from current position
-                this->hexagons.erase(this->hexagons.begin() + i);
-                // add its replacement at the top of the deque
-                this->hexagons.push_front(this->hexagon_factory.next());
+                if(this->config.spawn_mode == SPAWN_MODE_DEFAULT) {
+                    /*
+                     * default is to just respawn Hexagons in-place, as far as
+                     * z-indexing is concerned
+                     */
+                    this->hexagons[i] = this->hexagon_factory.next();
+                } else {
+                    /*
+                     * for both of the other spawn modes, we remove the dead
+                     * Hexagon from its current position first
+                     */
+                    this->hexagons.erase(this->hexagons.begin() + i);
+                    // now, we put it at top or bottom depending on spawn mode
+                    if(this->config.spawn_mode == SPAWN_MODE_BOTTOM) {
+                        // add its replacement at the start of the deque
+                        this->hexagons.push_front(this->hexagon_factory.next());
+                    } else if(this->config.spawn_mode == SPAWN_MODE_TOP) {
+                        // add its replacement at the end of the deque
+                        this->hexagons.push_back(this->hexagon_factory.next());
+                    }
+                }
             }
             // render the hexagon to screen
             this->window.draw(this->hexagons[i].shape());

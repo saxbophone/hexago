@@ -32,7 +32,7 @@ int main() {
     printf("Starting Screen Saver\n");
     // get first (best) fullscreen videomode and init window with it
     sf::RenderWindow window(
-        video_modes[0], window_title, sf::Style::None, settings
+        video_modes[0], window_title, sf::Style::Fullscreen, settings
     );
     // hide the mouse cursor
     window.setMouseCursorVisible(false);
