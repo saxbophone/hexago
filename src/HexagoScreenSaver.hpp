@@ -1,7 +1,7 @@
 #ifndef SAXBOPHONE_HEXAGO_HEXAGO_SCREEN_SAVER_HPP
 #define SAXBOPHONE_HEXAGO_HEXAGO_SCREEN_SAVER_HPP
 
-#include <vector>
+#include <deque>
 
 #include <SFML/Graphics.hpp>
 
@@ -80,7 +80,7 @@ namespace hexago {
             // the maximum number of Hexagons to draw to the screen at once
             size_t hexagon_count;
             // vector array to store the Hexagons in
-            std::vector<Hexagon> hexagons;
+            std::deque<Hexagon> hexagons;
             /*
              * a tuning constant for the mechanics which calculates the number
              * of hexagons which need to be drawn
