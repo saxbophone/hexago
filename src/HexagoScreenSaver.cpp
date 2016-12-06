@@ -1,5 +1,6 @@
+#include <deque>
+
 #include <cmath>
-#include <vector>
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
@@ -47,8 +48,8 @@ namespace hexago {
         );
         // get the calculated number of hexagons required
         this->hexagon_count = this->required_number_of_hexagons();
-        // initialise the hexagons vector to this many elements
-        this->hexagons = std::vector<Hexagon>(this->hexagon_count);
+        // initialise the hexagons deque to this many elements
+        this->hexagons = std::deque<Hexagon>(this->hexagon_count);
         // populate the array with Hexagon instances from the factory
         for(size_t i = 0; i < this->hexagon_count; i++) {
             this->hexagons[i] = this->hexagon_factory.next();
@@ -90,7 +91,10 @@ namespace hexago {
         for(size_t i = 0; i < this->hexagon_count; i++) {
             // check if the hexagon needs 're-birthing'
             if(this->hexagons[i].is_dead()) {
-                this->hexagons[i] = this->hexagon_factory.next();
+                // remove it from current position
+                this->hexagons.erase(this->hexagons.begin() + i);
+                // add its replacement at the top of the deque
+                this->hexagons.push_front(this->hexagon_factory.next());
             }
             // render the hexagon to screen
             this->window.draw(this->hexagons[i].shape());
