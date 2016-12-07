@@ -100,7 +100,7 @@ namespace hexago {
              * a tuning constant for the mechanics which calculates the number
              * of hexagons which need to be drawn
              */
-            static float HEXAGON_NUMBER_TUNING_CONSTANT;
+            static const float HEXAGON_NUMBER_TUNING_CONSTANT;
             /*
              * calculates the number of Hexagons that this instance of the
              * screensaver should have, based on the screen area, number of

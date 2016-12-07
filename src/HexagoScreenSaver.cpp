@@ -136,7 +136,11 @@ namespace hexago {
         this->window.display();
     }
 
-    float HexagoScreenSaver::HEXAGON_NUMBER_TUNING_CONSTANT = 30.0f;
+    /*
+     * a tuning constant for the mechanics which calculates the number
+     * of hexagons which need to be drawn
+     */
+    const float HexagoScreenSaver::HEXAGON_NUMBER_TUNING_CONSTANT = 30.0f;
 
     size_t HexagoScreenSaver::required_number_of_hexagons() const {
         // get the screen area first
