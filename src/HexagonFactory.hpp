@@ -3,6 +3,8 @@
 
 #include <random>
 
+#include <cstdint>
+
 #include <SFML/System/Vector2.hpp>
 
 #include "Hexagon.hpp"
@@ -26,7 +28,15 @@ namespace hexago {
                 hexagon_size_t start_size_min,
                 hexagon_size_t start_size_max,
                 hexagon_decay_t decay_speed_min,
-                hexagon_decay_t decay_speed_max
+                hexagon_decay_t decay_speed_max,
+                uint8_t red_colour_channel_minimum,
+                uint8_t red_colour_channel_maximum,
+                uint8_t green_colour_channel_minimum,
+                uint8_t green_colour_channel_maximum,
+                uint8_t blue_colour_channel_minimum,
+                uint8_t blue_colour_channel_maximum,
+                uint8_t alpha_colour_channel_minimum,
+                uint8_t alpha_colour_channel_maximum
             );
             // returns a randomly-generated Hexagon instance from the factory
             Hexagon next();
@@ -41,8 +51,15 @@ namespace hexago {
             std::uniform_int_distribution<hexagon_size_t> start_size_range;
             // the range within which decay speeds of new Hexagons may fall
             std::uniform_int_distribution<hexagon_size_t> decay_speed_range;
-            // the range of acceptable values for each RGB channel (0-255)
-            std::uniform_int_distribution<sf::Uint8> colour_channel_range;
+            // the range of acceptable values for each RGB channel
+            // red channel
+            std::uniform_int_distribution<sf::Uint8> red_colour_channel_range;
+            // green channel
+            std::uniform_int_distribution<sf::Uint8> green_colour_channel_range;
+            // blue channel
+            std::uniform_int_distribution<sf::Uint8> blue_colour_channel_range;
+            // alpha channel
+            std::uniform_int_distribution<sf::Uint8> alpha_colour_channel_range;
     };
 
 }

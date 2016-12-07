@@ -3,6 +3,8 @@
 
 #include <deque>
 
+#include <cstdint>
+
 #include <SFML/Graphics.hpp>
 
 #include "HexagonFactory.hpp"
@@ -40,6 +42,19 @@ namespace hexago {
         float maximum_hexagon_size;
         float minimum_hexagon_decay_speed;
         float maximum_hexagon_decay_speed;
+        /*
+         * the following eight properties are given as an unsigned integer with
+         * range 0-255 and describe the minimum/maximum values of the red,
+         * green, blue and alpha channels respectively
+         */
+        uint8_t red_colour_channel_minimum;
+        uint8_t red_colour_channel_maximum;
+        uint8_t green_colour_channel_minimum;
+        uint8_t green_colour_channel_maximum;
+        uint8_t blue_colour_channel_minimum;
+        uint8_t blue_colour_channel_maximum;
+        uint8_t alpha_colour_channel_minimum;
+        uint8_t alpha_colour_channel_maximum;
         /*
          * this property specifies the minimum amount of the screen area which
          * should be covered by Hexagons at any point in time. Also given as a

@@ -25,6 +25,14 @@ namespace hexago {
                 (1.0f / 6.0f), // maximum_hexagon_size
                 (1.0f / 32.0f), // minimum_hexagon_decay_speed
                 (1.0f / 16.0f), // maximum_hexagon_decay_speed
+                0, // red colour channel minimum
+                255, // red colour channel maximum
+                0, // green colour channel minimum
+                255, // green colour channel maximum
+                0, // blue colour channel minimum
+                255, // blue colour channel maximum
+                255, // alpha colour channel minimum
+                255, // alpha colour channel maximum
                 (100.0f / 100.0f), // minimum_screen_cover
                 SPAWN_MODE_DEFAULT, // spawn_mode
                 BG_MODE_BLACK, // background_mode
@@ -44,7 +52,15 @@ namespace hexago {
             window_size.y * this->config.minimum_hexagon_size,
             window_size.y * this->config.maximum_hexagon_size,
             window_size.y * this->config.minimum_hexagon_decay_speed,
-            window_size.y * this->config.maximum_hexagon_decay_speed
+            window_size.y * this->config.maximum_hexagon_decay_speed,
+            this->config.red_colour_channel_minimum,
+            this->config.red_colour_channel_maximum,
+            this->config.green_colour_channel_minimum,
+            this->config.green_colour_channel_maximum,
+            this->config.blue_colour_channel_minimum,
+            this->config.blue_colour_channel_maximum,
+            this->config.alpha_colour_channel_minimum,
+            this->config.alpha_colour_channel_maximum
         );
         // get the calculated number of hexagons required
         this->hexagon_count = this->required_number_of_hexagons();
