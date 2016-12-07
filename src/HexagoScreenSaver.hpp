@@ -80,6 +80,11 @@ namespace hexago {
             );
             // updates internal state and renders the hexagons to window
             void update();
+            /*
+             * a static constant member which stores the default configuration
+             * for the Screen Saver, as screen_saver_config_t struct
+             */
+            static const screen_saver_config_t DEFAULT_CONFIG;
         private:
             /*
              * a reference to the window instance that this application is bound

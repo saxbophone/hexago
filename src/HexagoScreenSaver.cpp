@@ -16,28 +16,7 @@ namespace hexago {
     // simple constructor
     HexagoScreenSaver::HexagoScreenSaver(
         sf::RenderWindow& window
-    ) : HexagoScreenSaver(
-            window,
-            // these are the default config settings
-            // they are written as fractions like this to aid human readability
-            {
-                (1.0f / 12.0f), // minimum_hexagon_size
-                (1.0f / 6.0f), // maximum_hexagon_size
-                (1.0f / 32.0f), // minimum_hexagon_decay_speed
-                (1.0f / 16.0f), // maximum_hexagon_decay_speed
-                0, // red colour channel minimum
-                255, // red colour channel maximum
-                0, // green colour channel minimum
-                255, // green colour channel maximum
-                0, // blue colour channel minimum
-                255, // blue colour channel maximum
-                255, // alpha colour channel minimum
-                255, // alpha colour channel maximum
-                (100.0f / 100.0f), // minimum_screen_cover
-                SPAWN_MODE_DEFAULT, // spawn_mode
-                BG_MODE_BLACK, // background_mode
-            }
-        ) {}
+    ) : HexagoScreenSaver(window, DEFAULT_CONFIG) {}
 
     // customisation constructor
     HexagoScreenSaver::HexagoScreenSaver(
@@ -135,6 +114,29 @@ namespace hexago {
         // draw out the rendered frame
         this->window.display();
     }
+    /*
+     * a static constant member which stores the default configuration
+     * for the Screen Saver, as screen_saver_config_t struct
+     */
+    const screen_saver_config_t HexagoScreenSaver::DEFAULT_CONFIG = {
+        // these are the default config settings
+        // they are written as fractions like this to aid human readability
+        (1.0f / 12.0f), // minimum_hexagon_size
+        (1.0f / 6.0f), // maximum_hexagon_size
+        (1.0f / 32.0f), // minimum_hexagon_decay_speed
+        (1.0f / 16.0f), // maximum_hexagon_decay_speed
+        0, // red colour channel minimum
+        255, // red colour channel maximum
+        0, // green colour channel minimum
+        255, // green colour channel maximum
+        0, // blue colour channel minimum
+        255, // blue colour channel maximum
+        255, // alpha colour channel minimum
+        255, // alpha colour channel maximum
+        (100.0f / 100.0f), // minimum_screen_cover
+        SPAWN_MODE_DEFAULT, // spawn_mode
+        BG_MODE_BLACK, // background_mode
+    };
 
     /*
      * a tuning constant for the mechanics which calculates the number
