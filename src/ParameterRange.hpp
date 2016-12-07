@@ -12,12 +12,16 @@ namespace hexago {
      */
     template<typename type>
     struct ParameterRange {
+        // default constructor
+        ParameterRange() {}
         // this constructor sets both min and max to the value given
-        ParameterRange(type value);
+        ParameterRange(type value) : ParameterRange(value, value) {}
         // this constructor sets min and max to separate respective values
-        ParameterRange(type min, type max);
+        ParameterRange(type min, type max) : min(min), max(max) {}
         // this method validates the struct (min <= max)
-        bool validate();
+        bool valid() {
+            return (this->min <= this->max);
+        }
         type min;
         type max;
     };
