@@ -8,6 +8,7 @@
 #include <SFML/System/Vector2.hpp>
 
 #include "HexagoScreenSaver.hpp"
+#include "ParameterRange.hpp"
 #include "HexagonFactory.hpp"
 
 
@@ -28,18 +29,30 @@ namespace hexago {
         this->hexagon_factory = HexagonFactory(
             sf::Vector2f(0.0f, 0.0f), // spawn lower bounds
             window_size, // spawn upper bounds
-            window_size.y * this->config.minimum_hexagon_size,
-            window_size.y * this->config.maximum_hexagon_size,
-            window_size.y * this->config.minimum_hexagon_decay_speed,
-            window_size.y * this->config.maximum_hexagon_decay_speed,
-            this->config.red_colour_channel_minimum,
-            this->config.red_colour_channel_maximum,
-            this->config.green_colour_channel_minimum,
-            this->config.green_colour_channel_maximum,
-            this->config.blue_colour_channel_minimum,
-            this->config.blue_colour_channel_maximum,
-            this->config.alpha_colour_channel_minimum,
-            this->config.alpha_colour_channel_maximum
+            ParameterRange<hexagon_size_t>(
+                window_size.y * this->config.minimum_hexagon_size,
+                window_size.y * this->config.maximum_hexagon_size
+            ),
+            ParameterRange<hexagon_decay_t>(
+                window_size.y * this->config.minimum_hexagon_decay_speed,
+                window_size.y * this->config.maximum_hexagon_decay_speed
+            ),
+            ParameterRange<uint8_t>(
+                this->config.red_colour_channel_minimum,
+                this->config.red_colour_channel_maximum
+            ),
+            ParameterRange<uint8_t>(
+                this->config.green_colour_channel_minimum,
+                this->config.green_colour_channel_maximum
+            ),
+            ParameterRange<uint8_t>(
+                this->config.blue_colour_channel_minimum,
+                this->config.blue_colour_channel_maximum
+            ),
+            ParameterRange<uint8_t>(
+                this->config.alpha_colour_channel_minimum,
+                this->config.alpha_colour_channel_maximum
+            )
         );
         // get the calculated number of hexagons required
         this->hexagon_count = this->required_number_of_hexagons();
