@@ -6,9 +6,6 @@
 
 namespace hexago {
 
-    // default constructor, does nothing. Provided as convenience.
-    Hexagon::Hexagon() {}
-
     // constructor
     Hexagon::Hexagon(
         sf::Vector2f centre,
@@ -22,7 +19,7 @@ namespace hexago {
         colour(colour) {}
 
     // returns a SFML shape which can be used to render this hexagon
-    sf::CircleShape Hexagon::shape() {
+    sf::CircleShape Hexagon::shape() const {
         // grab the current size right now as it's used a few times
         hexagon_size_t current_size = this->current_size();
         /*
@@ -43,7 +40,7 @@ namespace hexago {
         return shape;
     }
 
-    bool Hexagon::is_dead() {
+    bool Hexagon::is_dead() const {
         /*
          * TODO: Return true/false on whether this hexagon is finished, based
          * on birth time, current time, start size and decay time
@@ -55,7 +52,7 @@ namespace hexago {
      * returns fractional seconds count of how long this hexagon has
      * been 'alive' for
      */
-    seconds_alive_t Hexagon::time_alive() {
+    seconds_alive_t Hexagon::time_alive() const {
         // get the time counted so far by our internal clock, in seconds
         return this->birth_time.getElapsedTime().asSeconds();
     }
@@ -64,7 +61,7 @@ namespace hexago {
      * returns current size of the hexagon in pixels, based on birth
      * time, the time right now and the decay rate
      */
-    hexagon_size_t Hexagon::current_size() {
+    hexagon_size_t Hexagon::current_size() const {
         return (hexagon_size_t)(
             (seconds_alive_t)this->start_size - (
                 (seconds_alive_t)this->decay_rate * this->time_alive()

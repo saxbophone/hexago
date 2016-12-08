@@ -93,12 +93,14 @@ namespace hexago {
              * actual window instance in the scope it was originally declared.
              */
             sf::RenderWindow& window;
+            // store the window's size as we'll use it later on in other places
+            const sf::Vector2u window_size;
             // where we store the config settings
             screen_saver_config_t config;
             // a HexagonFactory instance which will be used to produce Hexagons
             HexagonFactory hexagon_factory;
             // the maximum number of Hexagons to draw to the screen at once
-            size_t hexagon_count;
+            const size_t hexagon_count;
             // vector array to store the Hexagons in
             std::deque<Hexagon> hexagons;
             /*

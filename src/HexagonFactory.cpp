@@ -6,9 +6,6 @@
 
 namespace hexago {
 
-    // default constructor, does nothing. Provided as convenience.
-    HexagonFactory::HexagonFactory() {}
-
     // constructor
     HexagonFactory::HexagonFactory(
         sf::Vector2f spawn_lower_bound,
@@ -19,23 +16,25 @@ namespace hexago {
         ParameterRange<uint8_t> green_colour_channel_range,
         ParameterRange<uint8_t> blue_colour_channel_range,
         ParameterRange<uint8_t> alpha_colour_channel_range
-        // almost all of the properties are set via an initialiser list
-    ) : x_spawn_range(spawn_lower_bound.x, spawn_upper_bound.x),
-        y_spawn_range(spawn_lower_bound.y, spawn_upper_bound.y),
-        start_size_range(start_size_range.min, start_size_range.max),
-        decay_speed_range(decay_speed_range.min, decay_speed_range.max),
-        red_colour_channel_range(
-            red_colour_channel_range.min, red_colour_channel_range.max
-        ),
-        green_colour_channel_range(
-            green_colour_channel_range.min, green_colour_channel_range.max
-        ),
-        blue_colour_channel_range(
-            blue_colour_channel_range.min, blue_colour_channel_range.max
-        ),
-        alpha_colour_channel_range(
-            alpha_colour_channel_range.min, alpha_colour_channel_range.max
-        ) {
+    )
+    :
+    // almost all of the properties are set via an initialiser list
+    x_spawn_range(spawn_lower_bound.x, spawn_upper_bound.x),
+    y_spawn_range(spawn_lower_bound.y, spawn_upper_bound.y),
+    start_size_range(start_size_range.min, start_size_range.max),
+    decay_speed_range(decay_speed_range.min, decay_speed_range.max),
+    red_colour_channel_range(
+        red_colour_channel_range.min, red_colour_channel_range.max
+    ),
+    green_colour_channel_range(
+        green_colour_channel_range.min, green_colour_channel_range.max
+    ),
+    blue_colour_channel_range(
+        blue_colour_channel_range.min, blue_colour_channel_range.max
+    ),
+    alpha_colour_channel_range(
+        alpha_colour_channel_range.min, alpha_colour_channel_range.max
+    ) {
         // seed the random number engine
         std::random_device random_device;
         this->random_number_engine = std::mt19937(random_device());

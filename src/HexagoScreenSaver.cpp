@@ -22,45 +22,43 @@ namespace hexago {
     // customisation constructor
     HexagoScreenSaver::HexagoScreenSaver(
         sf::RenderWindow& window, screen_saver_config_t config
-    ) : window(window), config(config) {
-        // get window dimensions
-        sf::Vector2f window_size = sf::Vector2f(this->window.getSize());
-        // instantiate the HexagonFactory with the config settings we've got
-        this->hexagon_factory = HexagonFactory(
-            sf::Vector2f(0.0f, 0.0f), // spawn lower bounds
-            window_size, // spawn upper bounds
-            ParameterRange<hexagon_size_t>(
-                window_size.y * this->config.minimum_hexagon_size,
-                window_size.y * this->config.maximum_hexagon_size
-            ),
-            ParameterRange<hexagon_decay_t>(
-                window_size.y * this->config.minimum_hexagon_decay_speed,
-                window_size.y * this->config.maximum_hexagon_decay_speed
-            ),
-            ParameterRange<uint8_t>(
-                this->config.red_colour_channel_minimum,
-                this->config.red_colour_channel_maximum
-            ),
-            ParameterRange<uint8_t>(
-                this->config.green_colour_channel_minimum,
-                this->config.green_colour_channel_maximum
-            ),
-            ParameterRange<uint8_t>(
-                this->config.blue_colour_channel_minimum,
-                this->config.blue_colour_channel_maximum
-            ),
-            ParameterRange<uint8_t>(
-                this->config.alpha_colour_channel_minimum,
-                this->config.alpha_colour_channel_maximum
-            )
-        );
-        // get the calculated number of hexagons required
-        this->hexagon_count = this->required_number_of_hexagons();
-        // initialise the hexagons deque to this many elements
-        this->hexagons = std::deque<Hexagon>(this->hexagon_count);
+    )
+    :
+    window(window),
+    window_size(window.getSize()),
+    config(config),
+    hexagon_factory(
+        sf::Vector2f(0.0f, 0.0f), // spawn lower bounds
+        sf::Vector2f(window_size), // spawn upper bounds
+        ParameterRange<hexagon_size_t>(
+            window_size.y * this->config.minimum_hexagon_size,
+            window_size.y * this->config.maximum_hexagon_size
+        ),
+        ParameterRange<hexagon_decay_t>(
+            window_size.y * this->config.minimum_hexagon_decay_speed,
+            window_size.y * this->config.maximum_hexagon_decay_speed
+        ),
+        ParameterRange<uint8_t>(
+            this->config.red_colour_channel_minimum,
+            this->config.red_colour_channel_maximum
+        ),
+        ParameterRange<uint8_t>(
+            this->config.green_colour_channel_minimum,
+            this->config.green_colour_channel_maximum
+        ),
+        ParameterRange<uint8_t>(
+            this->config.blue_colour_channel_minimum,
+            this->config.blue_colour_channel_maximum
+        ),
+        ParameterRange<uint8_t>(
+            this->config.alpha_colour_channel_minimum,
+            this->config.alpha_colour_channel_maximum
+        )
+    ),
+    hexagon_count(required_number_of_hexagons()) {
         // populate the array with Hexagon instances from the factory
         for(size_t i = 0; i < this->hexagon_count; i++) {
-            this->hexagons[i] = this->hexagon_factory.next();
+            this->hexagons.push_back(this->hexagon_factory.next());
         }
     }
 
@@ -159,13 +157,12 @@ namespace hexago {
 
     size_t HexagoScreenSaver::required_number_of_hexagons() const {
         // get the screen area first
-        sf::Vector2u screen_size = this->window.getSize();
-        size_t screen_area = screen_size.x * screen_size.y;
+        size_t screen_area = this->window_size.x * this->window_size.y;
         // now get the average hexagon radius
         float average_hexagon_radius = (
-            ((float)screen_size.y * this->config.minimum_hexagon_size)
+            ((float)this->window_size.y * this->config.minimum_hexagon_size)
             +
-            ((float)screen_size.y * this->config.maximum_hexagon_size)
+            ((float)this->window_size.y * this->config.maximum_hexagon_size)
         ) / 2.0f;
         /*
          * the area of a regular hexagon may be found with the side length or 
