@@ -6,9 +6,6 @@
 
 namespace hexago {
 
-    // default constructor, does nothing. Provided as convenience.
-    HexagonFactory::HexagonFactory() {}
-
     // constructor
     HexagonFactory::HexagonFactory(
         sf::Vector2f spawn_lower_bound,
