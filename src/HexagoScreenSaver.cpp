@@ -22,7 +22,11 @@ namespace hexago {
     // customisation constructor
     HexagoScreenSaver::HexagoScreenSaver(
         sf::RenderWindow& window, screen_saver_config_t config
-    ) : window(window), config(config) {
+    )
+    :
+    window(window),
+    config(config),
+    hexagon_count(required_number_of_hexagons()) {
         // get window dimensions
         sf::Vector2f window_size = sf::Vector2f(this->window.getSize());
         // instantiate the HexagonFactory with the config settings we've got
@@ -54,8 +58,6 @@ namespace hexago {
                 this->config.alpha_colour_channel_maximum
             )
         );
-        // get the calculated number of hexagons required
-        this->hexagon_count = this->required_number_of_hexagons();
         // initialise the hexagons deque to this many elements
         this->hexagons = std::deque<Hexagon>(this->hexagon_count);
         // populate the array with Hexagon instances from the factory

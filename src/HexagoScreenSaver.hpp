@@ -98,7 +98,7 @@ namespace hexago {
             // a HexagonFactory instance which will be used to produce Hexagons
             HexagonFactory hexagon_factory;
             // the maximum number of Hexagons to draw to the screen at once
-            size_t hexagon_count;
+            const size_t hexagon_count;
             // vector array to store the Hexagons in
             std::deque<Hexagon> hexagons;
             /*
