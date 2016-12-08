@@ -7,6 +7,7 @@
 
 #include <SFML/System/Vector2.hpp>
 
+#include "ParameterRange.hpp"
 #include "Hexagon.hpp"
 
 
@@ -25,18 +26,12 @@ namespace hexago {
             HexagonFactory(
                 sf::Vector2f spawn_lower_bound,
                 sf::Vector2f spawn_upper_bound,
-                hexagon_size_t start_size_min,
-                hexagon_size_t start_size_max,
-                hexagon_decay_t decay_speed_min,
-                hexagon_decay_t decay_speed_max,
-                uint8_t red_colour_channel_minimum,
-                uint8_t red_colour_channel_maximum,
-                uint8_t green_colour_channel_minimum,
-                uint8_t green_colour_channel_maximum,
-                uint8_t blue_colour_channel_minimum,
-                uint8_t blue_colour_channel_maximum,
-                uint8_t alpha_colour_channel_minimum,
-                uint8_t alpha_colour_channel_maximum
+                ParameterRange<hexagon_size_t> start_size_range,
+                ParameterRange<hexagon_decay_t> decay_speed_range,
+                ParameterRange<uint8_t> red_colour_channel_range,
+                ParameterRange<uint8_t> green_colour_channel_range,
+                ParameterRange<uint8_t> blue_colour_channel_range,
+                ParameterRange<uint8_t> alpha_colour_channel_range
             );
             // returns a randomly-generated Hexagon instance from the factory
             Hexagon next();
