@@ -13,19 +13,20 @@ namespace hexago {
     template<typename type>
     struct ParameterRange {
         // default constructor
-        ParameterRange() {}
+        ParameterRange();
         // this constructor sets both min and max to the value given
-        ParameterRange(type value) : ParameterRange(value, value) {}
+        ParameterRange(type value);
         // this constructor sets min and max to separate respective values
-        ParameterRange(type min, type max) : min(min), max(max) {}
+        ParameterRange(type min, type max);
         // this method validates the struct (min <= max)
-        bool valid() {
-            return (this->min <= this->max);
-        }
+        bool valid();
         type min;
         type max;
     };
 
 }
+
+// include the template implementation file so c++ doesn't throw a fit
+#include "ParameterRange.inl"
 
 #endif // include guard
