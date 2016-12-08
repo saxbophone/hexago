@@ -15,7 +15,7 @@ namespace hexago {
      : min(min), max(max) {}
     // this method validates the struct (min <= max)
     template<typename type>
-    bool ParameterRange<type>::valid() {
+    bool ParameterRange<type>::valid() const {
         return (this->min <= this->max);
     }
 

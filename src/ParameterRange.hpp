@@ -19,7 +19,7 @@ namespace hexago {
         // this constructor sets min and max to separate respective values
         ParameterRange(type min, type max);
         // this method validates the struct (min <= max)
-        bool valid();
+        bool valid() const;
         type min;
         type max;
     };
