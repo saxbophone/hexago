@@ -35,16 +35,6 @@ namespace hexago {
             // returns true if this hexagon has finished shrinking
             bool is_dead() const;
         private:
-            // the location of the hexagon on screen
-            sf::Vector2f centre;
-            // the start size of the hexagon (radius in pixels)
-            hexagon_size_t start_size;
-            // how many pixels smaller the hexagon should get in 1 second
-            hexagon_decay_t decay_rate;
-            // counter referencing the time that the hexagon was 'born'
-            sf::Clock birth_time;
-            // the colour of this hexagon
-            sf::Color colour;
             /*
              * returns fractional seconds count of how long this hexagon has
              * been 'alive' for
@@ -55,6 +45,17 @@ namespace hexago {
              * time, the time right now and the decay rate
              */
             hexagon_size_t current_size() const;
+
+            // the location of the hexagon on screen
+            sf::Vector2f centre;
+            // the start size of the hexagon (radius in pixels)
+            hexagon_size_t start_size;
+            // how many pixels smaller the hexagon should get in 1 second
+            hexagon_decay_t decay_rate;
+            // counter referencing the time that the hexagon was 'born'
+            sf::Clock birth_time;
+            // the colour of this hexagon
+            sf::Color colour;
     };
 
 }

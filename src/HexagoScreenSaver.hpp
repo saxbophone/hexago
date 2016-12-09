@@ -80,12 +80,20 @@ namespace hexago {
             );
             // updates internal state and renders the hexagons to window
             void update();
+
             /*
              * a static constant member which stores the default configuration
              * for the Screen Saver, as screen_saver_config_t struct
              */
             static const screen_saver_config_t DEFAULT_CONFIG;
         private:
+            /*
+             * calculates the number of Hexagons that this instance of the
+             * screensaver should have, based on the screen area, number of
+             * Hexagons and average size of them.
+             */
+            size_t required_number_of_hexagons() const;
+
             /*
              * a reference to the window instance that this application is bound
              * to, and which it will draw to. This needs to be a reference so
@@ -108,12 +116,6 @@ namespace hexago {
              * of hexagons which need to be drawn
              */
             static const float HEXAGON_NUMBER_TUNING_CONSTANT;
-            /*
-             * calculates the number of Hexagons that this instance of the
-             * screensaver should have, based on the screen area, number of
-             * Hexagons and average size of them.
-             */
-            size_t required_number_of_hexagons() const;
     };
 
 }

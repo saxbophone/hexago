@@ -7,9 +7,9 @@
 namespace hexago {
 
     typedef struct version_t {
-        uint8_t major;
-        uint8_t minor;
-        uint8_t patch;
+        const uint8_t major;
+        const uint8_t minor;
+        const uint8_t patch;
         const char* string;
     } version_t;
 

@@ -125,6 +125,7 @@ namespace hexago {
         // draw out the rendered frame
         this->window.display();
     }
+
     /*
      * a static constant member which stores the default configuration
      * for the Screen Saver, as screen_saver_config_t struct
@@ -148,12 +149,6 @@ namespace hexago {
         SPAWN_MODE_DEFAULT, // spawn_mode
         BG_MODE_BLACK, // background_mode
     };
-
-    /*
-     * a tuning constant for the mechanics which calculates the number
-     * of hexagons which need to be drawn
-     */
-    const float HexagoScreenSaver::HEXAGON_NUMBER_TUNING_CONSTANT = 30.0f;
 
     size_t HexagoScreenSaver::required_number_of_hexagons() const {
         // get the screen area first
@@ -185,5 +180,11 @@ namespace hexago {
             * HEXAGON_NUMBER_TUNING_CONSTANT
         );
     }
+
+    /*
+     * a tuning constant for the mechanics which calculates the number
+     * of hexagons which need to be drawn
+     */
+    const float HexagoScreenSaver::HEXAGON_NUMBER_TUNING_CONSTANT = 30.0f;
 
 }

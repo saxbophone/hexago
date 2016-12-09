@@ -20,6 +20,7 @@ namespace hexago {
         ParameterRange(type min, type max);
         // this method validates the struct (min <= max)
         bool valid() const;
+
         type min;
         type max;
     };
