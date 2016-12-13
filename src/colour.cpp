@@ -7,14 +7,19 @@
 namespace hexago {
 
     // prototype an internal private function
-    static xyz_colour_t xyz_a_from_lab_a(xyz_colour_t input);
+    static xyz_colour_t xyz_a_from_lab_a(lab_colour_t input);
 
     // returns an RGBA sf::Color instance for the given HSV+A colour
     // algorithm: http://www.easyrgb.com/index.php?X=MATH&H=21#text21
     sf::Color colour_from_hsv_a(hsv_colour_t input) {
         // if saturation is 0, then we can return early
         if(input.s == 0.0f) {
-            return sf::Color(0, 0, 0, (uint8_t)(input.alpha * 255.0f));
+            return sf::Color(
+                (uint8_t)(input.v * 255.0f),
+                (uint8_t)(input.v * 255.0f),
+                (uint8_t)(input.v * 255.0f),
+                (uint8_t)(input.alpha * 255.0f)
+            );
         } else {
             float temp_h = input.h * 6;
             // h value must be snapped to range 0.0 -> 6.0
@@ -93,7 +98,7 @@ namespace hexago {
      * the given LAB+A colour
      * algorithm: http://www.easyrgb.com/index.php?X=MATH&H=08#text8
      */
-    static xyz_colour_t xyz_a_from_lab_a(xyz_colour_t input) {
+    static xyz_colour_t xyz_a_from_lab_a(lab_colour_t input) {
         // TODO: Write Code!
     }
 
