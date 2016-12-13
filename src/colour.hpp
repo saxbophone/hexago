@@ -45,10 +45,10 @@ namespace hexago {
     } lab_colour_t;
 
     // returns an RGBA sf::Color instance for the given HSV+A colour
-    sf::Color colour_from_hsv_a(hsv_colour_t hsv_a_colour);
+    sf::Color colour_from_hsv_a(hsv_colour_t input);
 
     // returns an RGBA sf::Color instance for the given LAB+A colour
-    sf::Color colour_from_lab_a(lab_colour_t lab_a_colour);
+    sf::Color colour_from_lab_a(lab_colour_t input);
 
 }
 
