@@ -6,7 +6,25 @@
 
 namespace hexago {
 
-    // prototype an internal private function
+    /*
+     * This struct type is used to represent a XYZ+Alpha Colour
+     * (according to the CIE 1931 Colour Space).
+     *
+     * This type is intended to be used as an intermediate colour space type
+     * for converting between the LAB and RGB Colour spaces, as there is no
+     * defined calculation for converting directly between LAB and RGB
+     */
+    typedef struct xyz_colour_t {
+        float x; // range is 0.0 -> 95.047
+        float y; // range is 0.0 -> 100.000
+        float z; // range is 0.0 -> 108.883
+        float alpha; // range is 0.0 -> 1.0
+    } xyz_colour_t;
+
+    /*
+     * prototype the internal private function for
+     * LAB+Alpha -> CIE 1931/XYZ+Alpha
+     */
     static xyz_colour_t xyz_a_from_lab_a(lab_colour_t input);
 
     // returns an RGBA sf::Color instance for the given HSV+A colour
