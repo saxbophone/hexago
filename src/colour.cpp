@@ -6,6 +6,9 @@
 
 namespace hexago {
 
+    // prototype an internal private function
+    static xyz_colour_t xyz_a_from_lab_a(xyz_colour_t input);
+
     // returns an RGBA sf::Color instance for the given HSV+A colour
     // algorithm: http://www.easyrgb.com/index.php?X=MATH&H=21#text21
     sf::Color colour_from_hsv_a(hsv_colour_t input) {
@@ -78,13 +81,17 @@ namespace hexago {
     }
 
     // returns an RGBA sf::Color instance for the given LAB+A colour
+    // algorithm: http://www.easyrgb.com/index.php?X=MATH&H=01#text1
     sf::Color colour_from_lab_a(lab_colour_t input) {
+        // get xyz_a colour from lab_a colour first
+        xyz_colour_t intermediate = xyz_a_from_lab_a(input);
         // TODO: Write Code!
     }
 
     /*
      * private function, returns a CIE 1931 (XYZ) + Alpha colour instance for
      * the given LAB+A colour
+     * algorithm: http://www.easyrgb.com/index.php?X=MATH&H=08#text8
      */
     static xyz_colour_t xyz_a_from_lab_a(xyz_colour_t input) {
         // TODO: Write Code!
