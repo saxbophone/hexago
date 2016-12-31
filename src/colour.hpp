@@ -13,10 +13,10 @@ namespace hexago {
      */
     typedef struct hsv_colour_t {
         // all values are in range 0.0 -> 1.0
-        float h; // hue
-        float s; // saturation
-        float v; // value
-        float alpha; // alpha
+        double h; // hue
+        double s; // saturation
+        double v; // value
+        double alpha; // alpha
     } hsv_colour_t;
 
     /*
@@ -26,7 +26,7 @@ namespace hexago {
         uint8_t l; // lightness, with range 0 -> 100
         int8_t a; // a component, with range -100 -> 100
         int8_t b; // b component, with range -100 -> 100
-        float alpha; // range is 0.0 -> 1.0
+        double alpha; // range is 0.0 -> 1.0
     } lab_colour_t;
 
     // returns an RGBA sf::Color instance for the given HSV+A colour
