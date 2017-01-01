@@ -1,8 +1,6 @@
 #ifndef SAXBOPHONE_HEXAGO_COLOUR_HPP
 #define SAXBOPHONE_HEXAGO_COLOUR_HPP
 
-#include <cstdint>
-
 #include <SFML/Graphics/Color.hpp>
 
 
@@ -23,9 +21,9 @@ namespace hexago {
      * This struct type is used to represent a CIE-L*ab+Alpha Colour
      */
     typedef struct lab_colour_t {
-        uint8_t l; // lightness, with range 0 -> 100
-        int8_t a; // a component, with range -100 -> 100
-        int8_t b; // b component, with range -100 -> 100
+        double l; // lightness, with range 0 -> 100
+        double a; // a component, with range -100 -> 100
+        double b; // b component, with range -100 -> 100
         double alpha; // range is 0.0 -> 1.0
     } lab_colour_t;
 
