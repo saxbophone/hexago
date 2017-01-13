@@ -100,9 +100,16 @@ namespace hexago {
                 if(this->config.spawn_mode == SPAWN_MODE_DEFAULT) {
                     /*
                      * default is to just respawn Hexagons in-place, as far as
-                     * z-indexing is concerned
+                     * z-indexing is concerned. This series of calls:
+                     * 1. Removes the existing Hexagon object
+                     * 2. Inserts a new one from the factory in its place
                      */
-                    this->hexagons[i] = this->hexagon_factory.next();
+                    this->hexagons.insert(
+                        this->hexagons.erase(
+                            this->hexagons.begin() + i
+                        ),
+                        this->hexagon_factory.next()
+                    );
                 } else {
                     /*
                      * for both of the other spawn modes, we remove the dead
