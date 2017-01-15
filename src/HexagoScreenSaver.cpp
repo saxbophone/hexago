@@ -38,19 +38,19 @@ namespace hexago {
             window_size.y * this->config.minimum_hexagon_decay_speed,
             window_size.y * this->config.maximum_hexagon_decay_speed
         ),
-        ParameterRange<uint8_t>(
-            this->config.red_colour_channel_minimum,
-            this->config.red_colour_channel_maximum
+        ParameterRange<double>(
+            this->config.d_colour_channel_minimum,
+            this->config.d_colour_channel_maximum
         ),
-        ParameterRange<uint8_t>(
-            this->config.green_colour_channel_minimum,
-            this->config.green_colour_channel_maximum
+        ParameterRange<double>(
+            this->config.e_colour_channel_minimum,
+            this->config.e_colour_channel_maximum
         ),
-        ParameterRange<uint8_t>(
-            this->config.blue_colour_channel_minimum,
-            this->config.blue_colour_channel_maximum
+        ParameterRange<double>(
+            this->config.f_colour_channel_minimum,
+            this->config.f_colour_channel_maximum
         ),
-        ParameterRange<uint8_t>(
+        ParameterRange<double>(
             this->config.alpha_colour_channel_minimum,
             this->config.alpha_colour_channel_maximum
         )

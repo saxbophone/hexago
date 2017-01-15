@@ -26,10 +26,10 @@ namespace hexago {
                 sf::Vector2f spawn_upper_bound,
                 ParameterRange<hexagon_size_t> start_size_range,
                 ParameterRange<hexagon_decay_t> decay_speed_range,
-                ParameterRange<uint8_t> red_colour_channel_range,
-                ParameterRange<uint8_t> green_colour_channel_range,
-                ParameterRange<uint8_t> blue_colour_channel_range,
-                ParameterRange<uint8_t> alpha_colour_channel_range
+                ParameterRange<double> d_colour_channel_range,
+                ParameterRange<double> e_colour_channel_range,
+                ParameterRange<double> f_colour_channel_range,
+                ParameterRange<double> alpha_colour_channel_range
             );
             // returns a randomly-generated Hexagon instance from the factory
             Hexagon next();
@@ -46,13 +46,13 @@ namespace hexago {
             std::uniform_int_distribution<hexagon_size_t> decay_speed_range;
             // the range of acceptable values for each RGB channel
             // red channel
-            std::uniform_int_distribution<sf::Uint8> red_colour_channel_range;
+            std::uniform_real_distribution<double> d_colour_channel_range;
             // green channel
-            std::uniform_int_distribution<sf::Uint8> green_colour_channel_range;
+            std::uniform_real_distribution<double> e_colour_channel_range;
             // blue channel
-            std::uniform_int_distribution<sf::Uint8> blue_colour_channel_range;
+            std::uniform_real_distribution<double> f_colour_channel_range;
             // alpha channel
-            std::uniform_int_distribution<sf::Uint8> alpha_colour_channel_range;
+            std::uniform_real_distribution<double> alpha_colour_channel_range;
     };
 
 }

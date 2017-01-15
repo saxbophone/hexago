@@ -43,18 +43,24 @@ namespace hexago {
         float minimum_hexagon_decay_speed;
         float maximum_hexagon_decay_speed;
         /*
-         * the following eight properties are given as an unsigned integer with
-         * range 0-255 and describe the minimum/maximum values of the red,
-         * green, blue and alpha channels respectively
+         * the following eight properties give the maximum and minimum values
+         * that each colour channel may have. The colour system being used may
+         * be one of RGB+A, HSV+A or CIEL*a*b+A, so the valid range of these is
+         * dependent upon what system is being used. To simplify things, the
+         * types of all of these are double to cover the range of every colour
+         * system being used.
+         *
+         * channel mappings:
+         * d = R/H/L, e = G/S/a, f = B/V/b - alpha is alpha at all times.
          */
-        uint8_t red_colour_channel_minimum;
-        uint8_t red_colour_channel_maximum;
-        uint8_t green_colour_channel_minimum;
-        uint8_t green_colour_channel_maximum;
-        uint8_t blue_colour_channel_minimum;
-        uint8_t blue_colour_channel_maximum;
-        uint8_t alpha_colour_channel_minimum;
-        uint8_t alpha_colour_channel_maximum;
+        double d_colour_channel_minimum;
+        double d_colour_channel_maximum;
+        double e_colour_channel_minimum;
+        double e_colour_channel_maximum;
+        double f_colour_channel_minimum;
+        double f_colour_channel_maximum;
+        double alpha_colour_channel_minimum;
+        double alpha_colour_channel_maximum;
         /*
          * this property specifies the minimum amount of the screen area which
          * should be covered by Hexagons at any point in time. Also given as a

@@ -12,10 +12,10 @@ namespace hexago {
         sf::Vector2f spawn_upper_bound,
         ParameterRange<hexagon_size_t> start_size_range,
         ParameterRange<hexagon_decay_t> decay_speed_range,
-        ParameterRange<uint8_t> red_colour_channel_range,
-        ParameterRange<uint8_t> green_colour_channel_range,
-        ParameterRange<uint8_t> blue_colour_channel_range,
-        ParameterRange<uint8_t> alpha_colour_channel_range
+        ParameterRange<double> d_colour_channel_range,
+        ParameterRange<double> e_colour_channel_range,
+        ParameterRange<double> f_colour_channel_range,
+        ParameterRange<double> alpha_colour_channel_range
     ) :
         /*
          * all of the properties are set via an initialiser list
@@ -29,14 +29,14 @@ namespace hexago {
         y_spawn_range(spawn_lower_bound.y, spawn_upper_bound.y),
         start_size_range(start_size_range.min, start_size_range.max),
         decay_speed_range(decay_speed_range.min, decay_speed_range.max),
-        red_colour_channel_range(
-            red_colour_channel_range.min, red_colour_channel_range.max
+        d_colour_channel_range(
+            d_colour_channel_range.min, d_colour_channel_range.max
         ),
-        green_colour_channel_range(
-            green_colour_channel_range.min, green_colour_channel_range.max
+        e_colour_channel_range(
+            e_colour_channel_range.min, e_colour_channel_range.max
         ),
-        blue_colour_channel_range(
-            blue_colour_channel_range.min, blue_colour_channel_range.max
+        f_colour_channel_range(
+            f_colour_channel_range.min, f_colour_channel_range.max
         ),
         alpha_colour_channel_range(
             alpha_colour_channel_range.min, alpha_colour_channel_range.max
@@ -56,9 +56,9 @@ namespace hexago {
             decay_speed_range(this->random_number_engine),
             // a random opaque colour
             sf::Color(
-                red_colour_channel_range(this->random_number_engine),
-                green_colour_channel_range(this->random_number_engine),
-                blue_colour_channel_range(this->random_number_engine),
+                d_colour_channel_range(this->random_number_engine),
+                e_colour_channel_range(this->random_number_engine),
+                f_colour_channel_range(this->random_number_engine),
                 alpha_colour_channel_range(this->random_number_engine)
             )
         );
