@@ -2,6 +2,7 @@
 
 #include "HexagonFactory.hpp"
 #include "Hexagon.hpp"
+#include "colour.hpp"
 
 
 namespace hexago {
@@ -55,12 +56,12 @@ namespace hexago {
             // random decay speed
             decay_speed_range(this->random_number_engine),
             // a random opaque colour
-            sf::Color(
+            colour_from_lab_a({
                 d_colour_channel_range(this->random_number_engine),
                 e_colour_channel_range(this->random_number_engine),
                 f_colour_channel_range(this->random_number_engine),
-                alpha_colour_channel_range(this->random_number_engine)
-            )
+                alpha_colour_channel_range(this->random_number_engine),
+            })
         );
     }
 
