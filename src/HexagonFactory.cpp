@@ -1,6 +1,7 @@
 #include <random>
 
 #include "HexagonFactory.hpp"
+#include "HexagonFactoryConfig.hpp"
 #include "Hexagon.hpp"
 #include "colour.hpp"
 
@@ -8,39 +9,36 @@
 namespace hexago {
 
     // constructor
-    HexagonFactory::HexagonFactory(
-        sf::Vector2f spawn_lower_bound,
-        sf::Vector2f spawn_upper_bound,
-        ParameterRange<hexagon_size_t> start_size_range,
-        ParameterRange<hexagon_decay_t> decay_speed_range,
-        ParameterRange<double> d_colour_channel_range,
-        ParameterRange<double> e_colour_channel_range,
-        ParameterRange<double> f_colour_channel_range,
-        ParameterRange<double> alpha_colour_channel_range
-    ) :
+    HexagonFactory::HexagonFactory(HexagonFactoryConfig& config) :
         /*
-         * all of the properties are set via an initialiser list
+         * all of the properties are set via an initialiser list, reading from
+         * config object.
          *
          * std::random_device has two parens for a reason:
          * once for constructing the type
          * second for calling it, as that's what will give us random samples
          */
         random_number_engine(std::mt19937(std::random_device()())),
-        x_spawn_range(spawn_lower_bound.x, spawn_upper_bound.x),
-        y_spawn_range(spawn_lower_bound.y, spawn_upper_bound.y),
-        start_size_range(start_size_range.min, start_size_range.max),
-        decay_speed_range(decay_speed_range.min, decay_speed_range.max),
+        x_spawn_range(config.spawn_lower_bound.x, config.spawn_upper_bound.x),
+        y_spawn_range(config.spawn_lower_bound.y, config.spawn_upper_bound.y),
+        start_size_range(
+            config.start_size_range.min, config.start_size_range.max
+        ),
+        decay_speed_range(
+            config.decay_speed_range.min, config.decay_speed_range.max
+        ),
         d_colour_channel_range(
-            d_colour_channel_range.min, d_colour_channel_range.max
+            config.d_colour_channel_range.min, config.d_colour_channel_range.max
         ),
         e_colour_channel_range(
-            e_colour_channel_range.min, e_colour_channel_range.max
+            config.e_colour_channel_range.min, config.e_colour_channel_range.max
         ),
         f_colour_channel_range(
-            f_colour_channel_range.min, f_colour_channel_range.max
+            config.f_colour_channel_range.min, config.f_colour_channel_range.max
         ),
         alpha_colour_channel_range(
-            alpha_colour_channel_range.min, alpha_colour_channel_range.max
+            config.alpha_colour_channel_range.min,
+            config.alpha_colour_channel_range.max
         ) {}
 
     // returns a randomly-generated Hexagon instance from the factory
