@@ -107,14 +107,15 @@ namespace hexago {
             ParameterRange<float>((1.0 / 12.0), (1.0 / 6.0)),
             // decay_speed_range
             ParameterRange<float>((1.0 / 32.0), (1.0 / 16.0)),
-            COLOUR_MODEL_LAB, // colour_model
-            ParameterRange<colour_channel_t>(0.0, 100.0), // d_colour_channel_range
-            // // e_colour_channel_range
-            ParameterRange<colour_channel_t>(-100.0, 100.0),
+            COLOUR_MODEL_RGB, // colour_model
+            // d_colour_channel_range
+            ParameterRange<colour_channel_t>(0.0, 255.0),
+            // e_colour_channel_range
+            ParameterRange<colour_channel_t>(0.0, 255.0),
             // f_colour_channel_range
-            ParameterRange<colour_channel_t>(-100.0, 100.0),
+            ParameterRange<colour_channel_t>(0.0, 255.0),
             // alpha_colour_channel_range
-            ParameterRange<colour_channel_t>(1.0, 1.0),
+            ParameterRange<colour_channel_t>(100.0, 100.0),
             (100.0f / 100.0f), // minimum_screen_cover
             SPAWN_MODE_BOTTOM, // spawn_mode
             BG_COLOUR_BLACK // background_mode

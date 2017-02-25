@@ -1,9 +1,12 @@
 #include <random>
 
+#include <colrcv-0/models/rgb.h>
+#include <colrcv-0/models/hsv.h>
+#include <colrcv-0/models/lab.h>
+
 #include "HexagonFactory.hpp"
 #include "HexagonFactoryConfig.hpp"
 #include "Hexagon.hpp"
-#include "colour.hpp"
 
 
 namespace hexago {
@@ -49,34 +52,6 @@ namespace hexago {
 
     // returns a randomly-generated Hexagon instance from the factory
     Hexagon HexagonFactory::next() {
-        // get a new random colour from the specified colour model
-        sf::Color hexagon_colour;
-        switch(this->colour_model) {
-            case hexago::COLOUR_MODEL_RGB:
-                hexagon_colour = sf::Color(
-                    d_colour_channel_range(this->random_number_engine),
-                    e_colour_channel_range(this->random_number_engine),
-                    f_colour_channel_range(this->random_number_engine),
-                    alpha_colour_channel_range(this->random_number_engine)
-                );
-                break;
-            case hexago::COLOUR_MODEL_HSV:
-                hexagon_colour = colour_from_hsv_a({
-                    d_colour_channel_range(this->random_number_engine),
-                    e_colour_channel_range(this->random_number_engine),
-                    f_colour_channel_range(this->random_number_engine),
-                    alpha_colour_channel_range(this->random_number_engine),
-                });
-                break;
-            case hexago::COLOUR_MODEL_LAB:
-                hexagon_colour = colour_from_lab_a({
-                    d_colour_channel_range(this->random_number_engine),
-                    e_colour_channel_range(this->random_number_engine),
-                    f_colour_channel_range(this->random_number_engine),
-                    alpha_colour_channel_range(this->random_number_engine),
-                });
-                break;
-        }
         return Hexagon(
             // random starting position
             sf::Vector2f(
@@ -87,8 +62,57 @@ namespace hexago {
             start_size_range(this->random_number_engine),
             // random decay speed
             decay_speed_range(this->random_number_engine),
-            // use colour generated above
-            hexagon_colour
+            // use a new random colour
+            this->colour()
+        );
+    }
+
+    // gets a new random colour for a Hexagon, based on the chosen colour model
+    sf::Color HexagonFactory::colour() {
+        /*
+         * set the colour differently depending on what model is being used
+         * libcolrcv is used to achieve these conversions (if needed)
+         */
+        // colrcv rgb colour to be used later
+        colrcv_rgb_t rgb;
+        switch(this->colour_model) {
+            case hexago::COLOUR_MODEL_RGB: {                
+                // just store channels in rgb struct
+                rgb.r = d_colour_channel_range(this->random_number_engine);
+                rgb.g = e_colour_channel_range(this->random_number_engine);
+                rgb.b = f_colour_channel_range(this->random_number_engine);
+                break;
+            }
+            case hexago::COLOUR_MODEL_HSV: {                
+                // create a new hsv colour
+                colrcv_hsv_t hsv = {
+                    d_colour_channel_range(this->random_number_engine),
+                    e_colour_channel_range(this->random_number_engine),
+                    f_colour_channel_range(this->random_number_engine),
+                };
+                // convert to rgb
+                colrcv_hsv_to_rgb(hsv, &rgb);
+                break;
+            }
+            case hexago::COLOUR_MODEL_LAB: {                
+                // create a new lab colour
+                colrcv_lab_t lab = {
+                    d_colour_channel_range(this->random_number_engine),
+                    e_colour_channel_range(this->random_number_engine),
+                    f_colour_channel_range(this->random_number_engine),
+                };
+                // convert to rgb
+                colrcv_lab_to_rgb(lab, &rgb);
+                break;
+            }
+        }
+        // convert colrcv rgb colour to an sf::Color instance and attach alpha
+        return sf::Color(
+            rgb.r,
+            rgb.g,
+            rgb.b,
+            // alpha is given as range from 0-100 so turn this into 0-255
+            alpha_colour_channel_range(this->random_number_engine) / 100.0 * 255
         );
     }
 

@@ -58,6 +58,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # SDL2
 find_package(SFML 2 REQUIRED system window graphics network audio)
 include_directories(${SFML_INCLUDE_DIR})
+# COLRCV
+find_package(COLRCV 0.1 REQUIRED)
+include_directories(${COLRCV_INCLUDE_DIR})
 
 # C++ Sources
 file(GLOB HEXAGO_SOURCES "src/*.cpp")
@@ -66,6 +69,6 @@ file(GLOB HEXAGO_HEADERS "src/*.hpp")
 
 add_executable(hexago ${HEXAGO_SOURCES})
 
-target_link_libraries(hexago ${SFML_LIBRARIES})
+target_link_libraries(hexago ${SFML_LIBRARIES} ${COLRCV_LIBRARIES})
 
 install(TARGETS hexago DESTINATION bin)
