@@ -48,6 +48,9 @@ namespace hexago {
             // alpha channel
             std::uniform_real_distribution<colour_channel_t>
                 alpha_colour_channel_range;
+
+            // gets a new random colour for a Hexagon
+            sf::Color colour();
     };
 
 }
