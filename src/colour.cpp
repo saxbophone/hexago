@@ -54,9 +54,9 @@ namespace hexago {
             // floor convert to int
             uint8_t temp_i = (uint8_t)temp_h;
             // this further lot of temporaries are used in the channel multiplex
-            double temp_a = input.v * (1.0 - input.s);
-            double temp_b = input.v * (1.0 - input.s * (temp_h - temp_i));
-            double temp_c = input.v * (
+            const double temp_a = input.v * (1.0 - input.s);
+            const double temp_b = input.v * (1.0 - input.s * (temp_h - temp_i));
+            const double temp_c = input.v * (
                 1.0 - input.s * (1.0 - (temp_h - temp_i))
             );
             // prepare variables to hold the double RGB values for later use
@@ -131,9 +131,9 @@ namespace hexago {
         double temp_x = input.a / 500.0 + temp_y;
         double temp_z = temp_y - input.b / 200.0;
         // calculate cube power of each channel
-        double temp_y_cubed = pow(temp_y, 3.0);
-        double temp_x_cubed = pow(temp_x, 3.0);
-        double temp_z_cubed = pow(temp_z, 3.0);
+        const double temp_y_cubed = pow(temp_y, 3.0);
+        const double temp_x_cubed = pow(temp_x, 3.0);
+        const double temp_z_cubed = pow(temp_z, 3.0);
         // multiplex values
         if(temp_y_cubed > 0.008856) {
             temp_y = temp_y_cubed;
@@ -164,9 +164,9 @@ namespace hexago {
      */
     static sf::Color colour_from_xyz_a(xyz_colour_t input) {
         // shrink larger numbers down to float values
-        double temp_x = input.x / 100.0;
-        double temp_y = input.y / 100.0;
-        double temp_z = input.z / 100.0;
+        const double temp_x = input.x / 100.0;
+        const double temp_y = input.y / 100.0;
+        const double temp_z = input.z / 100.0;
         // multiplex the values
         double temp_r = temp_x *  3.2406 + temp_y * -1.5372 + temp_z * -0.4986;
         double temp_g = temp_x * -0.9689 + temp_y *  1.8758 + temp_z *  0.0415;

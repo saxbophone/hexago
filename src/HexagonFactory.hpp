@@ -3,11 +3,7 @@
 
 #include <random>
 
-#include <cstdint>
-
-#include <SFML/System/Vector2.hpp>
-
-#include "ParameterRange.hpp"
+#include "HexagonFactoryConfig.hpp"
 #include "Hexagon.hpp"
 
 
@@ -16,20 +12,13 @@ namespace hexago {
     /*
      * A class which produces new random Hexagon objects when requested.
      * The properties of the Hexagon objects produced are controlled by
-     * parameters set at the HexagonFactory's instantiation.
+     * the config object passed to the constructor.
      */
     class HexagonFactory {
         public:
             // constructor
             HexagonFactory(
-                sf::Vector2f spawn_lower_bound,
-                sf::Vector2f spawn_upper_bound,
-                ParameterRange<hexagon_size_t> start_size_range,
-                ParameterRange<hexagon_decay_t> decay_speed_range,
-                ParameterRange<uint8_t> red_colour_channel_range,
-                ParameterRange<uint8_t> green_colour_channel_range,
-                ParameterRange<uint8_t> blue_colour_channel_range,
-                ParameterRange<uint8_t> alpha_colour_channel_range
+                HexagonFactoryConfig& config, sf::Vector2u window_size
             );
             // returns a randomly-generated Hexagon instance from the factory
             Hexagon next();
@@ -46,13 +35,17 @@ namespace hexago {
             std::uniform_int_distribution<hexagon_size_t> decay_speed_range;
             // the range of acceptable values for each RGB channel
             // red channel
-            std::uniform_int_distribution<sf::Uint8> red_colour_channel_range;
+            std::uniform_real_distribution<colour_channel_t>
+                d_colour_channel_range;
             // green channel
-            std::uniform_int_distribution<sf::Uint8> green_colour_channel_range;
+            std::uniform_real_distribution<colour_channel_t>
+                e_colour_channel_range;
             // blue channel
-            std::uniform_int_distribution<sf::Uint8> blue_colour_channel_range;
+            std::uniform_real_distribution<colour_channel_t>
+                f_colour_channel_range;
             // alpha channel
-            std::uniform_int_distribution<sf::Uint8> alpha_colour_channel_range;
+            std::uniform_real_distribution<colour_channel_t>
+                alpha_colour_channel_range;
     };
 
 }
