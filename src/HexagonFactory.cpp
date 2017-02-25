@@ -32,6 +32,7 @@ namespace hexago {
             window_size.y * config.decay_speed_range.min,
             window_size.y * config.decay_speed_range.max
         ),
+        colour_model(config.colour_model),
         d_colour_channel_range(
             config.d_colour_channel_range.min, config.d_colour_channel_range.max
         ),
@@ -48,6 +49,34 @@ namespace hexago {
 
     // returns a randomly-generated Hexagon instance from the factory
     Hexagon HexagonFactory::next() {
+        // get a new random colour from the specified colour model
+        sf::Color hexagon_colour;
+        switch(this->colour_model) {
+            case hexago::COLOUR_MODEL_RGB:
+                hexagon_colour = sf::Color(
+                    d_colour_channel_range(this->random_number_engine),
+                    e_colour_channel_range(this->random_number_engine),
+                    f_colour_channel_range(this->random_number_engine),
+                    alpha_colour_channel_range(this->random_number_engine)
+                );
+                break;
+            case hexago::COLOUR_MODEL_HSV:
+                hexagon_colour = colour_from_hsv_a({
+                    d_colour_channel_range(this->random_number_engine),
+                    e_colour_channel_range(this->random_number_engine),
+                    f_colour_channel_range(this->random_number_engine),
+                    alpha_colour_channel_range(this->random_number_engine),
+                });
+                break;
+            case hexago::COLOUR_MODEL_LAB:
+                hexagon_colour = colour_from_lab_a({
+                    d_colour_channel_range(this->random_number_engine),
+                    e_colour_channel_range(this->random_number_engine),
+                    f_colour_channel_range(this->random_number_engine),
+                    alpha_colour_channel_range(this->random_number_engine),
+                });
+                break;
+        }
         return Hexagon(
             // random starting position
             sf::Vector2f(
@@ -58,13 +87,8 @@ namespace hexago {
             start_size_range(this->random_number_engine),
             // random decay speed
             decay_speed_range(this->random_number_engine),
-            // a random opaque colour
-            colour_from_lab_a({
-                d_colour_channel_range(this->random_number_engine),
-                e_colour_channel_range(this->random_number_engine),
-                f_colour_channel_range(this->random_number_engine),
-                alpha_colour_channel_range(this->random_number_engine),
-            })
+            // use colour generated above
+            hexagon_colour
         );
     }
 

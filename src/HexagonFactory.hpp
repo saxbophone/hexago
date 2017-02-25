@@ -33,14 +33,16 @@ namespace hexago {
             std::uniform_int_distribution<hexagon_size_t> start_size_range;
             // the range within which decay speeds of new Hexagons may fall
             std::uniform_int_distribution<hexagon_size_t> decay_speed_range;
-            // the range of acceptable values for each RGB channel
-            // red channel
+            // the colour model to use for hexagon colours
+            hexago::colour_model_t colour_model;
+            // the range of acceptable values for each colour channel
+            // channel d
             std::uniform_real_distribution<colour_channel_t>
                 d_colour_channel_range;
-            // green channel
+            // channel e
             std::uniform_real_distribution<colour_channel_t>
                 e_colour_channel_range;
-            // blue channel
+            // channel f
             std::uniform_real_distribution<colour_channel_t>
                 f_colour_channel_range;
             // alpha channel
