@@ -38,3 +38,8 @@ cmake_install.cmake
 install_manifest.txt
 CTestTestfile.cmake
 Testing
+
+# build directory
+build/*
+# allow .gitkeep file in build directory
+!build/.gitkeep
