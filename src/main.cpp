@@ -28,11 +28,11 @@ int main() {
     std::vector<sf::VideoMode> video_modes = sf::VideoMode::getFullscreenModes();
     // set anti-aliasing
     sf::ContextSettings settings;
-    settings.antialiasingLevel = 16;
+    settings.antialiasingLevel = 8;
     printf("Starting Screen Saver\n");
     // get first (best) fullscreen videomode and init window with it
     sf::RenderWindow window(
-        video_modes[0], window_title, sf::Style::None, settings
+        video_modes[0], window_title, sf::Style::Fullscreen, settings
     );
     // hide the mouse cursor
     window.setMouseCursorVisible(false);

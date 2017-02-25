@@ -3,8 +3,7 @@
 
 #include <random>
 
-#include <SFML/System/Vector2.hpp>
-
+#include "HexagonFactoryConfig.hpp"
 #include "Hexagon.hpp"
 
 
@@ -13,20 +12,13 @@ namespace hexago {
     /*
      * A class which produces new random Hexagon objects when requested.
      * The properties of the Hexagon objects produced are controlled by
-     * parameters set at the HexagonFactory's instantiation.
+     * the config object passed to the constructor.
      */
     class HexagonFactory {
         public:
-            // default constructor, does nothing. Provided as convenience.
-            HexagonFactory();
             // constructor
             HexagonFactory(
-                sf::Vector2f spawn_lower_bound,
-                sf::Vector2f spawn_upper_bound,
-                hexagon_size_t start_size_min,
-                hexagon_size_t start_size_max,
-                hexagon_decay_t decay_speed_min,
-                hexagon_decay_t decay_speed_max
+                HexagonFactoryConfig& config, sf::Vector2u window_size
             );
             // returns a randomly-generated Hexagon instance from the factory
             Hexagon next();
@@ -41,8 +33,24 @@ namespace hexago {
             std::uniform_int_distribution<hexagon_size_t> start_size_range;
             // the range within which decay speeds of new Hexagons may fall
             std::uniform_int_distribution<hexagon_size_t> decay_speed_range;
-            // the range of acceptable values for each RGB channel (0-255)
-            std::uniform_int_distribution<sf::Uint8> colour_channel_range;
+            // the colour model to use for hexagon colours
+            hexago::colour_model_t colour_model;
+            // the range of acceptable values for each colour channel
+            // channel d
+            std::uniform_real_distribution<colour_channel_t>
+                d_colour_channel_range;
+            // channel e
+            std::uniform_real_distribution<colour_channel_t>
+                e_colour_channel_range;
+            // channel f
+            std::uniform_real_distribution<colour_channel_t>
+                f_colour_channel_range;
+            // alpha channel
+            std::uniform_real_distribution<colour_channel_t>
+                alpha_colour_channel_range;
+
+            // gets a new random colour for a Hexagon
+            sf::Color colour();
     };
 
 }

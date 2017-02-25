@@ -23,8 +23,6 @@ namespace hexago {
      */
     class Hexagon {
         public:
-            // default constructor, does nothing. Provided as convenience.
-            Hexagon();
             // constructor
             Hexagon(
                 sf::Vector2f centre,
@@ -33,10 +31,21 @@ namespace hexago {
                 sf::Color colour
             );
             // returns a SFML shape which can be used to render this hexagon
-            sf::CircleShape shape();
+            sf::CircleShape shape() const;
             // returns true if this hexagon has finished shrinking
-            bool is_dead();
+            bool is_dead() const;
         private:
+            /*
+             * returns fractional seconds count of how long this hexagon has
+             * been 'alive' for
+             */
+            seconds_alive_t time_alive() const;
+            /*
+             * returns current size of the hexagon in pixels, based on birth
+             * time, the time right now and the decay rate
+             */
+            hexagon_size_t current_size() const;
+
             // the location of the hexagon on screen
             sf::Vector2f centre;
             // the start size of the hexagon (radius in pixels)
@@ -47,16 +56,6 @@ namespace hexago {
             sf::Clock birth_time;
             // the colour of this hexagon
             sf::Color colour;
-            /*
-             * returns fractional seconds count of how long this hexagon has
-             * been 'alive' for
-             */
-            seconds_alive_t time_alive();
-            /*
-             * returns current size of the hexagon in pixels, based on birth
-             * time, the time right now and the decay rate
-             */
-            hexagon_size_t current_size();
     };
 
 }
