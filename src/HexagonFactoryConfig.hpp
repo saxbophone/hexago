@@ -26,10 +26,8 @@ namespace hexago {
      * and configure a HexagonFactory
      */
     struct HexagonFactoryConfig {
-        sf::Vector2f spawn_lower_bound;
-        sf::Vector2f spawn_upper_bound;
-        ParameterRange<hexagon_size_t> start_size_range;
-        ParameterRange<hexagon_decay_t> decay_speed_range;
+        ParameterRange<float> start_size_range;
+        ParameterRange<float> decay_speed_range;
         colour_model_t colour_model;
         /*
          * the following four properties give the maximum and minimum values
@@ -49,10 +47,8 @@ namespace hexago {
 
         // constructor
         HexagonFactoryConfig(
-            sf::Vector2f spawn_lower_bound,
-            sf::Vector2f spawn_upper_bound,
-            ParameterRange<hexagon_size_t> start_size_range,
-            ParameterRange<hexagon_decay_t> decay_speed_range,
+            ParameterRange<float> start_size_range,
+            ParameterRange<float> decay_speed_range,
             colour_model_t colour_model,
             ParameterRange<colour_channel_t> d_colour_channel_range,
             ParameterRange<colour_channel_t> e_colour_channel_range,

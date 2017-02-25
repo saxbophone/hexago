@@ -18,7 +18,7 @@ namespace hexago {
     // simple constructor
     HexagoScreenSaver::HexagoScreenSaver(
         sf::RenderWindow& window
-    ) : HexagoScreenSaver(window, default_config(window.getSize())) {}
+    ) : HexagoScreenSaver(window, default_config()) {}
 
     // customisation constructor
     HexagoScreenSaver::HexagoScreenSaver(
@@ -28,7 +28,7 @@ namespace hexago {
     window(window),
     window_size(window.getSize()),
     config(config),
-    hexagon_factory(config),
+    hexagon_factory(config, window_size),
     hexagon_count(required_number_of_hexagons()) {
         // populate the array with Hexagon instances from the factory
         for(size_t i = 0; i < this->hexagon_count; i++) {
@@ -101,19 +101,12 @@ namespace hexago {
     }
 
     // retrieves the default config
-    HexagoScreenSaverConfig HexagoScreenSaver::default_config(
-        sf::Vector2u window_size_int
-    ) {
-        sf::Vector2f window_size(
-            (float)window_size_int.x, (float)window_size_int.y
-        );
+    HexagoScreenSaverConfig HexagoScreenSaver::default_config() {
         return HexagoScreenSaverConfig(
-            sf::Vector2f(0.0f, 0.0f), // spawn_lower_bound
-            window_size, // spawn_upper_bound
             // start_size_range
-            ParameterRange<hexagon_size_t>((window_size_int.y / 12), (window_size_int.y / 6)),
+            ParameterRange<float>((1.0 / 12.0), (1.0 / 6.0)),
             // decay_speed_range
-            ParameterRange<hexagon_decay_t>((window_size_int.y / 32), (window_size_int.y / 16)),
+            ParameterRange<float>((1.0 / 32.0), (1.0 / 16.0)),
             COLOUR_MODEL_LAB, // colour_model
             ParameterRange<colour_channel_t>(0.0, 100.0), // d_colour_channel_range
             // // e_colour_channel_range
@@ -131,15 +124,12 @@ namespace hexago {
     size_t HexagoScreenSaver::required_number_of_hexagons() const {
         // get the screen area first
         size_t screen_area = this->window_size.x * this->window_size.y;
-        printf("screen_area: %zu\n", screen_area);
-        printf("Hexagon size range: %i-%i\n", this->config.start_size_range.min, this->config.start_size_range.max);
         // now get the average hexagon radius
         float average_hexagon_radius = (
-            ((float)this->config.start_size_range.min)
+            (this->window_size.y * this->config.start_size_range.min)
             +
-            ((float)this->config.start_size_range.max)
+            (this->window_size.y * this->config.start_size_range.max)
         ) / 2.0f;
-        printf("average_hexagon_radius: %f\n", average_hexagon_radius);
         /*
          * the area of a regular hexagon may be found with the side length or 
          * radius as follows, where r is the radius length of the hexagon:
@@ -149,7 +139,6 @@ namespace hexago {
         float average_hexagon_area = (
             ((3.0f * sqrt(3.0f)) * pow(average_hexagon_radius, 2.0f)) / 2.0f
         );
-        printf("average_hexagon_area: %f\n", average_hexagon_area);
         /*
          * The number of hexagons needed to attain a given amount of screen
          * cover may be calculated with the following formula:

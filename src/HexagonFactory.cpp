@@ -9,23 +9,28 @@
 namespace hexago {
 
     // constructor
-    HexagonFactory::HexagonFactory(HexagonFactoryConfig& config) :
+    HexagonFactory::HexagonFactory(
+        HexagonFactoryConfig& config, sf::Vector2u window_size
+    ) :
         /*
          * all of the properties are set via an initialiser list, reading from
-         * config object.
+         * config object. additionally, the window size needs to be known so
+         * that the spawn bounds can be configured and sizes relative to y size.
          *
          * std::random_device has two parens for a reason:
          * once for constructing the type
          * second for calling it, as that's what will give us random samples
          */
         random_number_engine(std::mt19937(std::random_device()())),
-        x_spawn_range(config.spawn_lower_bound.x, config.spawn_upper_bound.x),
-        y_spawn_range(config.spawn_lower_bound.y, config.spawn_upper_bound.y),
+        x_spawn_range(0.0f, (float)window_size.x),
+        y_spawn_range(0.0f, (float)window_size.y),
         start_size_range(
-            config.start_size_range.min, config.start_size_range.max
+            window_size.y * config.start_size_range.min,
+            window_size.y * config.start_size_range.max
         ),
         decay_speed_range(
-            config.decay_speed_range.min, config.decay_speed_range.max
+            window_size.y * config.decay_speed_range.min,
+            window_size.y * config.decay_speed_range.max
         ),
         d_colour_channel_range(
             config.d_colour_channel_range.min, config.d_colour_channel_range.max

@@ -17,7 +17,9 @@ namespace hexago {
     class HexagonFactory {
         public:
             // constructor
-            HexagonFactory(HexagonFactoryConfig& config);
+            HexagonFactory(
+                HexagonFactoryConfig& config, sf::Vector2u window_size
+            );
             // returns a randomly-generated Hexagon instance from the factory
             Hexagon next();
         private:

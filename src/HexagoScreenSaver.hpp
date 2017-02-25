@@ -28,9 +28,7 @@ namespace hexago {
             // updates internal state and renders the hexagons to window
             void update();
             // retrieves the default config
-            static HexagoScreenSaverConfig default_config(
-                sf::Vector2u window_size
-            );
+            static HexagoScreenSaverConfig default_config();
 
         private:
             /*
