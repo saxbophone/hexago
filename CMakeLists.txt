@@ -56,7 +56,7 @@ endif()
 # add custom dependencies directory
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # SDL2
-find_package(SFML 2 REQUIRED system window graphics network audio)
+find_package(SFML 2 REQUIRED COMPONENTS audio graphics window system)
 include_directories(${SFML_INCLUDE_DIR})
 # COLRCV
 find_package(COLRCV 0.1 REQUIRED)
@@ -69,6 +69,11 @@ file(GLOB HEXAGO_HEADERS "src/*.hpp")
 
 add_executable(hexago ${HEXAGO_SOURCES})
 
-target_link_libraries(hexago ${SFML_LIBRARIES} ${COLRCV_LIBRARIES})
+# we only need to link dependencies if it's a static build
+if(SFML_STATIC_LIBRARIES)
+    target_link_libraries(hexago ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${COLRCV_LIBRARIES})
+else()
+    target_link_libraries(hexago ${SFML_LIBRARIES} ${COLRCV_LIBRARIES})
+endif()
 
 install(TARGETS hexago DESTINATION bin)
