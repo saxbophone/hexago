@@ -70,7 +70,12 @@ file(GLOB HEXAGO_HEADERS "src/*.hpp")
 add_executable(hexago ${HEXAGO_SOURCES})
 
 # we only need to link dependencies if it's a static build
+# we want to statically link SFML and the C and C++ standard libraries too as
+# it's unlikely a recipient of the software will have these on their system.
+#
+# This is allowed as per the GCC Runtime Exception.
 if(SFML_STATIC_LIBRARIES)
+    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
     target_link_libraries(hexago ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${COLRCV_LIBRARIES})
 else()
     target_link_libraries(hexago ${SFML_LIBRARIES} ${COLRCV_LIBRARIES})
