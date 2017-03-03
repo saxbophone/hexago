@@ -52,6 +52,19 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
     enable_cxx_compiler_flag_if_supported("-Werror")
 endif()
 
+# default build type is static unless on linux
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(HEXAGO_STATIC_BUILD OFF CACHE BOOL "")
+else()
+    set(HEXAGO_STATIC_BUILD ON CACHE BOOL "")
+endif()
+
+# do necessary things if static build was requested
+if(HEXAGO_STATIC_BUILD)
+    message(STATUS "Performing a Static Build")
+    set(SFML_STATIC_LIBRARIES ON)
+endif()
+
 # dependencies
 # add custom dependencies directory
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
@@ -69,15 +82,23 @@ file(GLOB HEXAGO_HEADERS "src/*.hpp")
 
 add_executable(hexago ${HEXAGO_SOURCES})
 
-# we only need to link dependencies if it's a static build
-# we want to statically link SFML and the C and C++ standard libraries too as
-# it's unlikely a recipient of the software will have these on their system.
-#
-# This is allowed as per the GCC Runtime Exception.
-if(SFML_STATIC_LIBRARIES)
-    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+# we need to do additional linking steps if it's a static build
+if(HEXAGO_STATIC_BUILD)
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        # if we're using GCC then these are the flags we need to use to enable
+        # statically linking the C and C++ standard libraries
+        #
+        # this is useful if it's unlikely a recipient of the software will
+        # have the correct versions of these on their system (e.g. MinGW
+        # compiling for Windows)
+        #
+        # This is allowed as per the GCC Runtime Exception.
+        set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+    endif()
+    # if we're statically linking, then we need to manually link SFML's dependencies as well
     target_link_libraries(hexago ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${COLRCV_LIBRARIES})
 else()
+    # if we're dynamically linking, we only need to link SFML and COLRCV
     target_link_libraries(hexago ${SFML_LIBRARIES} ${COLRCV_LIBRARIES})
 endif()
 
