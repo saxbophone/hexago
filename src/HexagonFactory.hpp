@@ -30,9 +30,9 @@ namespace hexago {
             // the y co-ordinate range within which Hexagons may be spawned
             std::uniform_real_distribution<float> y_spawn_range;
             // the range within which start sizes of new Hexagons may fall
-            std::uniform_int_distribution<hexagon_size_t> start_size_range;
+            std::uniform_real_distribution<hexagon_size_t> start_size_range;
             // the range within which decay speeds of new Hexagons may fall
-            std::uniform_int_distribution<hexagon_size_t> decay_speed_range;
+            std::uniform_real_distribution<hexagon_size_t> decay_speed_range;
             // the colour model to use for hexagon colours
             hexago::colour_model_t colour_model;
             // the range of acceptable values for each colour channel

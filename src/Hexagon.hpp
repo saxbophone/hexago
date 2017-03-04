@@ -11,9 +11,9 @@
 
 namespace hexago {
 
-    typedef int32_t hexagon_size_t;
-    typedef uint16_t hexagon_decay_t;
-    typedef float seconds_alive_t;
+    typedef double hexagon_size_t;
+    typedef double hexagon_decay_t;
+    typedef double seconds_alive_t;
 
     /*
      * A class used to represent a Hexagon shape that currently exists on the
