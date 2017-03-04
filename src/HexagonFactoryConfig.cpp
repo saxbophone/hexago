@@ -9,8 +9,8 @@ namespace hexago {
 
     // constructor
     HexagonFactoryConfig::HexagonFactoryConfig(
-        ParameterRange<float> start_size_range,
-        ParameterRange<float> decay_speed_range,
+        ParameterRange<double> start_size_range,
+        ParameterRange<double> decay_speed_range,
         colour_model_t colour_model,
         ParameterRange<colour_channel_t> d_colour_channel_range,
         ParameterRange<colour_channel_t> e_colour_channel_range,
