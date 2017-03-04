@@ -19,6 +19,7 @@ namespace hexago {
         ParameterRange<colour_channel_t> e_colour_channel_range,
         ParameterRange<colour_channel_t> f_colour_channel_range,
         ParameterRange<colour_channel_t> alpha_colour_channel_range,
+        unsigned int framerate,
         float minimum_screen_cover,
         hexagon_spawn_mode_t spawn_mode,
         background_colour_t background_colour
@@ -34,6 +35,7 @@ namespace hexago {
             f_colour_channel_range,
             alpha_colour_channel_range
         ),
+        framerate,
         minimum_screen_cover,
         spawn_mode,
         background_colour
@@ -42,12 +44,14 @@ namespace hexago {
     // delegated constructor
     HexagoScreenSaverConfig::HexagoScreenSaverConfig(
         HexagonFactoryConfig sub_config,
+        unsigned int framerate,
         float minimum_screen_cover,
         hexagon_spawn_mode_t spawn_mode,
         background_colour_t background_colour
     )
     :
     HexagonFactoryConfig(sub_config),
+    framerate(framerate),
     minimum_screen_cover(minimum_screen_cover),
     spawn_mode(spawn_mode),
     background_colour(background_colour)

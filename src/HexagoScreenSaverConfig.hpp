@@ -31,6 +31,7 @@ namespace hexago {
      * doesn't need to care about.
      */
     struct HexagoScreenSaverConfig: public HexagonFactoryConfig {
+        unsigned int framerate; // used for SFML framerate-limiting
         /*
          * this property specifies the minimum amount of the screen area which
          * should be covered by Hexagons at any point in time. Also given as a
@@ -51,6 +52,7 @@ namespace hexago {
             ParameterRange<colour_channel_t> e_colour_channel_range,
             ParameterRange<colour_channel_t> f_colour_channel_range,
             ParameterRange<colour_channel_t> alpha_colour_channel_range,
+            unsigned int framerate,
             float minimum_screen_cover,
             hexagon_spawn_mode_t spawn_mode,
             background_colour_t background_colour
@@ -59,6 +61,7 @@ namespace hexago {
         // delegated constructor
         HexagoScreenSaverConfig(
             HexagonFactoryConfig sub_config,
+            unsigned int framerate,
             float minimum_screen_cover,
             hexagon_spawn_mode_t spawn_mode,
             background_colour_t background_colour

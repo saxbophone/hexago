@@ -30,6 +30,8 @@ namespace hexago {
     config(config),
     hexagon_factory(config, window_size),
     hexagon_count(required_number_of_hexagons()) {
+        // set window framerate to what is given in config
+        window.setFramerateLimit(config.framerate);
         // populate the array with Hexagon instances from the factory
         for(size_t i = 0; i < this->hexagon_count; i++) {
             this->hexagons.push_back(this->hexagon_factory.next());
@@ -116,6 +118,7 @@ namespace hexago {
             ParameterRange<colour_channel_t>(0.0, 255.0),
             // alpha_colour_channel_range
             ParameterRange<colour_channel_t>(100.0, 100.0),
+            30, // framerate
             (100.0f / 100.0f), // minimum_screen_cover
             SPAWN_MODE_BOTTOM, // spawn_mode
             BG_COLOUR_BLACK // background_mode

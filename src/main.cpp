@@ -1,4 +1,5 @@
 #include <string>
+#include <sstream>
 
 #include <cstdio>
 
@@ -13,31 +14,33 @@ const hexago::version_t hexago::VERSION = {
     HEXAGO_VERSION_MAJOR,
     HEXAGO_VERSION_MINOR,
     HEXAGO_VERSION_PATCH,
+    HEXAGO_VERSION_BUILD,
     HEXAGO_VERSION_STRING,
 };
 
+// program copyright notice
+const char* copyright = "Copyright (c) 2017 Joshua Saxby. All rights reserved.";
+
 int main() {
     // build window title / console 'greet' message
-    const std::string window_title = (
-        (std::string)"Hexago v" + hexago::VERSION.string
-    );
-    printf("%s\n", window_title.c_str());
-
-    /* Now we set up the window instance */
+    std::ostringstream window_title_stream;
+    window_title_stream << "Hexago v" << hexago::VERSION.string;
+    window_title_stream << " (build " << hexago::VERSION.build << ")";
+    std::string window_title = window_title_stream.str();
+    // print Hexago version and copyright notice, on separate lines
+    printf("%s\n%s\n", window_title.c_str(), copyright);
     // get supported fullscreen video modes
     std::vector<sf::VideoMode> video_modes = sf::VideoMode::getFullscreenModes();
-    // set anti-aliasing
+    // window settings
     sf::ContextSettings settings;
+    // set anti-aliasing
     settings.antialiasingLevel = 8;
-    printf("Starting Screen Saver\n");
     // get first (best) fullscreen videomode and init window with it
     sf::RenderWindow window(
         video_modes[0], window_title, sf::Style::Fullscreen, settings
     );
     // hide the mouse cursor
     window.setMouseCursorVisible(false);
-    // enable vertical sync so we don't have to worry about framerate sync
-    window.setVerticalSyncEnabled(true);
 
     // now we instantiate a HexagoScreenSaver object, handing it our window
     hexago::HexagoScreenSaver app(window);
@@ -47,6 +50,5 @@ int main() {
         // call the update method to update internal state and draw the frame
         app.update();
     }
-    printf("Exit.\n");
     return 0;
 }
