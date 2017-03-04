@@ -134,6 +134,7 @@ namespace hexago {
          */
         if((argument[0] == '-') && ((next) < arg_count)) {
             // check its value for anything meaningful
+            // NOTE: This makes heavy use of boolean-OR short-circuiting
             load_double_arg(
                 "-ssmin", argument, next_argument, config.start_size_range.min,
                 advance
