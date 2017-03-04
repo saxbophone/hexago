@@ -1,6 +1,6 @@
 #include <string>
 
-#include <cstdio>
+#include <cstdlib>
 
 #include "ArgumentParser.hpp"
 #include "HexagoScreenSaverConfig.hpp"
@@ -18,14 +18,14 @@ namespace hexago {
     static bool load_double_arg(
         std::string flag,
         std::string argument,
-        std::string next_argument,
+        char* next_argument,
         double& destination,
         int& advance
     ) {
         // if the argument is the same as the flag
         if(argument == flag) {
             // convert the next argument to double and store at destination
-            destination = std::stod(next_argument, NULL);
+            destination = atof(next_argument);
             // set advance to 1 so we skip the next argument (already handled)
             advance = 1;
             // return true as we found it
@@ -65,14 +65,14 @@ namespace hexago {
     static bool load_uint_arg(
         std::string flag,
         std::string argument,
-        std::string next_argument,
+        char* next_argument,
         unsigned int& destination,
         int& advance
     ) {
         // if the argument is the same as the flag
         if(argument == flag) {
-            // convert the next argument to double and store at destination
-            destination = std::stoul(next_argument, NULL);
+            // convert the next argument to unsigned and store at destination
+            destination = strtoul(next_argument, NULL, 10);
             // set advance to 1 so we skip the next argument (already handled)
             advance = 1;
             // return true as we found it
@@ -127,7 +127,7 @@ namespace hexago {
         int next = arg_index + 1; // the index of the next argument
         // convert current and next arguments to C++ strings
         std::string argument = arguments[arg_index];
-        std::string next_argument = arguments[next];
+        char* next_argument = arguments[next];
         /*
          * if it starts with a hyphen and there's at least one more argument
          * after it, then it may be an argument
