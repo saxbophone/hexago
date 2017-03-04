@@ -59,7 +59,7 @@ namespace hexago {
              * a tuning constant for the mechanics which calculates the number
              * of hexagons which need to be drawn
              */
-            static const float HEXAGON_NUMBER_TUNING_CONSTANT;
+            static const double HEXAGON_NUMBER_TUNING_CONSTANT;
     };
 
 }

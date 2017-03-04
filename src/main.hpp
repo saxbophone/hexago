@@ -7,9 +7,12 @@
 namespace hexago {
 
     typedef struct version_t {
-        const uint8_t major;
-        const uint8_t minor;
-        const uint8_t patch;
+        // major, minor and patch are all standard semver
+        const uint16_t major;
+        const uint16_t minor;
+        const uint16_t patch;
+        // build is a single-series number which increments for any new version
+        const uint16_t build;
         const char* string;
     } version_t;
 

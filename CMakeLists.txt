@@ -1,7 +1,9 @@
 # begin basic metadata
 cmake_minimum_required(VERSION 3.0)
 
-project(hexago VERSION 0.3.0 LANGUAGES CXX)
+project(hexago VERSION 0.3.1 LANGUAGES CXX)
+# set build number - this increments for any new version
+set(HEXAGO_VERSION_BUILD 6)
 
 # set default C++ standard to use (C++11)
 set(HEXAGO_CXX_STANDARD "11")
@@ -24,6 +26,7 @@ set(HEXAGO_ESCAPED_VERSION_STRING "\"${HEXAGO_VERSION_STRING}\"")
 add_definitions(-DHEXAGO_VERSION_MAJOR=${PROJECT_VERSION_MAJOR})
 add_definitions(-DHEXAGO_VERSION_MINOR=${PROJECT_VERSION_MINOR})
 add_definitions(-DHEXAGO_VERSION_PATCH=${PROJECT_VERSION_PATCH})
+add_definitions(-DHEXAGO_VERSION_BUILD=${HEXAGO_VERSION_BUILD})
 add_definitions(-DHEXAGO_VERSION_STRING=${HEXAGO_ESCAPED_VERSION_STRING})
 
 # used for enabling additional compiler options if supported
@@ -52,11 +55,24 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
     enable_cxx_compiler_flag_if_supported("-Werror")
 endif()
 
+# default build type is static unless on linux
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(HEXAGO_STATIC_BUILD OFF CACHE BOOL "")
+else()
+    set(HEXAGO_STATIC_BUILD ON CACHE BOOL "")
+endif()
+
+# do necessary things if static build was requested
+if(HEXAGO_STATIC_BUILD)
+    message(STATUS "Performing a Static Build")
+    set(SFML_STATIC_LIBRARIES ON)
+endif()
+
 # dependencies
 # add custom dependencies directory
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # SDL2
-find_package(SFML 2 REQUIRED system window graphics network audio)
+find_package(SFML 2 REQUIRED COMPONENTS audio graphics window system)
 include_directories(${SFML_INCLUDE_DIR})
 # COLRCV
 find_package(COLRCV 0.1 REQUIRED)
@@ -69,6 +85,24 @@ file(GLOB HEXAGO_HEADERS "src/*.hpp")
 
 add_executable(hexago ${HEXAGO_SOURCES})
 
-target_link_libraries(hexago ${SFML_LIBRARIES} ${COLRCV_LIBRARIES})
+# we need to do additional linking steps if it's a static build
+if(HEXAGO_STATIC_BUILD)
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        # if we're using GCC then these are the flags we need to use to enable
+        # statically linking the C and C++ standard libraries
+        #
+        # this is useful if it's unlikely a recipient of the software will
+        # have the correct versions of these on their system (e.g. MinGW
+        # compiling for Windows)
+        #
+        # This is allowed as per the GCC Runtime Exception.
+        set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+    endif()
+    # if we're statically linking, then we need to manually link SFML's dependencies as well
+    target_link_libraries(hexago ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${COLRCV_LIBRARIES})
+else()
+    # if we're dynamically linking, we only need to link SFML and COLRCV
+    target_link_libraries(hexago ${SFML_LIBRARIES} ${COLRCV_LIBRARIES})
+endif()
 
 install(TARGETS hexago DESTINATION bin)

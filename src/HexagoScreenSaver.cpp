@@ -30,6 +30,8 @@ namespace hexago {
     config(config),
     hexagon_factory(config, window_size),
     hexagon_count(required_number_of_hexagons()) {
+        // set window framerate to what is given in config
+        window.setFramerateLimit(config.framerate);
         // populate the array with Hexagon instances from the factory
         for(size_t i = 0; i < this->hexagon_count; i++) {
             this->hexagons.push_back(this->hexagon_factory.next());
@@ -104,9 +106,9 @@ namespace hexago {
     HexagoScreenSaverConfig HexagoScreenSaver::default_config() {
         return HexagoScreenSaverConfig(
             // start_size_range
-            ParameterRange<float>((1.0 / 12.0), (1.0 / 6.0)),
+            ParameterRange<double>((1.0 / 12.0), (1.0 / 6.0)),
             // decay_speed_range
-            ParameterRange<float>((1.0 / 32.0), (1.0 / 16.0)),
+            ParameterRange<double>((1.0 / 32.0), (1.0 / 16.0)),
             COLOUR_MODEL_RGB, // colour_model
             // d_colour_channel_range
             ParameterRange<colour_channel_t>(0.0, 255.0),
@@ -116,7 +118,8 @@ namespace hexago {
             ParameterRange<colour_channel_t>(0.0, 255.0),
             // alpha_colour_channel_range
             ParameterRange<colour_channel_t>(100.0, 100.0),
-            (100.0f / 100.0f), // minimum_screen_cover
+            30, // framerate
+            (100.0 / 100.0), // minimum_screen_cover
             SPAWN_MODE_BOTTOM, // spawn_mode
             BG_COLOUR_BLACK // background_mode
         );
@@ -126,19 +129,19 @@ namespace hexago {
         // get the screen area first
         size_t screen_area = this->window_size.x * this->window_size.y;
         // now get the average hexagon radius
-        float average_hexagon_radius = (
+        double average_hexagon_radius = (
             (this->window_size.y * this->config.start_size_range.min)
             +
             (this->window_size.y * this->config.start_size_range.max)
-        ) / 2.0f;
+        ) / 2.0;
         /*
          * the area of a regular hexagon may be found with the side length or 
          * radius as follows, where r is the radius length of the hexagon:
          *
          * a = {[3 * sqrt(3)] * (r ^ 2)} / 2
          */
-        float average_hexagon_area = (
-            ((3.0f * sqrt(3.0f)) * pow(average_hexagon_radius, 2.0f)) / 2.0f
+        double average_hexagon_area = (
+            ((3.0 * sqrt(3.0)) * pow(average_hexagon_radius, 2.0)) / 2.0
         );
         /*
          * The number of hexagons needed to attain a given amount of screen
@@ -147,7 +150,7 @@ namespace hexago {
          * (screen_area / average_hexagon_area) * cover_amount * TUNING_CONSTANT
          */
         return (size_t)(
-            ((float)screen_area / average_hexagon_area)
+            ((double)screen_area / average_hexagon_area)
             * this->config.minimum_screen_cover
             * HEXAGON_NUMBER_TUNING_CONSTANT
         );
@@ -157,6 +160,6 @@ namespace hexago {
      * a tuning constant for the mechanics which calculates the number
      * of hexagons which need to be drawn
      */
-    const float HexagoScreenSaver::HEXAGON_NUMBER_TUNING_CONSTANT = 30.0f;
+    const double HexagoScreenSaver::HEXAGON_NUMBER_TUNING_CONSTANT = 30.0;
 
 }
