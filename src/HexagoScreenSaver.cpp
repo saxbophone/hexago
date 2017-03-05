@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <deque>
 
 #include <cmath>
@@ -26,9 +27,8 @@ namespace hexago {
     )
     :
     window(window),
-    window_size(window.getSize()),
     config(config),
-    hexagon_factory(config, window_size),
+    hexagon_factory(config, this->window_size(), this->scaling_dimension()),
     hexagon_count(required_number_of_hexagons()) {
         // set window framerate to what is given in config
         window.setFramerateLimit(config.framerate);
@@ -36,6 +36,18 @@ namespace hexago {
         for(size_t i = 0; i < this->hexagon_count; i++) {
             this->hexagons.push_back(this->hexagon_factory.next());
         }
+    }
+
+    // this method returns the size of the window we're bound to
+    sf::Vector2u HexagoScreenSaver::window_size() const {
+        return this->window.getSize();
+    }
+
+    // returns the size of the window dimension to use for scaling 
+    double HexagoScreenSaver::scaling_dimension() const {
+        sf::Vector2u window_size = this->window_size();
+        // scaling dimension is smallest of window x and y
+        return (double)std::min(window_size.x, window_size.y);
     }
 
     // updates internal state and renders the hexagons to window
@@ -124,12 +136,14 @@ namespace hexago {
 
     size_t HexagoScreenSaver::required_number_of_hexagons() const {
         // get the screen area first
-        size_t screen_area = this->window_size.x * this->window_size.y;
+        sf::Vector2u window_size = this->window_size();
+        size_t screen_area = window_size.x * window_size.y;
         // now get the average hexagon radius
+        double scaling_dimension = this->scaling_dimension();
         double average_hexagon_radius = (
-            (this->window_size.y / this->config.start_size_range.min)
+            (scaling_dimension / this->config.start_size_range.min)
             +
-            (this->window_size.y / this->config.start_size_range.max)
+            (scaling_dimension / this->config.start_size_range.max)
         ) / 2.0;
         /*
          * the area of a regular hexagon may be found with the side length or 
