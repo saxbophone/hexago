@@ -48,12 +48,12 @@ namespace hexago {
             // window axis to use is the smallest one
             float window_axis = (float)std::min(window_size.x, window_size.y);
             this->start_size_range = std::uniform_real_distribution<hexagon_size_t>(
-                window_size.y / config.start_size_range.min,
-                window_size.y / config.start_size_range.max
+                window_axis / config.start_size_range.min,
+                window_axis / config.start_size_range.max
             );
             this->decay_speed_range = std::uniform_real_distribution<hexagon_decay_t>(
-                window_size.y / config.decay_speed_range.min,
-                window_size.y / config.decay_speed_range.max
+                window_axis / config.decay_speed_range.min,
+                window_axis / config.decay_speed_range.max
             );
         }
 
