@@ -30,8 +30,8 @@ namespace hexago {
          * second for calling it, as that's what will give us random samples
          */
         random_number_engine(std::mt19937(std::random_device()())),
-        x_spawn_range(0.0f, (float)window_size.x),
-        y_spawn_range(0.0f, (float)window_size.y),
+        x_spawn_range((float)window_size.x / 2.0, (float)window_size.x / 2.0),
+        y_spawn_range((float)window_size.y / 2.0, (float)window_size.y / 2.0),
         start_size_range(
             scaling_dimension / config.start_size_range.min,
             scaling_dimension / config.start_size_range.max

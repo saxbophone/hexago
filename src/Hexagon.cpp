@@ -27,7 +27,7 @@ namespace hexago {
          * construct a CircleShape object with a radius of this Hexagon's size
          * and 6 sides (a hexagon)
          */
-        sf::CircleShape shape(current_size, 6);
+        sf::CircleShape shape(current_size, 360);
         /*
          * set the origin to the centre of the shape, as we want it to remain
          * anchored to the centre, not the top-left.
