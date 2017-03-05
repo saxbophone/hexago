@@ -1,18 +1,16 @@
 #include <cstdint>
 
-#include <SFML/Graphics.hpp>
-
 #include "HexagoScreenSaverConfig.hpp"
 #include "ParameterRange.hpp"
-#include "HexagonFactory.hpp"
 #include "Hexagon.hpp"
+#include "HexagonFactoryConfig.hpp"
 
 
 namespace hexago {
 
     // main constructor
     HexagoScreenSaverConfig::HexagoScreenSaverConfig(
-        ParameterRange<double> start_size_range,
+        ParameterRange<hexagon_decay_t> start_size_range,
         ParameterRange<double> decay_speed_range,
         colour_model_t colour_model,
         ParameterRange<colour_channel_t> d_colour_channel_range,

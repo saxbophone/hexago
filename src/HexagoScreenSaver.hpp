@@ -3,9 +3,8 @@
 
 #include <deque>
 
-#include <cstdint>
-
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/System/Vector2.hpp>
 
 #include "HexagoScreenSaverConfig.hpp"
 #include "HexagonFactory.hpp"
