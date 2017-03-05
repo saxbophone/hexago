@@ -73,11 +73,8 @@ namespace hexago {
         for(size_t i = 0; i < this->hexagon_count; i++) {
             // check if the hexagon needs 're-birthing'
             if(this->hexagons[i].is_dead()) {
-                if(this->config.spawn_mode == SPAWN_MODE_DEFAULT) {
-                    /*
-                     * default is to just respawn Hexagons in-place, as far as
-                     * z-indexing is concerned
-                     */
+                if(this->config.spawn_mode == SPAWN_MODE_SAME) {
+                    // respawn Hexagons in-place, at the same z-index
                     this->hexagons[i] = this->hexagon_factory.next();
                 } else {
                     /*
