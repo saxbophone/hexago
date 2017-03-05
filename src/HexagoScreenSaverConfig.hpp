@@ -11,7 +11,7 @@ namespace hexago {
 
     // enum for expressing where Hexagons should spawn
     enum hexagon_spawn_mode_t {
-        SPAWN_MODE_DEFAULT, // spawn in-place, no re-ordering
+        SPAWN_MODE_SAME, // spawn in-place, no re-ordering
         SPAWN_MODE_BOTTOM, // new Hexagons spawn underneath existing ones
         SPAWN_MODE_TOP, // new Hexagons spawn above existing ones
     };

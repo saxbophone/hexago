@@ -96,8 +96,8 @@ namespace hexago {
     ) {
         if(argument == flag) {
             // set spawn mode based on string
-            if(next_argument == "default") {
-                destination = SPAWN_MODE_DEFAULT;
+            if(next_argument == "same") {
+                destination = SPAWN_MODE_SAME;
             } else if(next_argument == "bottom") {
                 destination = SPAWN_MODE_BOTTOM;
             } else if(next_argument == "top") {
