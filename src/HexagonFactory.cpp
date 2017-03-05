@@ -1,5 +1,8 @@
 #include <random>
 
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/System/Vector2.hpp>
+
 #include <colrcv-0/models/rgb.h>
 #include <colrcv-0/models/hsv.h>
 #include <colrcv-0/models/lab.h>

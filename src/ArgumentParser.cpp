@@ -5,7 +5,6 @@
 #include "ArgumentParser.hpp"
 #include "HexagoScreenSaverConfig.hpp"
 #include "HexagoScreenSaver.hpp"
-#include "HexagonFactoryConfig.hpp"
 
 
 namespace hexago {

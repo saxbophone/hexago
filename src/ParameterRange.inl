@@ -1,3 +1,5 @@
+#include "ParameterRange.hpp"
+
 
 namespace hexago {
 

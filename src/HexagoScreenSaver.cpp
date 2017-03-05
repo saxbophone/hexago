@@ -2,15 +2,15 @@
 
 #include <cmath>
 
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
 
 #include "HexagoScreenSaver.hpp"
 #include "HexagoScreenSaverConfig.hpp"
 #include "ParameterRange.hpp"
-#include "HexagonFactory.hpp"
+#include "Hexagon.hpp"
 
 
 namespace hexago {
@@ -106,9 +106,9 @@ namespace hexago {
     HexagoScreenSaverConfig HexagoScreenSaver::default_config() {
         return HexagoScreenSaverConfig(
             // start_size_range
-            ParameterRange<double>((1.0 / 12.0), (1.0 / 6.0)),
+            ParameterRange<hexagon_size_t>((1.0 / 12.0), (1.0 / 6.0)),
             // decay_speed_range
-            ParameterRange<double>((1.0 / 32.0), (1.0 / 16.0)),
+            ParameterRange<hexagon_decay_t>((1.0 / 32.0), (1.0 / 16.0)),
             COLOUR_MODEL_RGB, // colour_model
             // d_colour_channel_range
             ParameterRange<colour_channel_t>(0.0, 255.0),
