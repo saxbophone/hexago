@@ -15,13 +15,16 @@ namespace hexago {
     /*
      * A class which produces new random Hexagon objects when requested.
      * The properties of the Hexagon objects produced are controlled by
-     * the config object passed to the constructor.
+     * the config object passed to the constructor. Window bounds and the
+     * window dimension used to scale hexagon sizes should also be passed.
      */
     class HexagonFactory {
         public:
             // constructor
             HexagonFactory(
-                HexagonFactoryConfig& config, sf::Vector2u window_size
+                HexagonFactoryConfig& config,
+                sf::Vector2u window_size,
+                double scaling_dimension
             );
             // returns a randomly-generated Hexagon instance from the factory
             Hexagon next();

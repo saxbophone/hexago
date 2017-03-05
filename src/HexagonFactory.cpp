@@ -1,8 +1,6 @@
-#include <algorithm>
 #include <random>
 
 #include <SFML/Graphics/Color.hpp>
-#include <SFML/System/Vector2.hpp>
 
 #include <colrcv-0/models/rgb.h>
 #include <colrcv-0/models/hsv.h>
@@ -17,12 +15,15 @@ namespace hexago {
 
     // constructor
     HexagonFactory::HexagonFactory(
-        HexagonFactoryConfig& config, sf::Vector2u window_size
+        HexagonFactoryConfig& config,
+        sf::Vector2u window_size,
+        double scaling_dimension
     ) :
         /*
          * all of the properties are set via an initialiser list, reading from
          * config object. additionally, the window size needs to be known so
-         * that the spawn bounds can be configured and sizes relative to y size.
+         * that the spawn bounds can be configured and the scaling factor needs
+         * to be known so that the sizes and speeds may be set relative to this.
          *
          * std::random_device has two parens for a reason:
          * once for constructing the type
@@ -31,6 +32,14 @@ namespace hexago {
         random_number_engine(std::mt19937(std::random_device()())),
         x_spawn_range(0.0f, (float)window_size.x),
         y_spawn_range(0.0f, (float)window_size.y),
+        start_size_range(
+            scaling_dimension / config.start_size_range.min,
+            scaling_dimension / config.start_size_range.max
+        ),
+        decay_speed_range(
+            scaling_dimension / config.decay_speed_range.min,
+            scaling_dimension / config.decay_speed_range.max
+        ),
         colour_model(config.colour_model),
         d_colour_channel_range(
             config.d_colour_channel_range.min, config.d_colour_channel_range.max
@@ -44,18 +53,7 @@ namespace hexago {
         alpha_colour_channel_range(
             config.alpha_colour_channel_range.min,
             config.alpha_colour_channel_range.max
-        ) {
-            // window axis to use is the smallest one
-            float window_axis = (float)std::min(window_size.x, window_size.y);
-            this->start_size_range = std::uniform_real_distribution<hexagon_size_t>(
-                window_axis / config.start_size_range.min,
-                window_axis / config.start_size_range.max
-            );
-            this->decay_speed_range = std::uniform_real_distribution<hexagon_decay_t>(
-                window_axis / config.decay_speed_range.min,
-                window_axis / config.decay_speed_range.max
-            );
-        }
+        ) {}
 
     // returns a randomly-generated Hexagon instance from the factory
     Hexagon HexagonFactory::next() {

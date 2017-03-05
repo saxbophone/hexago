@@ -24,6 +24,10 @@ namespace hexago {
             HexagoScreenSaver(
                 sf::RenderWindow& window, HexagoScreenSaverConfig config
             );
+            // returns the size of the window we're bound to
+            sf::Vector2u window_size() const;
+            // returns the size of the window dimension to use for scaling 
+            double scaling_dimension() const;
             // updates internal state and renders the hexagons to window
             void update();
             // retrieves the default config
@@ -44,8 +48,6 @@ namespace hexago {
              * actual window instance in the scope it was originally declared.
              */
             sf::RenderWindow& window;
-            // store the window's size as we'll use it later on in other places
-            const sf::Vector2u window_size;
             // where we store the config settings
             HexagoScreenSaverConfig config;
             // a HexagonFactory instance which will be used to produce Hexagons
