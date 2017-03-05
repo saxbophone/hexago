@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <random>
 
 #include <SFML/Graphics/Color.hpp>
@@ -30,14 +31,6 @@ namespace hexago {
         random_number_engine(std::mt19937(std::random_device()())),
         x_spawn_range(0.0f, (float)window_size.x),
         y_spawn_range(0.0f, (float)window_size.y),
-        start_size_range(
-            window_size.y * config.start_size_range.min,
-            window_size.y * config.start_size_range.max
-        ),
-        decay_speed_range(
-            window_size.y * config.decay_speed_range.min,
-            window_size.y * config.decay_speed_range.max
-        ),
         colour_model(config.colour_model),
         d_colour_channel_range(
             config.d_colour_channel_range.min, config.d_colour_channel_range.max
@@ -51,7 +44,18 @@ namespace hexago {
         alpha_colour_channel_range(
             config.alpha_colour_channel_range.min,
             config.alpha_colour_channel_range.max
-        ) {}
+        ) {
+            // window axis to use is the smallest one
+            float window_axis = (float)std::min(window_size.x, window_size.y);
+            this->start_size_range = std::uniform_real_distribution<hexagon_size_t>(
+                window_size.y / config.start_size_range.min,
+                window_size.y / config.start_size_range.max
+            );
+            this->decay_speed_range = std::uniform_real_distribution<hexagon_decay_t>(
+                window_size.y / config.decay_speed_range.min,
+                window_size.y / config.decay_speed_range.max
+            );
+        }
 
     // returns a randomly-generated Hexagon instance from the factory
     Hexagon HexagonFactory::next() {

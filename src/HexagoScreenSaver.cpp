@@ -103,9 +103,9 @@ namespace hexago {
     HexagoScreenSaverConfig HexagoScreenSaver::default_config() {
         return HexagoScreenSaverConfig(
             // start_size_range
-            ParameterRange<hexagon_size_t>((1.0 / 12.0), (1.0 / 6.0)),
+            ParameterRange<hexagon_size_t>(12.0, 6.0),
             // decay_speed_range
-            ParameterRange<hexagon_decay_t>((1.0 / 32.0), (1.0 / 16.0)),
+            ParameterRange<hexagon_decay_t>(32.0, 16.0),
             COLOUR_MODEL_RGB, // colour_model
             // d_colour_channel_range
             ParameterRange<colour_channel_t>(0.0, 255.0),
@@ -127,9 +127,9 @@ namespace hexago {
         size_t screen_area = this->window_size.x * this->window_size.y;
         // now get the average hexagon radius
         double average_hexagon_radius = (
-            (this->window_size.y * this->config.start_size_range.min)
+            (this->window_size.y / this->config.start_size_range.min)
             +
-            (this->window_size.y * this->config.start_size_range.max)
+            (this->window_size.y / this->config.start_size_range.max)
         ) / 2.0;
         /*
          * the area of a regular hexagon may be found with the side length or 
