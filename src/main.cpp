@@ -7,6 +7,7 @@
 
 #include "main.hpp"
 #include "HexagoScreenSaver.hpp"
+#include "ArgumentParser.hpp"
 
 
 // Version numbers are passed as preprocessor definitions by CMake
@@ -21,7 +22,7 @@ const hexago::version_t hexago::VERSION = {
 // program copyright notice
 const char* copyright = "Copyright (c) 2017 Joshua Saxby. All rights reserved.";
 
-int main() {
+int main(int argc, char* argv[]) {
     // build window title / console 'greet' message
     std::ostringstream window_title_stream;
     window_title_stream << "Hexago v" << hexago::VERSION.string;
@@ -42,8 +43,11 @@ int main() {
     // hide the mouse cursor
     window.setMouseCursorVisible(false);
 
-    // now we instantiate a HexagoScreenSaver object, handing it our window
-    hexago::HexagoScreenSaver app(window);
+    /*
+     * get screen saver config from command-line arguments, then instantiate a
+     * HexagoScreenSaver object, handing it our window and config
+     */
+    hexago::HexagoScreenSaver app(window, hexago::parse_arguments(argc, argv));
 
     // loop while window remains open
     while(window.isOpen()) {
