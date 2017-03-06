@@ -22,22 +22,22 @@ namespace hexago {
         hexagon_spawn_mode_t spawn_mode,
         background_colour_t background_colour
     )
-    : HexagoScreenSaverConfig(
-        HexagonFactoryConfig(
-            start_size_range,
-            decay_speed_range,
-            colour_model,
-            d_colour_channel_range,
-            e_colour_channel_range,
-            f_colour_channel_range,
-            alpha_colour_channel_range
-        ),
-        framerate,
-        minimum_screen_cover,
-        spawn_mode,
-        background_colour
-    )
-    {}
+      : HexagoScreenSaverConfig(
+            HexagonFactoryConfig(
+                start_size_range,
+                decay_speed_range,
+                colour_model,
+                d_colour_channel_range,
+                e_colour_channel_range,
+                f_colour_channel_range,
+                alpha_colour_channel_range
+            ),
+            framerate,
+            minimum_screen_cover,
+            spawn_mode,
+            background_colour
+        )
+      {}
 
     // delegated constructor
     HexagoScreenSaverConfig::HexagoScreenSaverConfig(
@@ -47,11 +47,11 @@ namespace hexago {
         hexagon_spawn_mode_t spawn_mode,
         background_colour_t background_colour
     )
-    : HexagonFactoryConfig(sub_config)
-    , framerate(framerate)
-    , minimum_screen_cover(minimum_screen_cover)
-    , spawn_mode(spawn_mode)
-    , background_colour(background_colour)
-    {}
+      : HexagonFactoryConfig(sub_config)
+      , framerate(framerate)
+      , minimum_screen_cover(minimum_screen_cover)
+      , spawn_mode(spawn_mode)
+      , background_colour(background_colour)
+      {}
 
 }

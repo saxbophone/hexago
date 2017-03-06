@@ -15,11 +15,11 @@ namespace hexago {
         sf::Color colour
         // all the properties are set via an initialiser list
     )
-    : centre(centre)
-    , start_size(start_size)
-    , decay_rate(decay_rate)
-    , colour(colour)
-    {}
+      : centre(centre)
+      , start_size(start_size)
+      , decay_rate(decay_rate)
+      , colour(colour)
+      {}
 
     // returns a SFML shape which can be used to render this hexagon
     sf::CircleShape Hexagon::shape() const {
