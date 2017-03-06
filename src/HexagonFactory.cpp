@@ -33,26 +33,26 @@ namespace hexago {
       , x_spawn_range(0.0f, (float)window_size.x)
       , y_spawn_range(0.0f, (float)window_size.y)
       , start_size_range(
-          scaling_dimension / config.start_size_range.min,
-          scaling_dimension / config.start_size_range.max
+        scaling_dimension / config.start_size_range.min,
+        scaling_dimension / config.start_size_range.max
       )
       , decay_speed_range(
-          scaling_dimension / config.decay_speed_range.min,
-          scaling_dimension / config.decay_speed_range.max
+        scaling_dimension / config.decay_speed_range.min,
+        scaling_dimension / config.decay_speed_range.max
       )
       , colour_model(config.colour_model)
       , d_colour_channel_range(
-          config.d_colour_channel_range.min, config.d_colour_channel_range.max
+        config.d_colour_channel_range.min, config.d_colour_channel_range.max
       )
       , e_colour_channel_range(
-          config.e_colour_channel_range.min, config.e_colour_channel_range.max
+        config.e_colour_channel_range.min, config.e_colour_channel_range.max
       )
       , f_colour_channel_range(
-          config.f_colour_channel_range.min, config.f_colour_channel_range.max
+        config.f_colour_channel_range.min, config.f_colour_channel_range.max
       )
       , alpha_colour_channel_range(
-          config.alpha_colour_channel_range.min,
-          config.alpha_colour_channel_range.max
+        config.alpha_colour_channel_range.min,
+        config.alpha_colour_channel_range.max
       )
       {}
 

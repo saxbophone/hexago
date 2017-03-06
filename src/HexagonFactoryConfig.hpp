@@ -53,6 +53,9 @@ namespace hexago {
             ParameterRange<colour_channel_t> f_colour_channel_range,
             ParameterRange<colour_channel_t> alpha_colour_channel_range
         );
+
+        // validates any unresolved members of the config struct (i.e. NANs)
+        void resolve_defaults();
     };
 
 }

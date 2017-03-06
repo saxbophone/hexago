@@ -119,12 +119,13 @@ namespace hexago {
             // decay_speed_range
             ParameterRange<hexagon_decay_t>(32.0, 16.0),
             COLOUR_MODEL_RGB, // colour_model
+            // NOTE: The default "don't care" value for a colour channel is NAN
             // d_colour_channel_range
-            ParameterRange<colour_channel_t>(0.0, 255.0),
+            ParameterRange<colour_channel_t>(NAN, NAN),
             // e_colour_channel_range
-            ParameterRange<colour_channel_t>(0.0, 255.0),
+            ParameterRange<colour_channel_t>(NAN, NAN),
             // f_colour_channel_range
-            ParameterRange<colour_channel_t>(0.0, 255.0),
+            ParameterRange<colour_channel_t>(NAN, NAN),
             // alpha_colour_channel_range
             ParameterRange<colour_channel_t>(100.0, 100.0),
             30, // framerate
