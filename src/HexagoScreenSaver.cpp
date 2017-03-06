@@ -25,11 +25,10 @@ namespace hexago {
     HexagoScreenSaver::HexagoScreenSaver(
         sf::RenderWindow& window, HexagoScreenSaverConfig config
     )
-    :
-    window(window),
-    config(config),
-    hexagon_factory(config, this->window_size(), this->scaling_dimension()),
-    hexagon_count(required_number_of_hexagons()) {
+    : window(window)
+    , config(config)
+    , hexagon_factory(config, this->window_size(), this->scaling_dimension())
+    , hexagon_count(required_number_of_hexagons()) {
         // set window framerate to what is given in config
         window.setFramerateLimit(config.framerate);
         // populate the array with Hexagon instances from the factory
