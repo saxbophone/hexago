@@ -198,6 +198,8 @@ namespace hexago {
         for(int i = 1; i < argc; i++) {
             i += parse_argument(i, argc, argv, config);
         }
+        // call resolve_defaults() to make config valid
+        config.resolve_defaults();
         return config;
     }
 
