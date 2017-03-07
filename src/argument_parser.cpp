@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 
-#include "ArgumentParser.hpp"
+#include "argument_parser.hpp"
 #include "HexagoScreenSaverConfig.hpp"
 #include "HexagoScreenSaver.hpp"
 
