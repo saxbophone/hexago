@@ -3,6 +3,9 @@
 
 #include <random>
 
+#include <SFML/Graphics/Color.hpp>
+#include <SFML/System/Vector2.hpp>
+
 #include "HexagonFactoryConfig.hpp"
 #include "Hexagon.hpp"
 
@@ -12,13 +15,16 @@ namespace hexago {
     /*
      * A class which produces new random Hexagon objects when requested.
      * The properties of the Hexagon objects produced are controlled by
-     * the config object passed to the constructor.
+     * the config object passed to the constructor. Window bounds and the
+     * window dimension used to scale hexagon sizes should also be passed.
      */
     class HexagonFactory {
         public:
             // constructor
             HexagonFactory(
-                HexagonFactoryConfig& config, sf::Vector2u window_size
+                HexagonFactoryConfig& config,
+                sf::Vector2u window_size,
+                double scaling_dimension
             );
             // returns a randomly-generated Hexagon instance from the factory
             Hexagon next();
@@ -32,7 +38,7 @@ namespace hexago {
             // the range within which start sizes of new Hexagons may fall
             std::uniform_real_distribution<hexagon_size_t> start_size_range;
             // the range within which decay speeds of new Hexagons may fall
-            std::uniform_real_distribution<hexagon_size_t> decay_speed_range;
+            std::uniform_real_distribution<hexagon_decay_t> decay_speed_range;
             // the colour model to use for hexagon colours
             hexago::colour_model_t colour_model;
             // the range of acceptable values for each colour channel

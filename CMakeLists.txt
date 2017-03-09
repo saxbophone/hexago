@@ -1,9 +1,9 @@
 # begin basic metadata
 cmake_minimum_required(VERSION 3.0)
 
-project(hexago VERSION 0.4.0 LANGUAGES CXX)
+project(hexago VERSION 0.5.0 LANGUAGES CXX)
 # set build number - this increments for any new version
-set(HEXAGO_VERSION_BUILD 7)
+set(HEXAGO_VERSION_BUILD 8)
 
 # set default C++ standard to use (C++11)
 set(HEXAGO_CXX_STANDARD "11")
@@ -55,11 +55,11 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
     enable_cxx_compiler_flag_if_supported("-Werror")
 endif()
 
-# default build type is static unless on linux
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    set(HEXAGO_STATIC_BUILD OFF CACHE BOOL "")
-else()
+# default build type is only static if on Windows
+if(WIN32)
     set(HEXAGO_STATIC_BUILD ON CACHE BOOL "")
+else()
+    set(HEXAGO_STATIC_BUILD OFF CACHE BOOL "")
 endif()
 
 # do necessary things if static build was requested

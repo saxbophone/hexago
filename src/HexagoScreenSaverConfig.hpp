@@ -3,9 +3,7 @@
 
 #include <cstdint>
 
-#include <SFML/Graphics.hpp>
-
-#include "HexagonFactory.hpp"
+#include "HexagonFactoryConfig.hpp"
 #include "Hexagon.hpp"
 
 
@@ -13,15 +11,16 @@ namespace hexago {
 
     // enum for expressing where Hexagons should spawn
     enum hexagon_spawn_mode_t {
-        SPAWN_MODE_DEFAULT, // spawn in-place, no re-ordering
+        SPAWN_MODE_SAME, // spawn in-place, no re-ordering
         SPAWN_MODE_BOTTOM, // new Hexagons spawn underneath existing ones
         SPAWN_MODE_TOP, // new Hexagons spawn above existing ones
     };
 
     // enum for expressing what the background colour should be
     enum background_colour_t {
-        BG_COLOUR_BLACK, // a solid black background, the default
-        BG_COLOUR_WHITE, // a solid white background, not recommended
+        BG_COLOUR_GREY, // a neutral grey background
+        BG_COLOUR_BLACK, // a solid black background
+        BG_COLOUR_WHITE, // a solid white background
     };
 
     /*
@@ -45,8 +44,8 @@ namespace hexago {
 
         // main constructor
         HexagoScreenSaverConfig(
-            ParameterRange<double> start_size_range,
-            ParameterRange<double> decay_speed_range,
+            ParameterRange<hexagon_size_t> start_size_range,
+            ParameterRange<hexagon_decay_t> decay_speed_range,
             colour_model_t colour_model,
             ParameterRange<colour_channel_t> d_colour_channel_range,
             ParameterRange<colour_channel_t> e_colour_channel_range,

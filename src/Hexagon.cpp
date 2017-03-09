@@ -1,3 +1,4 @@
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/System/Vector2.hpp>
 
@@ -13,10 +14,12 @@ namespace hexago {
         hexagon_decay_t decay_rate,
         sf::Color colour
         // all the properties are set via an initialiser list
-    ) : centre(centre),
-        start_size(start_size),
-        decay_rate(decay_rate),
-        colour(colour) {}
+    )
+      : centre(centre)
+      , start_size(start_size)
+      , decay_rate(decay_rate)
+      , colour(colour)
+      {}
 
     // returns a SFML shape which can be used to render this hexagon
     sf::CircleShape Hexagon::shape() const {

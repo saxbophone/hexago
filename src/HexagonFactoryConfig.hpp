@@ -1,8 +1,6 @@
 #ifndef SAXBOPHONE_HEXAGO_HEXAGON_FACTORY_CONFIG_HPP
 #define SAXBOPHONE_HEXAGO_HEXAGON_FACTORY_CONFIG_HPP
 
-#include <SFML/System/Vector2.hpp>
-
 #include "ParameterRange.hpp"
 #include "Hexagon.hpp"
 
@@ -26,8 +24,8 @@ namespace hexago {
      * and configure a HexagonFactory
      */
     struct HexagonFactoryConfig {
-        ParameterRange<double> start_size_range;
-        ParameterRange<double> decay_speed_range;
+        ParameterRange<hexagon_size_t> start_size_range;
+        ParameterRange<hexagon_decay_t> decay_speed_range;
         colour_model_t colour_model;
         /*
          * the following four properties give the maximum and minimum values
@@ -47,14 +45,17 @@ namespace hexago {
 
         // constructor
         HexagonFactoryConfig(
-            ParameterRange<double> start_size_range,
-            ParameterRange<double> decay_speed_range,
+            ParameterRange<hexagon_size_t> start_size_range,
+            ParameterRange<hexagon_decay_t> decay_speed_range,
             colour_model_t colour_model,
             ParameterRange<colour_channel_t> d_colour_channel_range,
             ParameterRange<colour_channel_t> e_colour_channel_range,
             ParameterRange<colour_channel_t> f_colour_channel_range,
             ParameterRange<colour_channel_t> alpha_colour_channel_range
         );
+
+        // validates any unresolved members of the config struct (i.e. NANs)
+        void resolve_defaults();
     };
 
 }

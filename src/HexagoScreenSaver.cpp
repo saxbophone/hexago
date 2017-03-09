@@ -1,41 +1,54 @@
+#include <algorithm>
 #include <deque>
 
 #include <cmath>
 
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
 
 #include "HexagoScreenSaver.hpp"
 #include "HexagoScreenSaverConfig.hpp"
 #include "ParameterRange.hpp"
-#include "HexagonFactory.hpp"
+#include "Hexagon.hpp"
 
 
 namespace hexago {
 
     // simple constructor
-    HexagoScreenSaver::HexagoScreenSaver(
-        sf::RenderWindow& window
-    ) : HexagoScreenSaver(window, default_config()) {}
+    HexagoScreenSaver::HexagoScreenSaver(sf::RenderWindow& window)
+      : HexagoScreenSaver(window, default_config())
+      {}
 
     // customisation constructor
     HexagoScreenSaver::HexagoScreenSaver(
         sf::RenderWindow& window, HexagoScreenSaverConfig config
     )
-    :
-    window(window),
-    window_size(window.getSize()),
-    config(config),
-    hexagon_factory(config, window_size),
-    hexagon_count(required_number_of_hexagons()) {
+      : window(window)
+      , config(config)
+      , hexagon_factory(config, this->window_size(), this->scaling_dimension())
+      , hexagon_count(this->required_number_of_hexagons())
+      , background_colour(this->resolve_background_colour())
+      {
         // set window framerate to what is given in config
         window.setFramerateLimit(config.framerate);
         // populate the array with Hexagon instances from the factory
         for(size_t i = 0; i < this->hexagon_count; i++) {
             this->hexagons.push_back(this->hexagon_factory.next());
         }
+    }
+
+    // this method returns the size of the window we're bound to
+    sf::Vector2u HexagoScreenSaver::window_size() const {
+        return this->window.getSize();
+    }
+
+    // returns the size of the window dimension to use for scaling 
+    double HexagoScreenSaver::scaling_dimension() const {
+        sf::Vector2u window_size = this->window_size();
+        // scaling dimension is smallest of window x and y
+        return (double)std::min(window_size.x, window_size.y);
     }
 
     // updates internal state and renders the hexagons to window
@@ -67,17 +80,14 @@ namespace hexago {
                     break;
             }
         }
-        // clear the window with black color
-        this->window.clear(sf::Color::Black);
+        // clear the window with background colour
+        this->window.clear(this->background_colour);
         // loop over all the hexagons in the array
         for(size_t i = 0; i < this->hexagon_count; i++) {
             // check if the hexagon needs 're-birthing'
             if(this->hexagons[i].is_dead()) {
-                if(this->config.spawn_mode == SPAWN_MODE_DEFAULT) {
-                    /*
-                     * default is to just respawn Hexagons in-place, as far as
-                     * z-indexing is concerned
-                     */
+                if(this->config.spawn_mode == SPAWN_MODE_SAME) {
+                    // respawn Hexagons in-place, at the same z-index
                     this->hexagons[i] = this->hexagon_factory.next();
                 } else {
                     /*
@@ -106,33 +116,35 @@ namespace hexago {
     HexagoScreenSaverConfig HexagoScreenSaver::default_config() {
         return HexagoScreenSaverConfig(
             // start_size_range
-            ParameterRange<double>((1.0 / 12.0), (1.0 / 6.0)),
+            ParameterRange<hexagon_size_t>(12.0, 6.0),
             // decay_speed_range
-            ParameterRange<double>((1.0 / 32.0), (1.0 / 16.0)),
+            ParameterRange<hexagon_decay_t>(32.0, 16.0),
             COLOUR_MODEL_RGB, // colour_model
+            // NOTE: The default "don't care" value for a colour channel is NAN
             // d_colour_channel_range
-            ParameterRange<colour_channel_t>(0.0, 255.0),
+            ParameterRange<colour_channel_t>(NAN, NAN),
             // e_colour_channel_range
-            ParameterRange<colour_channel_t>(0.0, 255.0),
+            ParameterRange<colour_channel_t>(NAN, NAN),
             // f_colour_channel_range
-            ParameterRange<colour_channel_t>(0.0, 255.0),
+            ParameterRange<colour_channel_t>(NAN, NAN),
             // alpha_colour_channel_range
             ParameterRange<colour_channel_t>(100.0, 100.0),
             30, // framerate
             (100.0 / 100.0), // minimum_screen_cover
             SPAWN_MODE_BOTTOM, // spawn_mode
-            BG_COLOUR_BLACK // background_mode
+            BG_COLOUR_GREY // background_mode
         );
     }
 
     size_t HexagoScreenSaver::required_number_of_hexagons() const {
         // get the screen area first
-        size_t screen_area = this->window_size.x * this->window_size.y;
+        sf::Vector2u window_size = this->window_size();
+        size_t screen_area = window_size.x * window_size.y;
         // now get the average hexagon radius
+        double scaling_dimension = this->scaling_dimension();
+        // average is average of minimum starting size and 0 (hexagons shrink)
         double average_hexagon_radius = (
-            (this->window_size.y * this->config.start_size_range.min)
-            +
-            (this->window_size.y * this->config.start_size_range.max)
+            (scaling_dimension / this->config.start_size_range.min) + 0.0
         ) / 2.0;
         /*
          * the area of a regular hexagon may be found with the side length or 
@@ -156,10 +168,23 @@ namespace hexago {
         );
     }
 
+    sf::Color HexagoScreenSaver::resolve_background_colour() const {
+        // background colour is set based on config option value
+        switch(this->config.background_colour) {
+            case BG_COLOUR_BLACK:
+                return sf::Color::Black;
+            case BG_COLOUR_WHITE:
+                return sf::Color::White;
+            case BG_COLOUR_GREY:
+            default:
+                return sf::Color(127, 127, 127);
+        }
+    }
+
     /*
      * a tuning constant for the mechanics which calculates the number
      * of hexagons which need to be drawn
      */
-    const double HexagoScreenSaver::HEXAGON_NUMBER_TUNING_CONSTANT = 30.0;
+    const double HexagoScreenSaver::HEXAGON_NUMBER_TUNING_CONSTANT = 2.75;
 
 }

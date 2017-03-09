@@ -1,5 +1,7 @@
 #include <random>
 
+#include <SFML/Graphics/Color.hpp>
+
 #include <colrcv-0/models/rgb.h>
 #include <colrcv-0/models/hsv.h>
 #include <colrcv-0/models/lab.h>
@@ -13,42 +15,46 @@ namespace hexago {
 
     // constructor
     HexagonFactory::HexagonFactory(
-        HexagonFactoryConfig& config, sf::Vector2u window_size
-    ) :
-        /*
-         * all of the properties are set via an initialiser list, reading from
-         * config object. additionally, the window size needs to be known so
-         * that the spawn bounds can be configured and sizes relative to y size.
-         *
-         * std::random_device has two parens for a reason:
-         * once for constructing the type
-         * second for calling it, as that's what will give us random samples
-         */
-        random_number_engine(std::mt19937(std::random_device()())),
-        x_spawn_range(0.0f, (float)window_size.x),
-        y_spawn_range(0.0f, (float)window_size.y),
-        start_size_range(
-            window_size.y * config.start_size_range.min,
-            window_size.y * config.start_size_range.max
-        ),
-        decay_speed_range(
-            window_size.y * config.decay_speed_range.min,
-            window_size.y * config.decay_speed_range.max
-        ),
-        colour_model(config.colour_model),
-        d_colour_channel_range(
-            config.d_colour_channel_range.min, config.d_colour_channel_range.max
-        ),
-        e_colour_channel_range(
-            config.e_colour_channel_range.min, config.e_colour_channel_range.max
-        ),
-        f_colour_channel_range(
-            config.f_colour_channel_range.min, config.f_colour_channel_range.max
-        ),
-        alpha_colour_channel_range(
-            config.alpha_colour_channel_range.min,
-            config.alpha_colour_channel_range.max
-        ) {}
+        HexagonFactoryConfig& config,
+        sf::Vector2u window_size,
+        double scaling_dimension
+    )
+    /*
+     * all of the properties are set via an initialiser list, reading from
+     * config object. additionally, the window size needs to be known so
+     * that the spawn bounds can be configured and the scaling factor needs
+     * to be known so that the sizes and speeds may be set relative to this.
+     *
+     * std::random_device has two parens for a reason:
+     * once for constructing the type
+     * second for calling it, as that's what will give us random samples
+     */
+      : random_number_engine(std::mt19937(std::random_device()()))
+      , x_spawn_range(0.0f, (float)window_size.x)
+      , y_spawn_range(0.0f, (float)window_size.y)
+      , start_size_range(
+        scaling_dimension / config.start_size_range.min,
+        scaling_dimension / config.start_size_range.max
+      )
+      , decay_speed_range(
+        scaling_dimension / config.decay_speed_range.min,
+        scaling_dimension / config.decay_speed_range.max
+      )
+      , colour_model(config.colour_model)
+      , d_colour_channel_range(
+        config.d_colour_channel_range.min, config.d_colour_channel_range.max
+      )
+      , e_colour_channel_range(
+        config.e_colour_channel_range.min, config.e_colour_channel_range.max
+      )
+      , f_colour_channel_range(
+        config.f_colour_channel_range.min, config.f_colour_channel_range.max
+      )
+      , alpha_colour_channel_range(
+        config.alpha_colour_channel_range.min,
+        config.alpha_colour_channel_range.max
+      )
+      {}
 
     // returns a randomly-generated Hexagon instance from the factory
     Hexagon HexagonFactory::next() {

@@ -7,7 +7,7 @@
 
 #include "main.hpp"
 #include "HexagoScreenSaver.hpp"
-#include "ArgumentParser.hpp"
+#include "argument_parser.hpp"
 
 
 // Version numbers are passed as preprocessor definitions by CMake

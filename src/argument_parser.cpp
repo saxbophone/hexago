@@ -2,10 +2,9 @@
 
 #include <cstdlib>
 
-#include "ArgumentParser.hpp"
+#include "argument_parser.hpp"
 #include "HexagoScreenSaverConfig.hpp"
 #include "HexagoScreenSaver.hpp"
-#include "HexagonFactoryConfig.hpp"
 
 
 namespace hexago {
@@ -97,12 +96,42 @@ namespace hexago {
     ) {
         if(argument == flag) {
             // set spawn mode based on string
-            if(next_argument == "default") {
-                destination = SPAWN_MODE_DEFAULT;
+            if(next_argument == "same") {
+                destination = SPAWN_MODE_SAME;
             } else if(next_argument == "bottom") {
                 destination = SPAWN_MODE_BOTTOM;
             } else if(next_argument == "top") {
                 destination = SPAWN_MODE_TOP;
+            }
+            // advance by one argument
+            advance = 1;
+            // return true as we found it
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /*
+     * module-private function for loading one command-line argument which
+     * specifies the background colour to use
+     * returns true if the argument was found
+     */
+    static bool load_bg_arg(
+        std::string flag,
+        std::string argument,
+        std::string next_argument,
+        hexago::background_colour_t& destination,
+        int& advance
+    ) {
+        if(argument == flag) {
+            // set background colour based on string
+            if(next_argument == "grey") {
+                destination = BG_COLOUR_GREY;
+            } else if(next_argument == "black") {
+                destination = BG_COLOUR_BLACK;
+            } else if(next_argument == "white") {
+                destination = BG_COLOUR_WHITE;
             }
             // advance by one argument
             advance = 1;
@@ -184,6 +213,9 @@ namespace hexago {
                 advance
             ) || load_spawn_arg(
                 "-spawn", argument, next_argument, config.spawn_mode, advance
+            ) || load_bg_arg(
+                "-bgcol", argument, next_argument, config.background_colour,
+                advance
             );
         }
         return advance;
@@ -199,6 +231,8 @@ namespace hexago {
         for(int i = 1; i < argc; i++) {
             i += parse_argument(i, argc, argv, config);
         }
+        // call resolve_defaults() to make config valid
+        config.resolve_defaults();
         return config;
     }
 
