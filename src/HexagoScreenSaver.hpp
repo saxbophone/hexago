@@ -3,6 +3,7 @@
 
 #include <deque>
 
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
 
@@ -42,6 +43,12 @@ namespace hexago {
             size_t required_number_of_hexagons() const;
 
             /*
+             * Returns an sf::Color instance representing the colour that the
+             * background should be, according to the config object given.
+             */
+            sf::Color resolve_background_colour() const;
+
+            /*
              * a reference to the window instance that this application is bound
              * to, and which it will draw to. This needs to be a reference so
              * that mutation operations which are done on the Window affect the
@@ -54,6 +61,8 @@ namespace hexago {
             HexagonFactory hexagon_factory;
             // the maximum number of Hexagons to draw to the screen at once
             const size_t hexagon_count;
+            // the colour to paint the background with
+            const sf::Color background_colour;
             // vector array to store the Hexagons in
             std::deque<Hexagon> hexagons;
             /*

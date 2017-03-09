@@ -28,7 +28,8 @@ namespace hexago {
       : window(window)
       , config(config)
       , hexagon_factory(config, this->window_size(), this->scaling_dimension())
-      , hexagon_count(required_number_of_hexagons())
+      , hexagon_count(this->required_number_of_hexagons())
+      , background_colour(this->resolve_background_colour())
       {
         // set window framerate to what is given in config
         window.setFramerateLimit(config.framerate);
@@ -79,8 +80,8 @@ namespace hexago {
                     break;
             }
         }
-        // clear the window with black color
-        this->window.clear(sf::Color::Black);
+        // clear the window with background colour
+        this->window.clear(this->background_colour);
         // loop over all the hexagons in the array
         for(size_t i = 0; i < this->hexagon_count; i++) {
             // check if the hexagon needs 're-birthing'
@@ -131,7 +132,7 @@ namespace hexago {
             30, // framerate
             (100.0 / 100.0), // minimum_screen_cover
             SPAWN_MODE_BOTTOM, // spawn_mode
-            BG_COLOUR_BLACK // background_mode
+            BG_COLOUR_GREY // background_mode
         );
     }
 
@@ -141,10 +142,9 @@ namespace hexago {
         size_t screen_area = window_size.x * window_size.y;
         // now get the average hexagon radius
         double scaling_dimension = this->scaling_dimension();
+        // average is average of minimum starting size and 0 (hexagons shrink)
         double average_hexagon_radius = (
-            (scaling_dimension / this->config.start_size_range.min)
-            +
-            (scaling_dimension / this->config.start_size_range.max)
+            (scaling_dimension / this->config.start_size_range.min) + 0.0
         ) / 2.0;
         /*
          * the area of a regular hexagon may be found with the side length or 
@@ -168,10 +168,23 @@ namespace hexago {
         );
     }
 
+    sf::Color HexagoScreenSaver::resolve_background_colour() const {
+        // background colour is set based on config option value
+        switch(this->config.background_colour) {
+            case BG_COLOUR_BLACK:
+                return sf::Color::Black;
+            case BG_COLOUR_WHITE:
+                return sf::Color::White;
+            case BG_COLOUR_GREY:
+            default:
+                return sf::Color(127, 127, 127);
+        }
+    }
+
     /*
      * a tuning constant for the mechanics which calculates the number
      * of hexagons which need to be drawn
      */
-    const double HexagoScreenSaver::HEXAGON_NUMBER_TUNING_CONSTANT = 30.0;
+    const double HexagoScreenSaver::HEXAGON_NUMBER_TUNING_CONSTANT = 2.75;
 
 }

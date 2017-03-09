@@ -18,8 +18,9 @@ namespace hexago {
 
     // enum for expressing what the background colour should be
     enum background_colour_t {
-        BG_COLOUR_BLACK, // a solid black background, the default
-        BG_COLOUR_WHITE, // a solid white background, not recommended
+        BG_COLOUR_GREY, // a neutral grey background
+        BG_COLOUR_BLACK, // a solid black background
+        BG_COLOUR_WHITE, // a solid white background
     };
 
     /*
