@@ -80,8 +80,10 @@ namespace hexago {
                     break;
             }
         }
-        // clear the window with background colour
-        this->window.clear(this->background_colour);
+        // clear the window with background colour if it's not set to NONE
+        if(this->config.background_colour != BG_COLOUR_NONE) {
+            this->window.clear(this->background_colour);
+        }
         // loop over all the hexagons in the array
         for(size_t i = 0; i < this->hexagon_count; i++) {
             // check if the hexagon needs 're-birthing'
@@ -175,6 +177,12 @@ namespace hexago {
                 return sf::Color::Black;
             case BG_COLOUR_WHITE:
                 return sf::Color::White;
+            case BG_COLOUR_NONE:
+                /*
+                 * no background means colour is not used - return full
+                 * transparency anyway, just for consistency
+                 */
+                return sf::Color(0, 0, 0, 0);
             case BG_COLOUR_GREY:
             default:
                 return sf::Color(127, 127, 127);
