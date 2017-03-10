@@ -21,6 +21,7 @@ namespace hexago {
         BG_COLOUR_GREY, // a neutral grey background
         BG_COLOUR_BLACK, // a solid black background
         BG_COLOUR_WHITE, // a solid white background
+        BG_COLOUR_NONE, // disable background repainting entirely, shapes blend
     };
 
     /*
