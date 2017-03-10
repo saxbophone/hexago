@@ -11,7 +11,7 @@ set(HEXAGO_CXX_STANDARD "11")
 if(DEFINED ENV{HEXAGO_CXX_STANDARD})
     set(HEXAGO_CXX_STANDARD "$ENV{HEXAGO_CXX_STANDARD}")
 endif()
-message(STATUS "C++ Standard set to C++${HEXAGO_CXX_STANDARD}")
+message(STATUS "[hexago] C++ Standard set to C++${HEXAGO_CXX_STANDARD}")
 set(CMAKE_CXX_STANDARD ${HEXAGO_CXX_STANDARD})
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -44,7 +44,7 @@ endfunction()
 
 # enable extra flags (warnings) if we're not in release mode
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
-    message(STATUS "Warnings Enabled")
+    message(STATUS "[hexago] Warnings Enabled")
     # enable all warnings about 'questionable constructs'
     enable_cxx_compiler_flag_if_supported("-Wall")
     # issue 'pedantic' warnings for strict ISO compliance
@@ -64,7 +64,7 @@ endif()
 
 # do necessary things if static build was requested
 if(HEXAGO_STATIC_BUILD)
-    message(STATUS "Performing a Static Build")
+    message(STATUS "[hexago] Performing a Static Build")
     set(SFML_STATIC_LIBRARIES ON)
 endif()
 
