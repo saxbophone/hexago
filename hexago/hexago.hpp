@@ -1,5 +1,5 @@
-#ifndef SAXBOPHONE_HEXAGO_MAIN_HPP
-#define SAXBOPHONE_HEXAGO_MAIN_HPP
+#ifndef SAXBOPHONE_HEXAGO_HEXAGO_HPP
+#define SAXBOPHONE_HEXAGO_HEXAGO_HPP
 
 #include <cstdint>
 
@@ -17,6 +17,8 @@ namespace hexago {
     } version_t;
 
     extern const version_t VERSION;
+
+    extern const char* copyright;
 
 }
 
