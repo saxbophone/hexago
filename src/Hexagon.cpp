@@ -45,8 +45,8 @@ namespace hexago {
 
     bool Hexagon::is_dead() const {
         /*
-         * TODO: Return true/false on whether this hexagon is finished, based
-         * on birth time, current time, start size and decay time
+         * Return true/false on whether this hexagon is finished, based on
+         * birth time, current time, start size and decay time
          */
         return (this->current_size() <= 0);
     }
