@@ -1,5 +1,9 @@
 #include <cmath>
 
+#include <colrcv-0/models/rgb.h>
+#include <colrcv-0/models/hsv.h>
+#include <colrcv-0/models/lab.h>
+
 #include "ParameterRange.hpp"
 #include "HexagonFactoryConfig.hpp"
 #include "Hexagon.hpp"
@@ -46,28 +50,37 @@ namespace hexago {
         // check which colour model we're using, set bounds accordingly
         switch(this->colour_model) {
             case COLOUR_MODEL_RGB:
-                d_channel_bounds.min = 0;
-                d_channel_bounds.max = 255;
-                e_channel_bounds.min = 0;
-                e_channel_bounds.max = 255;
-                f_channel_bounds.min = 0;
-                f_channel_bounds.max = 255;
+                // r
+                d_channel_bounds.min = COLRCV_RGB_MIN_VALUE;
+                d_channel_bounds.max = COLRCV_RGB_MAX_VALUE;
+                // g
+                e_channel_bounds.min = COLRCV_RGB_MIN_VALUE;
+                e_channel_bounds.max = COLRCV_RGB_MAX_VALUE;
+                // b
+                f_channel_bounds.min = COLRCV_RGB_MIN_VALUE;
+                f_channel_bounds.max = COLRCV_RGB_MAX_VALUE;
                 break;
             case COLOUR_MODEL_HSV:
-                d_channel_bounds.min = 0;
-                d_channel_bounds.max = 360;
-                e_channel_bounds.min = 0;
-                e_channel_bounds.max = 100;
-                f_channel_bounds.min = 0;
-                f_channel_bounds.max = 100;
+                // h
+                d_channel_bounds.min = COLRCV_HSV_MIN_VALUE;
+                d_channel_bounds.max = COLRCV_HSV_H_MAX_VALUE;
+                // s
+                e_channel_bounds.min = COLRCV_HSV_MIN_VALUE;
+                e_channel_bounds.max = COLRCV_HSV_S_MAX_VALUE;
+                // v
+                f_channel_bounds.min = COLRCV_HSV_MIN_VALUE;
+                f_channel_bounds.max = COLRCV_HSV_V_MAX_VALUE;
                 break;
             case COLOUR_MODEL_LAB:
-                d_channel_bounds.min = 0;
-                d_channel_bounds.max = 100;
-                e_channel_bounds.min = -100;
-                e_channel_bounds.max = 100;
-                f_channel_bounds.min = -100;
-                f_channel_bounds.max = 100;
+                // l
+                d_channel_bounds.min = COLRCV_LAB_L_MIN_VALUE;
+                d_channel_bounds.max = COLRCV_LAB_MAX_VALUE;
+                // a
+                e_channel_bounds.min = COLRCV_LAB_A_MIN_VALUE;
+                e_channel_bounds.max = COLRCV_LAB_MAX_VALUE;
+                // b
+                f_channel_bounds.min = COLRCV_LAB_B_MIN_VALUE;
+                f_channel_bounds.max = COLRCV_LAB_MAX_VALUE;
                 break;
         }
         // check any channel values for NANs and set them to bounds if so
