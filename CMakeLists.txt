@@ -74,6 +74,13 @@ if(HEXAGO_STATIC_BUILD)
     set(SFML_STATIC_LIBRARIES ON)
 endif()
 
+# unset BUILD_SHARED_LIBS, in case it was set
+# this affects whether *we* build as static or shared
+# in this instance, we always want to build libhexago as a static library as
+# we're not going to install it separately at all and want to bundle it with
+# all executables that depend on it
+unset(BUILD_SHARED_LIBS)
+
 # dependencies
 # add custom dependencies directory
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
@@ -84,13 +91,18 @@ include_directories(${SFML_INCLUDE_DIR})
 find_package(COLRCV 0.1 REQUIRED)
 include_directories(${COLRCV_INCLUDE_DIR})
 
-# C++ Sources
-file(GLOB HEXAGO_SOURCES "src/*.cpp")
-# C++ Headers
-file(GLOB HEXAGO_HEADERS "src/*.hpp")
+# compile the bulk of Hexago into a library (libhexago)
+# this is then shared among the programs which depend on it
 
-add_executable(hexago ${HEXAGO_SOURCES})
+# libhexago C++ Sources
+file(GLOB LIBHEXAGO_SOURCES "hexago/*.cpp")
+# libhexago Headers
+file(GLOB LIBHEXAGO_HEADERS "hexago/*.hpp")
 
+# here we define the libhexago library
+add_library(hexago ${LIBHEXAGO_SOURCES})
+
+# here we link libhexago with its dependencies
 # we need to do additional linking steps if it's a static build
 if(HEXAGO_STATIC_BUILD)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -111,4 +123,9 @@ else()
     target_link_libraries(hexago ${SFML_LIBRARIES} ${COLRCV_LIBRARIES})
 endif()
 
-install(TARGETS hexago DESTINATION bin)
+# this is the cross-platform demo program
+add_executable(hexago-demo "demo.cpp")
+# link it with libhexago
+target_link_libraries(hexago-demo hexago)
+
+install(TARGETS hexago-demo DESTINATION bin)
