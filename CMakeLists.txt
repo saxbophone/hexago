@@ -1,19 +1,9 @@
 # begin basic metadata
 cmake_minimum_required(VERSION 3.0)
 
-project(hexago VERSION 0.5.0 LANGUAGES CXX)
+project(hexago VERSION 0.6.0 LANGUAGES CXX)
 # set build number - this increments for any new version
-set(HEXAGO_VERSION_BUILD 8)
-
-# set default C++ standard to use (C++11)
-set(HEXAGO_CXX_STANDARD "11")
-# if env variable HEXAGO_CXX_STANDARD is set, override version
-if(DEFINED ENV{HEXAGO_CXX_STANDARD})
-    set(HEXAGO_CXX_STANDARD "$ENV{HEXAGO_CXX_STANDARD}")
-endif()
-message(STATUS "C++ Standard set to C++${HEXAGO_CXX_STANDARD}")
-set(CMAKE_CXX_STANDARD ${HEXAGO_CXX_STANDARD})
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(HEXAGO_VERSION_BUILD 9)
 
 set(
     HEXAGO_VERSION_STRING
@@ -28,6 +18,22 @@ add_definitions(-DHEXAGO_VERSION_MINOR=${PROJECT_VERSION_MINOR})
 add_definitions(-DHEXAGO_VERSION_PATCH=${PROJECT_VERSION_PATCH})
 add_definitions(-DHEXAGO_VERSION_BUILD=${HEXAGO_VERSION_BUILD})
 add_definitions(-DHEXAGO_VERSION_STRING=${HEXAGO_ESCAPED_VERSION_STRING})
+
+message(
+    STATUS
+    "[hexago] Preparing to build Hexago v${HEXAGO_VERSION_STRING} "
+    "(build ${HEXAGO_VERSION_BUILD})"
+)
+
+# set default C++ standard to use (C++11)
+set(HEXAGO_CXX_STANDARD "11")
+# if env variable HEXAGO_CXX_STANDARD is set, override version
+if(DEFINED ENV{HEXAGO_CXX_STANDARD})
+    set(HEXAGO_CXX_STANDARD "$ENV{HEXAGO_CXX_STANDARD}")
+endif()
+message(STATUS "[hexago] C++ Standard set to C++${HEXAGO_CXX_STANDARD}")
+set(CMAKE_CXX_STANDARD ${HEXAGO_CXX_STANDARD})
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # used for enabling additional compiler options if supported
 include(CheckCXXCompilerFlag)
@@ -44,7 +50,7 @@ endfunction()
 
 # enable extra flags (warnings) if we're not in release mode
 if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
-    message(STATUS "Warnings Enabled")
+    message(STATUS "[hexago] Warnings Enabled")
     # enable all warnings about 'questionable constructs'
     enable_cxx_compiler_flag_if_supported("-Wall")
     # issue 'pedantic' warnings for strict ISO compliance
@@ -64,7 +70,7 @@ endif()
 
 # do necessary things if static build was requested
 if(HEXAGO_STATIC_BUILD)
-    message(STATUS "Performing a Static Build")
+    message(STATUS "[hexago] Performing a Static Build")
     set(SFML_STATIC_LIBRARIES ON)
 endif()
 

@@ -132,6 +132,8 @@ namespace hexago {
                 destination = BG_COLOUR_BLACK;
             } else if(next_argument == "white") {
                 destination = BG_COLOUR_WHITE;
+            } else if(next_argument == "none") {
+                destination = BG_COLOUR_NONE;
             }
             // advance by one argument
             advance = 1;
