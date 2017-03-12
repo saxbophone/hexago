@@ -18,7 +18,7 @@ namespace hexago {
 
     // simple constructor
     HexagoScreenSaver::HexagoScreenSaver(sf::RenderWindow& window)
-      : HexagoScreenSaver(window, default_config())
+      : HexagoScreenSaver(window, resolved_default_config())
       {}
 
     // customisation constructor
@@ -114,7 +114,6 @@ namespace hexago {
         this->window.display();
     }
 
-    // retrieves the default config
     HexagoScreenSaverConfig HexagoScreenSaver::default_config() {
         return HexagoScreenSaverConfig(
             // start_size_range
@@ -136,6 +135,14 @@ namespace hexago {
             SPAWN_MODE_BOTTOM, // spawn_mode
             BG_COLOUR_GREY // background_mode
         );
+    }
+
+    HexagoScreenSaverConfig HexagoScreenSaver::resolved_default_config() {
+        // get unfinised default config
+        HexagoScreenSaverConfig config = HexagoScreenSaver::default_config();
+        // resolve default values
+        config.resolve_defaults();
+        return config;
     }
 
     size_t HexagoScreenSaver::required_number_of_hexagons() const {
