@@ -102,6 +102,12 @@ file(GLOB LIBHEXAGO_HEADERS "hexago/*.hpp")
 # here we define the libhexago library
 add_library(hexago ${LIBHEXAGO_SOURCES})
 
+# if we're on windows, then set these additional linker options so the console
+# window doesn't show up and get in the way
+if(WIN32)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-subsystem,windows")
+endif()
+
 # here we link libhexago with its dependencies
 # we need to do additional linking steps if it's a static build
 if(HEXAGO_STATIC_BUILD)
@@ -114,7 +120,7 @@ if(HEXAGO_STATIC_BUILD)
         # compiling for Windows)
         #
         # This is allowed as per the GCC Runtime Exception.
-        set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
     endif()
     # if we're statically linking, then we need to manually link SFML's dependencies as well
     target_link_libraries(hexago ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${COLRCV_LIBRARIES})
@@ -123,9 +129,16 @@ else()
     target_link_libraries(hexago ${SFML_LIBRARIES} ${COLRCV_LIBRARIES})
 endif()
 
+# specify executables and link with the library
 # this is the cross-platform demo program
 add_executable(hexago-demo "demo.cpp")
-# link it with libhexago
 target_link_libraries(hexago-demo hexago)
+# include Windows NT Screensaver if we're on Windows NT
+if(WIN32)
+    add_executable(hexago-win "windows_nt.cpp")
+    # make the executable file have a '.scr' file extension
+    set_target_properties(hexago-win PROPERTIES SUFFIX ".scr")
+    target_link_libraries(hexago-win hexago)
+endif()
 
 install(TARGETS hexago-demo DESTINATION bin)

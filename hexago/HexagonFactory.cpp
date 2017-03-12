@@ -82,14 +82,14 @@ namespace hexago {
         // colrcv rgb colour to be used later
         colrcv_rgb_t rgb;
         switch(this->colour_model) {
-            case hexago::COLOUR_MODEL_RGB: {                
+            case hexago::COLOUR_MODEL_RGB: {
                 // just store channels in rgb struct
                 rgb.r = d_colour_channel_range(this->random_number_engine);
                 rgb.g = e_colour_channel_range(this->random_number_engine);
                 rgb.b = f_colour_channel_range(this->random_number_engine);
                 break;
             }
-            case hexago::COLOUR_MODEL_HSV: {                
+            case hexago::COLOUR_MODEL_HSV: {
                 // create a new hsv colour
                 colrcv_hsv_t hsv = {
                     d_colour_channel_range(this->random_number_engine),
@@ -100,7 +100,7 @@ namespace hexago {
                 colrcv_hsv_to_rgb(hsv, &rgb);
                 break;
             }
-            case hexago::COLOUR_MODEL_LAB: {                
+            case hexago::COLOUR_MODEL_LAB: {
                 // create a new lab colour
                 colrcv_lab_t lab = {
                     d_colour_channel_range(this->random_number_engine),
