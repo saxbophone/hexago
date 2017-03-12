@@ -1,13 +1,14 @@
 #include <string>
 #include <sstream>
 
+#include <SFML/Window.hpp>
+
 #include <cstdio>
+#include <cstdlib>
 
 #include <tchar.h>
 #include <windows.h>
 #include <scrnsave.h>
-
-#include <SFML/Window.hpp>
 
 #include "hexago/hexago.hpp"
 #include "hexago/HexagoScreenSaver.hpp"
@@ -45,40 +46,37 @@ BOOL WINAPI RegisterDialogClasses(HANDLE) {
 }
 
 
-int WINAPI WinMain(
-    HINSTANCE current_app_instance,
-    HINSTANCE, // previous_app_instance
-    LPSTR, // command_line_arguments
-    int // window_show_mode
+// simple helper function for handling the windows API GUI stuff
+static HWND get_window_handle(
+    HINSTANCE app_instance, WNDCLASSEX* window_class
 ) {
     // construct a window class data structure
-    WNDCLASSEX window_class;
-    window_class.hInstance = current_app_instance;
-    window_class.lpszClassName = window_class_name;
+    window_class->hInstance = app_instance;
+    window_class->lpszClassName = window_class_name;
     // this is our event-handler callback function, defined above
-    window_class.lpfnWndProc = ScreenSaverProc;
-    window_class.style = CS_DBLCLKS; // catch double-clicks
-    window_class.cbSize = sizeof(WNDCLASSEX); // set object size
+    window_class->lpfnWndProc = ScreenSaverProc;
+    window_class->style = CS_DBLCLKS; // catch double-clicks
+    window_class->cbSize = sizeof(WNDCLASSEX); // set object size
     // use default icon and mouse pointer
-    window_class.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    window_class.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-    window_class.hCursor = LoadCursor(NULL, IDC_ARROW);
-    window_class.lpszMenuName = NULL; // no menu
-    window_class.cbClsExtra = 0; // no extra bytes after window class
-    window_class.cbWndExtra = 0; // structure or the window instance
+    window_class->hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    window_class->hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+    window_class->hCursor = LoadCursor(NULL, IDC_ARROW);
+    window_class->lpszMenuName = NULL; // no menu
+    window_class->cbClsExtra = 0; // no extra bytes after window class
+    window_class->cbWndExtra = 0; // structure or the window instance
     // use Windows's default colour as the background of the window
-    window_class.hbrBackground = (HBRUSH)COLOR_BACKGROUND;
+    window_class->hbrBackground = (HBRUSH)COLOR_BACKGROUND;
     // try and register the window class. if it fails, print error and quit
-    if(!RegisterClassEx(&window_class)) {
+    if(!RegisterClassEx(window_class)) {
         fprintf(
             stderr, "Windows API Error: Could not register window class\n"
         );
-        return 1;
+        exit(1);
     }
     /* if we got here, then the class was registered successfully
-     * let's now create the window handle
+     * let's now create and return the window handle
      */
-    HWND window_handle = CreateWindowEx(
+    return CreateWindowEx(
         0, // the extended window style to create it with
         window_class_name, // window class name
         window_class_name, // window title text
@@ -92,18 +90,35 @@ int WINAPI WinMain(
         // window handle to parent window - in this case our parent is desktop
         HWND_DESKTOP,
         NULL, // handle to menu - in this case, we don't want one
-        current_app_instance, // handle to current app instance
+        app_instance, // handle to current app instance
         NULL // no additional window creation data
     );
+}
+
+
+int WINAPI WinMain(
+    HINSTANCE current_app_instance,
+    HINSTANCE, // previous_app_instance
+    LPSTR, // command_line_arguments
+    int // window_show_mode
+) {
+    // get Windows window handle
+    WNDCLASSEX window_class = {};
+    HWND window_handle = get_window_handle(current_app_instance, &window_class);
     // hand over the window handle to SFML
     sf::RenderWindow window(window_handle);
+    // window settings
+    sf::ContextSettings settings;
+    // set anti-aliasing
+    settings.antialiasingLevel = 8;
     // use SFML to create the screen in fullscreen mode
     // get an appropriate video mode
     sf::VideoMode video_mode = sf::VideoMode::getFullscreenModes()[0];
     window.create(
         video_mode,
         APP_NAME,
-        sf::Style::Fullscreen
+        sf::Style::Fullscreen,
+        settings
     );
     // instantiate the screensaver app with this window instance
     hexago::HexagoScreenSaver screensaver(window);
