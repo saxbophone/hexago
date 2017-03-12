@@ -61,18 +61,18 @@ namespace hexago {
                  * fall-throughs warrant a program exit.
                  */
                 case sf::Event::Closed:
-                case sf::Event::LostFocus:
+                // case sf::Event::LostFocus:
                 case sf::Event::KeyPressed:
                 case sf::Event::KeyReleased:
                 case sf::Event::MouseWheelScrolled:
                 case sf::Event::MouseButtonPressed:
                 case sf::Event::MouseButtonReleased:
-                case sf::Event::MouseMoved:
-                case sf::Event::MouseEntered:
-                case sf::Event::MouseLeft:
-                case sf::Event::TouchBegan:
-                case sf::Event::TouchMoved:
-                case sf::Event::TouchEnded:
+                // case sf::Event::MouseMoved:
+                // case sf::Event::MouseEntered:
+                // case sf::Event::MouseLeft:
+                // case sf::Event::TouchBegan:
+                // case sf::Event::TouchMoved:
+                // case sf::Event::TouchEnded:
                     this->window.close();
                     continue;
                 default:

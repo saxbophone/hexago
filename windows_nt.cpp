@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <sstream>
 
@@ -48,7 +49,7 @@ BOOL WINAPI RegisterDialogClasses(HANDLE) {
 
 // simple helper function for handling the windows API GUI stuff
 static HWND get_window_handle(
-    HINSTANCE app_instance, WNDCLASSEX* window_class
+    HINSTANCE app_instance, WNDCLASSEX* window_class, HWND parent_window
 ) {
     // construct a window class data structure
     window_class->hInstance = app_instance;
@@ -87,8 +88,8 @@ static HWND get_window_handle(
         // window x and y dimensions - again, here we let windows decide
         CW_USEDEFAULT,
         CW_USEDEFAULT,
-        // window handle to parent window - in this case our parent is desktop
-        HWND_DESKTOP,
+        // window handle to parent window
+        parent_window,
         NULL, // handle to menu - in this case, we don't want one
         app_instance, // handle to current app instance
         NULL // no additional window creation data
@@ -99,12 +100,49 @@ static HWND get_window_handle(
 int WINAPI WinMain(
     HINSTANCE current_app_instance,
     HINSTANCE, // previous_app_instance
-    LPSTR, // command_line_arguments
+    LPSTR, // command_line_arguments,
     int // window_show_mode
 ) {
+    // retrieve command-line arguments
+    LPWSTR* arguments = NULL;
+    int argument_count = 0;
+    arguments = CommandLineToArgvW(GetCommandLineW(), &argument_count);
+    // catch parse failure
+    if(arguments == NULL) {
+        fprintf(stderr, "Unable to parse command-line arguments\n");
+        return 1;
+    }
+    // if there were no arguments, then it's asking for config mode
+    if(argument_count < 2) {
+        // we currently don't implement this
+        return 0;
+    }
+    // initially set parent window to Desktop - we'll change it if preview mode
+    HWND parent_window = HWND_DESKTOP;
+    // check argument
+    // convert from LPWSTR to C++ wstring to preserve my sanity!
+    std::wstring argument = arguments[1];
+    if(argument[0] == '/') {
+        switch(argument[1]) {
+            case 'p':
+                /*
+                 * this is preview mode, so we need to get parent window handle
+                 * from the second command-line argument
+                 */
+                wprintf(L"%s\n", arguments[2]);
+                parent_window = (HWND)std::wcstol(arguments[2], NULL, 10);
+            case 's':
+                // this is screensaver mode, so we can just continue
+                break;
+            default:
+                return 0;
+        }
+    }
     // get Windows window handle
     WNDCLASSEX window_class = {};
-    HWND window_handle = get_window_handle(current_app_instance, &window_class);
+    HWND window_handle = get_window_handle(
+        current_app_instance, &window_class, parent_window
+    );
     // hand over the window handle to SFML
     sf::RenderWindow window(window_handle);
     // window settings
@@ -114,7 +152,7 @@ int WINAPI WinMain(
     // use SFML to create the screen in fullscreen mode
     // get an appropriate video mode
     sf::VideoMode video_mode = sf::VideoMode::getFullscreenModes()[0];
-    window.create(video_mode, APP_NAME, sf::Style::Fullscreen, settings);
+    window.create(video_mode, APP_NAME, sf::Style::Default, settings);
     // instantiate the screensaver app with this window instance
     hexago::HexagoScreenSaver screensaver(window);
     // loop while window remains open
@@ -122,6 +160,7 @@ int WINAPI WinMain(
         // call the update method to update internal state and draw the frame
         screensaver.update();
     }
+    std::cin.get();
     // cleanup before exit
     // destroy window handle
     DestroyWindow(window_handle);
