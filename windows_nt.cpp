@@ -105,12 +105,8 @@ int WINAPI WinMain(
         APP_NAME,
         sf::Style::Fullscreen
     );
-    // get default screensaver config
-    hexago::HexagoScreenSaverConfig settings = hexago::HexagoScreenSaver::default_config();
-    // resolve default values of settings object
-    settings.resolve_defaults();
-    // instantiate the screensaver app with this window instance and settings
-    hexago::HexagoScreenSaver screensaver(window, settings);
+    // instantiate the screensaver app with this window instance
+    hexago::HexagoScreenSaver screensaver(window);
     // loop while window remains open
     while(window.isOpen()) {
         // call the update method to update internal state and draw the frame
