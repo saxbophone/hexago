@@ -35,6 +35,8 @@ namespace hexago {
             static HexagoScreenSaverConfig default_config();
 
         private:
+            // retrieves the default config, with all default values resolved
+            static HexagoScreenSaverConfig resolved_default_config();
             /*
              * calculates the number of Hexagons that this instance of the
              * screensaver should have, based on the screen area, number of
