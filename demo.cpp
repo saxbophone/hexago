@@ -1,5 +1,6 @@
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include <cstdio>
 
@@ -30,13 +31,11 @@ int main(int argc, char* argv[]) {
     );
     // hide the mouse cursor
     window.setMouseCursorVisible(false);
-
     /*
      * get screen saver config from command-line arguments, then instantiate a
      * HexagoScreenSaver object, handing it our window and config
      */
     hexago::HexagoScreenSaver app(window, hexago::parse_arguments(argc, argv));
-
     // loop while window remains open
     while(window.isOpen()) {
         // call the update method to update internal state and draw the frame
