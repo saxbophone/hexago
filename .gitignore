@@ -27,7 +27,6 @@
 *.exe
 *.out
 *.app
-hexago
 
 ### CMake ###
 CMakeCache.txt

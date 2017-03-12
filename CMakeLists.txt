@@ -1,9 +1,9 @@
 # begin basic metadata
 cmake_minimum_required(VERSION 3.0)
 
-project(hexago VERSION 0.6.0 LANGUAGES CXX)
+project(hexago VERSION 0.7.0 LANGUAGES CXX)
 # set build number - this increments for any new version
-set(HEXAGO_VERSION_BUILD 9)
+set(HEXAGO_VERSION_BUILD 10)
 
 set(
     HEXAGO_VERSION_STRING
@@ -74,6 +74,13 @@ if(HEXAGO_STATIC_BUILD)
     set(SFML_STATIC_LIBRARIES ON)
 endif()
 
+# unset BUILD_SHARED_LIBS, in case it was set
+# this affects whether *we* build as static or shared
+# in this instance, we always want to build libhexago as a static library as
+# we're not going to install it separately at all and want to bundle it with
+# all executables that depend on it
+unset(BUILD_SHARED_LIBS)
+
 # dependencies
 # add custom dependencies directory
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
@@ -84,13 +91,24 @@ include_directories(${SFML_INCLUDE_DIR})
 find_package(COLRCV 0.1 REQUIRED)
 include_directories(${COLRCV_INCLUDE_DIR})
 
-# C++ Sources
-file(GLOB HEXAGO_SOURCES "src/*.cpp")
-# C++ Headers
-file(GLOB HEXAGO_HEADERS "src/*.hpp")
+# compile the bulk of Hexago into a library (libhexago)
+# this is then shared among the programs which depend on it
 
-add_executable(hexago ${HEXAGO_SOURCES})
+# libhexago C++ Sources
+file(GLOB LIBHEXAGO_SOURCES "hexago/*.cpp")
+# libhexago Headers
+file(GLOB LIBHEXAGO_HEADERS "hexago/*.hpp")
 
+# here we define the libhexago library
+add_library(hexago ${LIBHEXAGO_SOURCES})
+
+# if we're on windows, then set these additional linker options so the console
+# window doesn't show up and get in the way
+if(WIN32)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-subsystem,windows")
+endif()
+
+# here we link libhexago with its dependencies
 # we need to do additional linking steps if it's a static build
 if(HEXAGO_STATIC_BUILD)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -102,7 +120,7 @@ if(HEXAGO_STATIC_BUILD)
         # compiling for Windows)
         #
         # This is allowed as per the GCC Runtime Exception.
-        set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
     endif()
     # if we're statically linking, then we need to manually link SFML's dependencies as well
     target_link_libraries(hexago ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${COLRCV_LIBRARIES})
@@ -111,4 +129,16 @@ else()
     target_link_libraries(hexago ${SFML_LIBRARIES} ${COLRCV_LIBRARIES})
 endif()
 
-install(TARGETS hexago DESTINATION bin)
+# specify executables and link with the library
+# this is the cross-platform demo program
+add_executable(hexago-demo "demo.cpp")
+target_link_libraries(hexago-demo hexago)
+# include Windows NT Screensaver if we're on Windows NT
+if(WIN32)
+    add_executable(hexago-win "windows_nt.cpp")
+    # make the executable file have a '.scr' file extension
+    set_target_properties(hexago-win PROPERTIES SUFFIX ".scr")
+    target_link_libraries(hexago-win hexago)
+endif()
+
+install(TARGETS hexago-demo DESTINATION bin)
