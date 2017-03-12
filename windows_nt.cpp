@@ -114,12 +114,7 @@ int WINAPI WinMain(
     // use SFML to create the screen in fullscreen mode
     // get an appropriate video mode
     sf::VideoMode video_mode = sf::VideoMode::getFullscreenModes()[0];
-    window.create(
-        video_mode,
-        APP_NAME,
-        sf::Style::Fullscreen,
-        settings
-    );
+    window.create(video_mode, APP_NAME, sf::Style::Fullscreen, settings);
     // instantiate the screensaver app with this window instance
     hexago::HexagoScreenSaver screensaver(window);
     // loop while window remains open
