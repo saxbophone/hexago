@@ -102,6 +102,12 @@ file(GLOB LIBHEXAGO_HEADERS "hexago/*.hpp")
 # here we define the libhexago library
 add_library(hexago ${LIBHEXAGO_SOURCES})
 
+# if we're on windows, then set these additional linker options so the console
+# window doesn't show up and get in the way
+if(WIN32)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-subsystem,windows")
+endif()
+
 # here we link libhexago with its dependencies
 # we need to do additional linking steps if it's a static build
 if(HEXAGO_STATIC_BUILD)
@@ -132,8 +138,7 @@ if(WIN32)
     add_executable(hexago-win "windows_nt.cpp")
     # make the executable file have a '.scr' file extension
     set_target_properties(hexago-win PROPERTIES SUFFIX ".scr")
-    # we also need to link with scrnsave.lib
-    target_link_libraries(hexago-win hexago scrnsave)
+    target_link_libraries(hexago-win hexago)
 endif()
 
 install(TARGETS hexago-demo DESTINATION bin)
