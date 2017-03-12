@@ -105,26 +105,8 @@ int WINAPI WinMain(
         APP_NAME,
         sf::Style::Fullscreen
     );
-    hexago::HexagoScreenSaverConfig settings(
-        // start_size_range
-        hexago::ParameterRange<hexago::hexagon_size_t>(12.0, 6.0),
-        // decay_speed_range
-        hexago::ParameterRange<hexago::hexagon_decay_t>(32.0, 16.0),
-        hexago::COLOUR_MODEL_RGB, // colour_model
-        // NOTE: The default "don't care" value for a colour channel is NAN
-        // d_colour_channel_range
-        hexago::ParameterRange<hexago::colour_channel_t>(NAN, NAN),
-        // e_colour_channel_range
-        hexago::ParameterRange<hexago::colour_channel_t>(NAN, NAN),
-        // f_colour_channel_range
-        hexago::ParameterRange<hexago::colour_channel_t>(NAN, NAN),
-        // alpha_colour_channel_range
-        hexago::ParameterRange<hexago::colour_channel_t>(100.0, 100.0),
-        30, // framerate
-        (100.0 / 100.0), // minimum_screen_cover
-        hexago::SPAWN_MODE_BOTTOM, // spawn_mode
-        hexago::BG_COLOUR_WHITE // background_mode
-    );
+    // get default screensaver config
+    hexago::HexagoScreenSaverConfig settings = hexago::HexagoScreenSaver::default_config();
     // resolve default values of settings object
     settings.resolve_defaults();
     // instantiate the screensaver app with this window instance and settings
