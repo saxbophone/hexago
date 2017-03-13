@@ -1,5 +1,5 @@
 /*
- * XXX: This code was written on Linux and HAS NOT BEEN TESTED AT ALL (yet)
+ * This should compile, provided the target system has the appropriate headers
  */
 #include <SFML/Window.hpp>
 
@@ -10,7 +10,7 @@
 
 @implementation HexagoScreenSaverView
 
-static NSString * const MyModuleName = @"com.saxbophone.HexagoScreenSaver";
+static const NSString* MyModuleName = @"com.saxbophone.HexagoScreenSaver";
 
 - (id)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview {
     self = [super initWithFrame:frame isPreview:isPreview];
@@ -23,13 +23,26 @@ static NSString * const MyModuleName = @"com.saxbophone.HexagoScreenSaver";
         /*
          * initialise an SFML window from a native window handle (in this case,
          * we can use self as ScreenSaverView inherits from NSView, which SFML
-         * will accept as a window handle)
+         * will accept as a window handle - it's basically a void pointer as
+         * far as C++ is concerned)
          */
-        sfml_window = sf::RenderWindow(self); // TODO: include sf::ContextSettings
+        /*
+         * TODO: Check this cast is necessary - it may not be on OSX
+         * (both types are void pointers as far as I'm aware)
+         */
+        sfml_window = new sf::RenderWindow((sf::WindowHandle)self);
+        // TODO: include sf::ContextSettings in sf::RenderWindow constructor
         // intialise screensaver app with window instance
-        screensaver = hexago::HexagoScreenSaver(sfml_window);
+        screensaver = new hexago::HexagoScreenSaver(*sfml_window);
     }
     return self;
+}
+
+-(void)dealloc {
+    // hook into dealloc message so we relinquish resources (our C++ objects!)
+    delete sfml_window;
+    delete screensaver;
+    [super dealloc];
 }
 
 - (void)startAnimation {
@@ -47,7 +60,7 @@ static NSString * const MyModuleName = @"com.saxbophone.HexagoScreenSaver";
 
 - (void)animateOneFrame {
     // call screensaver.update() to render one frame
-    screensaver.update();
+    screensaver->update();
 }
 
 - (BOOL)hasConfigureSheet {
