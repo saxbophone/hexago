@@ -1,0 +1,3 @@
+*.[ch]pp linguist-language=C++
+*.hh linguist-language=Objective-C++
+*.mm linguist-language=Objective-C++
