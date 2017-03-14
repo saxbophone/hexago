@@ -140,5 +140,16 @@ if(WIN32)
     set_target_properties(hexago-win PROPERTIES SUFFIX ".scr")
     target_link_libraries(hexago-win hexago)
 endif()
+# include Mac OSX Screensaver if we're on Mac OSX
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    # make sure CMake passes the correct arguments to the compiler to build as
+    # objective-c++
+    set_source_files_properties(
+        "mac_osx.mm" PROPERTIES COMPILE_FLAGS "-x objective-c++"
+    )
+    add_executable(hexago-mac "mac_osx.mm")
+    target_link_libraries(hexago-mac hexago)
+    # TODO: Set up creation of App Bundle containing dependencies for portability
+endif()
 
 install(TARGETS hexago-demo DESTINATION bin)
