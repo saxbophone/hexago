@@ -8,7 +8,6 @@
 
 #include <windows.h>
 
-#include "hexago/hexago.hpp"
 #include "hexago/HexagoScreenSaver.hpp"
 
 
