@@ -90,6 +90,11 @@ include_directories(${SFML_INCLUDE_DIR})
 # COLRCV
 find_package(COLRCV 0.1 REQUIRED)
 include_directories(${COLRCV_INCLUDE_DIR})
+# if on OSX, then we also need to find the Foundation and Screensaver frameworks
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    find_library(OSX_FRAMEWORK_FOUNDATION CoreFoundation)
+    find_library(OSX_FRAMEWORK_SCREENSAVER CoreScreenSaver)
+endif()
 
 # compile the bulk of Hexago into a library (libhexago)
 # this is then shared among the programs which depend on it
@@ -150,9 +155,9 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     # OSX Screensavers are built as bundles (a kind of library), as they need
     # to be loaded into the OS as a plugin rather than run of their own accord
     add_library(hexago-mac "mac_osx.mm")
-    set_target_properties(hexago-mac PROPERTIES MACOSX_BUNDLE TRUE BUNDLE_EXTENSION ".saver")
-    # TODO: Work out how to link with OSX Foundation librar(ies), if this is needed
-    target_link_libraries(hexago-mac hexago)
+    set_target_properties(hexago-mac PROPERTIES PREFIX "" MACOSX_BUNDLE TRUE BUNDLE_EXTENSION ".saver")
+    # link it with hexago, as well as OSX Foundation and ScreenSaver frameworks
+    target_link_libraries(hexago-mac hexago ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER})
     # TODO: Set up creation of App Bundle containing dependencies for portability
 endif()
 
