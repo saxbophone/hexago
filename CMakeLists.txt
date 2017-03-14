@@ -147,7 +147,11 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set_source_files_properties(
         "mac_osx.mm" PROPERTIES COMPILE_FLAGS "-x objective-c++"
     )
-    add_executable(hexago-mac "mac_osx.mm")
+    # OSX Screensavers are built as bundles (a kind of library), as they need
+    # to be loaded into the OS as a plugin rather than run of their own accord
+    add_library(hexago-mac "mac_osx.mm")
+    set_target_properties(hexago-mac PROPERTIES MACOSX_BUNDLE TRUE BUNDLE_EXTENSION ".saver")
+    # TODO: Work out how to link with OSX Foundation librar(ies), if this is needed
     target_link_libraries(hexago-mac hexago)
     # TODO: Set up creation of App Bundle containing dependencies for portability
 endif()
