@@ -14,39 +14,28 @@ static const NSString* MyModuleName = @"com.saxbophone.HexagoScreenSaver";
 
 - (id)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview {
     self = [super initWithFrame:frame isPreview:isPreview];
-    if (self) {
+    if(self) {
         /*
          * TODO: This should use framerate from our config object instead, or
          * even possibly be removed...
          */
         [self setAnimationTimeInterval:1/30.0];
-        /*
-         * initialise an SFML window from a native window handle (in this case,
-         * we can use self as ScreenSaverView inherits from NSView, which SFML
-         * will accept as a window handle - it's basically a void pointer as
-         * far as C++ is concerned)
-         */
-        /*
-         * TODO: Check this cast is necessary - it may not be on OSX
-         * (both types are void pointers as far as I'm aware)
-         */
-        sfml_window = new sf::RenderWindow((sf::WindowHandle)self);
-        // TODO: include sf::ContextSettings in sf::RenderWindow constructor
-        // intialise screensaver app with window instance
-        screensaver = new hexago::HexagoScreenSaver(*sfml_window);
     }
     return self;
 }
 
--(void)dealloc {
-    // hook into dealloc message so we relinquish resources (our C++ objects!)
-    delete sfml_window;
-    delete screensaver;
-    [super dealloc];
-}
-
 - (void)startAnimation {
     [super startAnimation];
+    /*
+     * initialise an SFML window from a native window handle (in this case,
+     * we can use self as ScreenSaverView inherits from NSView, which SFML
+     * will accept as a window handle - it's basically a void pointer as
+     * far as C++ and Objective-C++ are concerned)
+     */
+    // TODO: include sf::ContextSettings in sf::RenderWindow constructor
+    sfml_window = new sf::RenderWindow(self);
+    // intialise screensaver app with window instance
+    screensaver = new hexago::HexagoScreenSaver(*sfml_window);
 }
 
 - (void)stopAnimation {
@@ -68,9 +57,16 @@ static const NSString* MyModuleName = @"com.saxbophone.HexagoScreenSaver";
     return NO;
 }
 
-- (NSWindow *)configureSheet {
+- (NSWindow*)configureSheet {
     // TODO: Implement configuration dialog
     return nil;
+}
+
+- (void)dealloc {
+    // hook into dealloc message so we relinquish resources (our C++ objects!)
+    delete screensaver;
+    delete sfml_window;
+    [super dealloc];
 }
 
 @end
