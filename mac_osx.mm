@@ -10,8 +10,6 @@
 
 @implementation HexagoScreenSaverView
 
-static const NSString* MyModuleName = @"com.saxbophone.HexagoScreenSaver";
-
 - (id)initWithFrame:(NSRect)frame isPreview:(BOOL)isPreview {
     self = [super initWithFrame:frame isPreview:isPreview];
     if(self) {
@@ -66,7 +64,6 @@ static const NSString* MyModuleName = @"com.saxbophone.HexagoScreenSaver";
     // hook into dealloc message so we relinquish resources (our C++ objects!)
     delete screensaver;
     delete sfml_window;
-    [super dealloc];
 }
 
 @end
