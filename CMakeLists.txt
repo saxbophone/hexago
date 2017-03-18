@@ -15,13 +15,15 @@ set(CMAKE_FIND_ROOT_PATH "/home/joshua/Dev_Build/osxcross/target/SDK/MacOSX10.11
 # modify default behavior of FIND_XXX() commands to
 # search for headers/libs in the target environment and
 # search for programs in the build host environment
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
+set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
+set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
 
 set(CMAKE_FIND_ROOT_PATH "/home/joshua/Dev_Build/osxcross/target/macports/pkgs/opt/local/")
 
 set(CMAKE_OSX_SYSROOT "/home/joshua/Dev_Build/osxcross/target/SDK/MacOSX10.11.sdk/")
+
+set(CMAKE_INSTALL_FRAMEWORK_PREFIX "/home/joshua/Dev_Build/osxcross/target/SDK/MacOSX10.11.sdk/System/Library/Frameworks")
 
 project(hexago VERSION 0.7.0 LANGUAGES CXX)
 # set build number - this increments for any new version
