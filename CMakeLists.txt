@@ -1,6 +1,8 @@
 # begin basic metadata
 cmake_minimum_required(VERSION 3.0)
 
+set(CMAKE_INSTALL_PREFIX "/home/joshua/Dev_Build/osxcross/target/SDK/MacOSX10.11.sdk/usr")
+
 set(CMAKE_SYSTEM_NAME Darwin)
 set(TOOLCHAIN_PREFIX x86_64-apple-darwin15)
 
@@ -172,9 +174,9 @@ endif()
 # include Mac OSX Screensaver if we're on Mac OSX
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     # make sure CMake passes the correct arguments to the compiler to build as
-    # objective-c++
+    # objective-c++, and to enable ARC (rather than garbage collection)
     set_source_files_properties(
-        "mac_osx.mm" PROPERTIES COMPILE_FLAGS "-x objective-c++"
+        "mac_osx.mm" PROPERTIES COMPILE_FLAGS "-x objective-c++ -fobjc-arc"
     )
     # OSX Screensavers are built as bundles (a kind of library), as they need
     # to be loaded into the OS as a plugin rather than run of their own accord

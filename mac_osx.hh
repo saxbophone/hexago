@@ -1,5 +1,6 @@
 /*
- * This should compile, provided the target system has the appropriate headers
+ * This is the Mac OSX version of the screensaver, written as a plugin
+ * (as required by the OSX screensaver framework)
  */
 #import <ScreenSaver/ScreenSaver.h>
 

@@ -1,6 +1,12 @@
 /*
- * This should compile, provided the target system has the appropriate headers
+ * This is the Mac OSX version of the screensaver, written as a plugin
+ * (as required by the OSX screensaver framework)
  */
+// check that ARC is enabled - we need it othwerwise our code is invalid
+#if ! __has_feature(objc_arc)
+#error "ARC is not enabled or supported. This file will not compile without it."
+#endif
+
 #include <SFML/Window.hpp>
 
 #import "mac_osx.hh"
@@ -31,7 +37,7 @@
      * far as C++ and Objective-C++ are concerned)
      */
     // TODO: include sf::ContextSettings in sf::RenderWindow constructor
-    sfml_window = new sf::RenderWindow(self);
+    sfml_window = new sf::RenderWindow((__bridge_retained sf::WindowHandle)self);
     // intialise screensaver app with window instance
     screensaver = new hexago::HexagoScreenSaver(*sfml_window);
 }
