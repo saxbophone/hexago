@@ -17,11 +17,31 @@ set(CMAKE_FIND_ROOT_PATH "/home/joshua/Dev_Build/osxcross/target/SDK/MacOSX10.11
 # modify default behavior of FIND_XXX() commands to
 # search for headers/libs in the target environment and
 # search for programs in the build host environment
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
+# set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
+# set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY BOTH)
+# set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE BOTH)
 
-set(CMAKE_FIND_ROOT_PATH "/home/joshua/Dev_Build/osxcross/target/macports/pkgs/opt/local/")
+# use, i.e. don't skip the full RPATH for the build tree
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+
+# when building, don't use the install RPATH already
+# (but later on when installing)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
+
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+
+# add the automatically determined parts of the RPATH
+# which point to directories outside the build tree to the install RPATH
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+
+# # the RPATH to be used when installing, but only if it's not a system directory
+# LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+# IF("${isSystemDir}" STREQUAL "-1")
+#    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+# ENDIF("${isSystemDir}" STREQUAL "-1")
+
+# set(CMAKE_FIND_ROOT_PATH "/home/joshua/Dev_Build/osxcross/target/macports/pkgs/opt/local/")
 
 set(CMAKE_OSX_SYSROOT "/home/joshua/Dev_Build/osxcross/target/SDK/MacOSX10.11.sdk/")
 
@@ -131,7 +151,7 @@ file(GLOB LIBHEXAGO_SOURCES "hexago/*.cpp")
 file(GLOB LIBHEXAGO_HEADERS "hexago/*.hpp")
 
 # here we define the libhexago library
-add_library(hexago ${LIBHEXAGO_SOURCES})
+add_library(hexago STATIC ${LIBHEXAGO_SOURCES})
 
 # if we're on windows, then set these additional linker options so the console
 # window doesn't show up and get in the way
@@ -180,8 +200,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
     # OSX Screensavers are built as bundles (a kind of library), as they need
     # to be loaded into the OS as a plugin rather than run of their own accord
-    add_library(hexago-mac "mac_osx.mm")
-    set_target_properties(hexago-mac PROPERTIES PREFIX "" MACOSX_BUNDLE TRUE SUFFIX ".saver")
+    add_library(hexago-mac MODULE "mac_osx.mm")
+    set_target_properties(hexago-mac PROPERTIES PREFIX "")
     # link it with hexago, as well as OSX Foundation and ScreenSaver frameworks
     target_link_libraries(hexago-mac hexago ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER} objc)
     # TODO: Set up creation of App Bundle containing dependencies for portability
