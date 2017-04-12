@@ -97,7 +97,7 @@ namespace hexago {
                     f_colour_channel_range(this->random_number_engine),
                 };
                 // convert to rgb
-                colrcv_hsv_to_rgb(hsv, &rgb);
+                rgb = colrcv_hsv_to_rgb(hsv);
                 break;
             }
             case hexago::COLOUR_MODEL_LAB: {
@@ -108,7 +108,7 @@ namespace hexago {
                     f_colour_channel_range(this->random_number_engine),
                 };
                 // convert to rgb
-                colrcv_lab_to_rgb(lab, &rgb);
+                rgb = colrcv_lab_to_rgb(lab);
                 break;
             }
         }
