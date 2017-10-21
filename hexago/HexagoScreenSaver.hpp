@@ -68,7 +68,11 @@ namespace hexago {
             const size_t hexagon_count;
             // the colour to paint the background with
             const sf::Color background_colour;
-            // vector array to store the Hexagons in
+            /*
+             * double-ended-queue to store the Hexagons in
+             * a deque is used because it allows faster insertion/removal at
+             * either end of the queue
+             */
             std::deque<Hexagon> hexagons;
             /*
              * a tuning constant for the mechanics which calculates the number
