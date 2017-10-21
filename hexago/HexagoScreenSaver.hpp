@@ -50,6 +50,9 @@ namespace hexago {
              */
             sf::Color resolve_background_colour() const;
 
+            // Handles any pending events from he event queue
+            void handle_events();
+
             /*
              * a reference to the window instance that this application is bound
              * to, and which it will draw to. This needs to be a reference so

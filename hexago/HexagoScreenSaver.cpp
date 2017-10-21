@@ -53,29 +53,8 @@ namespace hexago {
 
     // updates internal state and renders the hexagons to window
     void HexagoScreenSaver::update() {
-        sf::Event event;
-        while(this->window.pollEvent(event)) {
-            switch(event.type) {
-                /*
-                 * any of the following event types in this series of case
-                 * fall-throughs warrant a program exit.
-                 */
-                case sf::Event::Closed:
-                case sf::Event::LostFocus:
-                case sf::Event::KeyPressed:
-                case sf::Event::MouseWheelScrolled:
-                case sf::Event::MouseButtonPressed:
-                case sf::Event::MouseMoved:
-                case sf::Event::TouchBegan:
-                case sf::Event::TouchMoved:
-                case sf::Event::TouchEnded:
-                    this->window.close();
-                    continue;
-                default:
-                    // do nothing;
-                    break;
-            }
-        }
+        // handle any pending events first
+        this->handle_events();
         // clear the window with background colour if it's not set to NONE
         if(this->config.background_colour != BG_COLOUR_NONE) {
             this->window.clear(this->background_colour);
@@ -189,6 +168,34 @@ namespace hexago {
             case BG_COLOUR_GREY:
             default:
                 return sf::Color(127, 127, 127);
+        }
+    }
+
+    void HexagoScreenSaver::handle_events() {
+        sf::Event event;
+        while(this->window.pollEvent(event)) {
+            switch(event.type) {
+                /*
+                 * any of the following event types in this series of case
+                 * fall-throughs warrant a program exit.
+                 */
+                case sf::Event::Closed:
+                case sf::Event::LostFocus:
+                case sf::Event::KeyPressed:
+                case sf::Event::MouseWheelScrolled:
+                case sf::Event::MouseButtonPressed:
+                case sf::Event::MouseMoved:
+                case sf::Event::TouchBegan:
+                case sf::Event::TouchMoved:
+                case sf::Event::TouchEnded:
+                    // closing the window leads to a program exit
+                    this->window.close();
+                    // if it's a close event then we don't need to grab any more
+                    return;
+                default:
+                    // do nothing;
+                    break;
+            }
         }
     }
 
