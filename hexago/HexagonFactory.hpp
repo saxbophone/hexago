@@ -32,9 +32,9 @@ namespace hexago {
             // the random number engine we'll be using
             std::mt19937 random_number_engine;
             // the x co-ordinate range within which Hexagons may be spawned
-            std::uniform_real_distribution<float> x_spawn_range;
+            std::uniform_real_distribution<double> x_spawn_range;
             // the y co-ordinate range within which Hexagons may be spawned
-            std::uniform_real_distribution<float> y_spawn_range;
+            std::uniform_real_distribution<double> y_spawn_range;
             // the range within which start sizes of new Hexagons may fall
             std::uniform_real_distribution<hexagon_size_t> start_size_range;
             // the range within which decay speeds of new Hexagons may fall
