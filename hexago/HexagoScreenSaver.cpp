@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <deque>
+#include <iostream>
 
 #include <cmath>
 
@@ -63,13 +64,9 @@ namespace hexago {
                 case sf::Event::Closed:
                 case sf::Event::LostFocus:
                 case sf::Event::KeyPressed:
-                case sf::Event::KeyReleased:
                 case sf::Event::MouseWheelScrolled:
                 case sf::Event::MouseButtonPressed:
-                case sf::Event::MouseButtonReleased:
                 case sf::Event::MouseMoved:
-                case sf::Event::MouseEntered:
-                case sf::Event::MouseLeft:
                 case sf::Event::TouchBegan:
                 case sf::Event::TouchMoved:
                 case sf::Event::TouchEnded:
