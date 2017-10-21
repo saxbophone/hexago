@@ -83,30 +83,19 @@ namespace hexago {
         colrcv_rgb_t rgb;
         switch(this->colour_model) {
             case hexago::COLOUR_MODEL_RGB: {
-                // just store channels in rgb struct
-                rgb.r = d_colour_channel_range(this->random_number_engine);
-                rgb.g = e_colour_channel_range(this->random_number_engine);
-                rgb.b = f_colour_channel_range(this->random_number_engine);
+                rgb = this->generate_rgb_colour();
                 break;
             }
             case hexago::COLOUR_MODEL_HSV: {
                 // create a new hsv colour
-                colrcv_hsv_t hsv = {
-                    d_colour_channel_range(this->random_number_engine),
-                    e_colour_channel_range(this->random_number_engine),
-                    f_colour_channel_range(this->random_number_engine),
-                };
+                colrcv_hsv_t hsv = this->generate_hsv_colour();
                 // convert to rgb
                 rgb = colrcv_hsv_to_rgb(hsv);
                 break;
             }
             case hexago::COLOUR_MODEL_LAB: {
                 // create a new lab colour
-                colrcv_lab_t lab = {
-                    d_colour_channel_range(this->random_number_engine),
-                    e_colour_channel_range(this->random_number_engine),
-                    f_colour_channel_range(this->random_number_engine),
-                };
+                colrcv_lab_t lab = this->generate_lab_colour();
                 // convert to rgb
                 rgb = colrcv_lab_to_rgb(lab);
                 break;
@@ -120,6 +109,33 @@ namespace hexago {
             // alpha is given as range from 0-100 so turn this into 0-255
             alpha_colour_channel_range(this->random_number_engine) / 100.0 * 255
         );
+    }
+
+    colrcv_rgb_t HexagonFactory::generate_rgb_colour() {
+        colrcv_rgb_t rgb = {
+            d_colour_channel_range(this->random_number_engine),
+            e_colour_channel_range(this->random_number_engine),
+            f_colour_channel_range(this->random_number_engine),
+        };
+        return rgb;
+    }
+
+    colrcv_hsv_t HexagonFactory::generate_hsv_colour() {
+        colrcv_hsv_t hsv = {
+            d_colour_channel_range(this->random_number_engine),
+            e_colour_channel_range(this->random_number_engine),
+            f_colour_channel_range(this->random_number_engine),
+        };
+        return hsv;
+    }
+
+    colrcv_lab_t HexagonFactory::generate_lab_colour() {
+        colrcv_lab_t lab = {
+            d_colour_channel_range(this->random_number_engine),
+            e_colour_channel_range(this->random_number_engine),
+            f_colour_channel_range(this->random_number_engine),
+        };
+        return lab;
     }
 
 }
