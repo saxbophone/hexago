@@ -31,10 +31,12 @@ static bool keep_running(sf::RenderWindow* window) {
                 // return false to indicate it should stop running
                 return false;
             default:
-                // keep going, so return true
-                return true;
+                // keep checking events
+                break;
         }
     }
+    // if no stop events were found, we get here and return true to keep running
+    return true;
 }
 
 int main(int argc, char* argv[]) {
