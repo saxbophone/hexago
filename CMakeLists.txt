@@ -143,7 +143,8 @@ if(WIN32)
     add_executable(hexago-win "windows_nt.cpp")
     # make the executable file have a '.scr' file extension
     set_target_properties(hexago-win PROPERTIES SUFFIX ".scr")
-    target_link_libraries(hexago-win hexago)
+    # as well as hexago library, we also need to link to the windows scrnsave.lib library
+    target_link_libraries(hexago-win hexago scrnsave)
 endif()
 # include Mac OSX Screensaver if we're on Mac OSX
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
