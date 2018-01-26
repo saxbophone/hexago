@@ -13,7 +13,7 @@
 
 
 // windows timer handle
-#define TIMER 101
+#define HEXAGO_TIMER 1
 
 /*
  * for storing a dynamically-allocated SFML window which we'll use for the
@@ -39,7 +39,7 @@ extern "C" LONG WINAPI ScreenSaverProc(
             window = new sf::RenderWindow(hWnd, sf::ContextSettings());
             screensaver = new hexago::HexagoScreenSaver(window);
             // start a window timer -the number is milliseconds of delay
-            SetTimer(hWnd, TIMER, 1000 / 30, NULL);
+            SetTimer(hWnd, HEXAGO_TIMER, 1000 / 30, NULL);
             break;
         case WM_TIMER:
             if (screensaver != NULL) {
@@ -50,7 +50,7 @@ extern "C" LONG WINAPI ScreenSaverProc(
         case WM_DESTROY:
             // stop the screensaver
             // kill timer
-            KillTimer(hWnd, TIMER);
+            KillTimer(hWnd, HEXAGO_TIMER);
             // relinquish resources
             delete screensaver;
             delete window;
