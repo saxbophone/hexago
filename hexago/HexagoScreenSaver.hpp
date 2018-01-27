@@ -20,10 +20,10 @@ namespace hexago {
     class HexagoScreenSaver {
         public:
             // simple constructor - needs a sf::RenderWindow instance at least
-            HexagoScreenSaver(sf::RenderWindow& window);
+            HexagoScreenSaver(sf::RenderWindow* window);
             // customisation constructor - allows different options to be set
             HexagoScreenSaver(
-                sf::RenderWindow& window, HexagoScreenSaverConfig config
+                sf::RenderWindow* window, HexagoScreenSaverConfig config
             );
             // returns the size of the window we're bound to
             sf::Vector2u window_size() const;
@@ -50,16 +50,15 @@ namespace hexago {
              */
             sf::Color resolve_background_colour() const;
 
-            // Handles any pending events from he event queue
-            void handle_events();
-
             /*
-             * a reference to the window instance that this application is bound
-             * to, and which it will draw to. This needs to be a reference so
+             * a pointer to the window instance that this application is bound
+             * to, and which it will draw to. This needs to be a pointer so
              * that mutation operations which are done on the Window affect the
              * actual window instance in the scope it was originally declared.
+             * A reference cannot be used here due to the way the Mac OSX and
+             * Microsoft Windows screensaver frameworks work
              */
-            sf::RenderWindow& window;
+            sf::RenderWindow* window;
             // where we store the config settings
             HexagoScreenSaverConfig config;
             // a HexagonFactory instance which will be used to produce Hexagons

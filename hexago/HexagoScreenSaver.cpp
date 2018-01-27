@@ -17,13 +17,13 @@
 namespace hexago {
 
     // simple constructor
-    HexagoScreenSaver::HexagoScreenSaver(sf::RenderWindow& window)
+    HexagoScreenSaver::HexagoScreenSaver(sf::RenderWindow* window)
       : HexagoScreenSaver(window, resolved_default_config())
       {}
 
     // customisation constructor
     HexagoScreenSaver::HexagoScreenSaver(
-        sf::RenderWindow& window, HexagoScreenSaverConfig config
+        sf::RenderWindow* window, HexagoScreenSaverConfig config
     )
       : window(window)
       , config(config)
@@ -32,7 +32,7 @@ namespace hexago {
       , background_colour(this->resolve_background_colour())
       {
         // set window framerate to what is given in config
-        window.setFramerateLimit(config.framerate);
+        window->setFramerateLimit(config.framerate);
         // populate the array with Hexagon instances from the factory
         for(size_t i = 0; i < this->hexagon_count; i++) {
             this->hexagons.push_back(this->hexagon_factory.next());
@@ -41,7 +41,7 @@ namespace hexago {
 
     // this method returns the size of the window we're bound to
     sf::Vector2u HexagoScreenSaver::window_size() const {
-        return this->window.getSize();
+        return this->window->getSize();
     }
 
     // returns the size of the window dimension to use for scaling 
@@ -53,11 +53,9 @@ namespace hexago {
 
     // updates internal state and renders the hexagons to window
     void HexagoScreenSaver::update() {
-        // handle any pending events first
-        this->handle_events();
         // clear the window with background colour if it's not set to NONE
         if(this->config.background_colour != BG_COLOUR_NONE) {
-            this->window.clear(this->background_colour);
+            this->window->clear(this->background_colour);
         }
         // loop over all the hexagons in the array
         for(size_t i = 0; i < this->hexagon_count; i++) {
@@ -83,10 +81,10 @@ namespace hexago {
                 }
             }
             // render the hexagon to screen
-            this->window.draw(this->hexagons[i].shape());
+            this->window->draw(this->hexagons[i].shape());
         }
         // draw out the rendered frame
-        this->window.display();
+        this->window->display();
     }
 
     HexagoScreenSaverConfig HexagoScreenSaver::default_config() {
@@ -168,34 +166,6 @@ namespace hexago {
             case BG_COLOUR_GREY:
             default:
                 return sf::Color(127, 127, 127);
-        }
-    }
-
-    void HexagoScreenSaver::handle_events() {
-        sf::Event event;
-        while(this->window.pollEvent(event)) {
-            switch(event.type) {
-                /*
-                 * any of the following event types in this series of case
-                 * fall-throughs warrant a program exit.
-                 */
-                case sf::Event::Closed:
-                case sf::Event::LostFocus:
-                case sf::Event::KeyPressed:
-                case sf::Event::MouseWheelScrolled:
-                case sf::Event::MouseButtonPressed:
-                case sf::Event::MouseMoved:
-                case sf::Event::TouchBegan:
-                case sf::Event::TouchMoved:
-                case sf::Event::TouchEnded:
-                    // closing the window leads to a program exit
-                    this->window.close();
-                    // if it's a close event then we don't need to grab any more
-                    return;
-                default:
-                    // do nothing;
-                    break;
-            }
         }
     }
 
