@@ -29,13 +29,10 @@ namespace hexago {
              * class should apply frame-limiting or not. This should be left as
              * `false` if framelimiting is being managed externally (as is the
              * case in screensaver modules for both Microsoft Windows and macOS)
-             * init_window controls whether or not a render window should be set
-             * up automatically or not
              */
             HexagoScreenSaver(
                 HexagoScreenSaverConfig config=resolved_default_config(),
-                bool internal_framelimit=false,
-                bool init_window=true
+                bool internal_framelimit=false
             );
             /*
              * this constructor takes an OS-specific window handle and will
@@ -58,6 +55,11 @@ namespace hexago {
             // retrieves the default config
             static HexagoScreenSaverConfig default_config();
 
+            /*
+             * The SFML RenderWindow that this screensaver will render to
+             */
+            sf::RenderWindow window;
+
         private:
             // retrieves the default config, with all default values resolved
             static HexagoScreenSaverConfig resolved_default_config();
@@ -67,17 +69,14 @@ namespace hexago {
              * Hexagons and average size of them.
              */
             size_t required_number_of_hexagons() const;
-
             /*
              * Returns an sf::Color instance representing the colour that the
              * background should be, according to the config object given.
              */
             sf::Color resolve_background_colour() const;
+            // performs additional initialisation after field initialisation
+            void init();
 
-            /*
-             * The SFML RenderWindow that this screensaver will render to
-             */
-            sf::RenderWindow window;
             // whether internal framelimiting is enabled or not
             const bool internal_framelimit;
             // where we store the config settings
