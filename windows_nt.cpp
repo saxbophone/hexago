@@ -16,15 +16,11 @@
 #define HEXAGO_TIMER 1
 
 /*
- * for storing a dynamically-allocated SFML window which we'll use for the
- * screensaver
+ * for storing a dynamically-allocated screensaver instance
  * --this can't be automatically allocated because the creation and destruction
  * of it happens in the ScreenSaverProc event-handler
  */
-static sf::RenderWindow* window = NULL;
-// for storing the screensaver, dynamically-allocated for same reasons as above
 static hexago::HexagoScreenSaver* screensaver = NULL;
-
 
 // this is the main event-handling function of the windows screensaver framework
 extern "C" LONG WINAPI ScreenSaverProc(
@@ -35,9 +31,8 @@ extern "C" LONG WINAPI ScreenSaverProc(
 ) {
     switch (message) {
         case WM_CREATE:
-            // initialise the screensaver
-            window = new sf::RenderWindow(hWnd, sf::ContextSettings());
-            screensaver = new hexago::HexagoScreenSaver(window);
+            // initialise the screensaver from the window handle
+            screensaver = new hexago::HexagoScreenSaver(hWnd);
             // start a window timer -the number is milliseconds of delay
             SetTimer(hWnd, HEXAGO_TIMER, 1000 / 30, NULL);
             break;
@@ -51,9 +46,8 @@ extern "C" LONG WINAPI ScreenSaverProc(
             // stop the screensaver
             // kill timer
             KillTimer(hWnd, HEXAGO_TIMER);
-            // relinquish resources
+            // deallocate the screensaver
             delete screensaver;
-            delete window;
             break;
         default:
             // all other unhandled messages are passed to DefScreenSaverProc
