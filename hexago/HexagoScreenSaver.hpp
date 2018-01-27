@@ -29,10 +29,13 @@ namespace hexago {
              * class should apply frame-limiting or not. This should be left as
              * `false` if framelimiting is being managed externally (as is the
              * case in screensaver modules for both Microsoft Windows and macOS)
+             * init_window controls whether or not a render window should be set
+             * up automatically or not
              */
             HexagoScreenSaver(
                 HexagoScreenSaverConfig config=resolved_default_config(),
-                bool internal_framelimit=false
+                bool internal_framelimit=false,
+                bool init_window=true
             );
             /*
              * this constructor takes an OS-specific window handle and will
