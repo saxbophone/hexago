@@ -16,32 +16,45 @@
 
 namespace hexago {
 
-    // simple constructor
-    HexagoScreenSaver::HexagoScreenSaver(sf::RenderWindow* window)
-      : HexagoScreenSaver(window, resolved_default_config())
-      {}
-
-    // customisation constructor
+    // default constructor
     HexagoScreenSaver::HexagoScreenSaver(
-        sf::RenderWindow* window, HexagoScreenSaverConfig config
+        HexagoScreenSaverConfig config,
+        bool internal_framelimit
     )
-      : window(window)
+      : window(
+            // get first (best) fullscreen videomode and init window with it
+            sf::VideoMode::getFullscreenModes()[0],
+            "Hexago Screensaver Demo",
+            sf::Style::Fullscreen
+        )
+      , internal_framelimit(internal_framelimit)
       , config(config)
       , hexagon_factory(config, this->window_size(), this->scaling_dimension())
       , hexagon_count(this->required_number_of_hexagons())
       , background_colour(this->resolve_background_colour())
       {
-        // set window framerate to what is given in config
-        window->setFramerateLimit(config.framerate);
-        // populate the array with Hexagon instances from the factory
-        for(size_t i = 0; i < this->hexagon_count; i++) {
-            this->hexagons.push_back(this->hexagon_factory.next());
-        }
+        this->init();
+    }
+
+    // window handle constructor
+    HexagoScreenSaver::HexagoScreenSaver(
+        sf::WindowHandle window_handle,
+        HexagoScreenSaverConfig config,
+        bool internal_framelimit
+    )
+      : window(window_handle)
+      , internal_framelimit(internal_framelimit)
+      , config(config)
+      , hexagon_factory(config, this->window_size(), this->scaling_dimension())
+      , hexagon_count(this->required_number_of_hexagons())
+      , background_colour(this->resolve_background_colour())
+      {
+        this->init();
     }
 
     // this method returns the size of the window we're bound to
     sf::Vector2u HexagoScreenSaver::window_size() const {
-        return this->window->getSize();
+        return this->window.getSize();
     }
 
     // returns the size of the window dimension to use for scaling 
@@ -55,7 +68,7 @@ namespace hexago {
     void HexagoScreenSaver::update() {
         // clear the window with background colour if it's not set to NONE
         if(this->config.background_colour != BG_COLOUR_NONE) {
-            this->window->clear(this->background_colour);
+            this->window.clear(this->background_colour);
         }
         // loop over all the hexagons in the array
         for(size_t i = 0; i < this->hexagon_count; i++) {
@@ -81,10 +94,10 @@ namespace hexago {
                 }
             }
             // render the hexagon to screen
-            this->window->draw(this->hexagons[i].shape());
+            this->window.draw(this->hexagons[i].shape());
         }
         // draw out the rendered frame
-        this->window->display();
+        this->window.display();
     }
 
     HexagoScreenSaverConfig HexagoScreenSaver::default_config() {
@@ -166,6 +179,19 @@ namespace hexago {
             case BG_COLOUR_GREY:
             default:
                 return sf::Color(127, 127, 127);
+        }
+    }
+
+    void HexagoScreenSaver::init() {
+        // populate the array with Hexagon instances from the factory
+        for(size_t i = 0; i < this->hexagon_count; i++) {
+            this->hexagons.push_back(this->hexagon_factory.next());
+        }
+        // hide the mouse cursor
+        this->window.setMouseCursorVisible(false);
+        // set window framerate to what is given in config if enabled
+        if (this->internal_framelimit) {
+            this->window.setFramerateLimit(config.framerate);
         }
     }
 

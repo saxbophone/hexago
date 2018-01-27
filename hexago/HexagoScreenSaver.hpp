@@ -5,6 +5,7 @@
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/WindowHandle.hpp>
 #include <SFML/System/Vector2.hpp>
 
 #include "HexagoScreenSaverConfig.hpp"
@@ -19,11 +20,31 @@ namespace hexago {
      */
     class HexagoScreenSaver {
         public:
-            // simple constructor - needs a sf::RenderWindow instance at least
-            HexagoScreenSaver(sf::RenderWindow* window);
-            // customisation constructor - allows different options to be set
+            /*
+             * default constructor -optionally takes a config object or uses
+             * the default config otherwise
+             * when using this constructor, a full-screen SFML window will be
+             * created and the screensaver will render to this
+             * internal_framelimit controls whether or not this screensaver
+             * class should apply frame-limiting or not. This should be left as
+             * `false` if framelimiting is being managed externally (as is the
+             * case in screensaver modules for both Microsoft Windows and macOS)
+             */
             HexagoScreenSaver(
-                sf::RenderWindow* window, HexagoScreenSaverConfig config
+                HexagoScreenSaverConfig config=resolved_default_config(),
+                bool internal_framelimit=false
+            );
+            /*
+             * this constructor takes an OS-specific window handle and will
+             * render to that instead -like the default constructor, this one
+             * also optionally takes a config object, without which the default
+             * config is used
+             * internal_framelimit is the same as that mentioned above
+             */
+            HexagoScreenSaver(
+                sf::WindowHandle window_handle,
+                HexagoScreenSaverConfig config=resolved_default_config(),
+                bool internal_framelimit=false
             );
             // returns the size of the window we're bound to
             sf::Vector2u window_size() const;
@@ -34,6 +55,11 @@ namespace hexago {
             // retrieves the default config
             static HexagoScreenSaverConfig default_config();
 
+            /*
+             * The SFML RenderWindow that this screensaver will render to
+             */
+            sf::RenderWindow window;
+
         private:
             // retrieves the default config, with all default values resolved
             static HexagoScreenSaverConfig resolved_default_config();
@@ -43,22 +69,16 @@ namespace hexago {
              * Hexagons and average size of them.
              */
             size_t required_number_of_hexagons() const;
-
             /*
              * Returns an sf::Color instance representing the colour that the
              * background should be, according to the config object given.
              */
             sf::Color resolve_background_colour() const;
+            // performs additional initialisation after field initialisation
+            void init();
 
-            /*
-             * a pointer to the window instance that this application is bound
-             * to, and which it will draw to. This needs to be a pointer so
-             * that mutation operations which are done on the Window affect the
-             * actual window instance in the scope it was originally declared.
-             * A reference cannot be used here due to the way the Mac OSX and
-             * Microsoft Windows screensaver frameworks work
-             */
-            sf::RenderWindow* window;
+            // whether internal framelimiting is enabled or not
+            const bool internal_framelimit;
             // where we store the config settings
             HexagoScreenSaverConfig config;
             // a HexagonFactory instance which will be used to produce Hexagons
