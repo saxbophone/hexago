@@ -1,8 +1,6 @@
 /*
  * This should compile, provided the target system has the appropriate headers
  */
-#include <SFML/Window.hpp>
-
 #import "mac_osx.hh"
 
 #include "hexago/HexagoScreenSaver.hpp"
@@ -25,15 +23,12 @@
 - (void)startAnimation {
     [super startAnimation];
     /*
-     * initialise an SFML window from a native window handle (in this case,
-     * we can use self as ScreenSaverView inherits from NSView, which SFML
-     * will accept as a window handle - it's basically a void pointer as
-     * far as C++ and Objective-C++ are concerned)
+     * initialise our screensaver from a native window handle (in this case,
+     * we can use self as ScreenSaverView inherits from NSView, which is a
+     * window handle - it's basically a void pointer as far as C++ and
+     * Objective-C++ are concerned)
      */
-    // TODO: include sf::ContextSettings in sf::RenderWindow constructor
-    sfml_window = new sf::RenderWindow(self);
-    // intialise screensaver app with window instance
-    screensaver = new hexago::HexagoScreenSaver(*sfml_window);
+    screensaver = new hexago::HexagoScreenSaver(self);
 }
 
 - (void)stopAnimation {
@@ -61,9 +56,8 @@
 }
 
 - (void)dealloc {
-    // hook into dealloc message so we relinquish resources (our C++ objects!)
+    // hook into dealloc message so we relinquish resources (our C++ object!)
     delete screensaver;
-    delete sfml_window;
 }
 
 @end
