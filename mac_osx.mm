@@ -1,6 +1,13 @@
 /*
  * This should compile, provided the target system has the appropriate headers
  */
+// check that ARC is enabled - we need it othwerwise our code is invalid
+#if ! __has_feature(objc_arc)
+#error "ARC is not enabled or supported. This file will not compile without it."
+#endif
+
+#include <SFML/Window.hpp>
+
 #import "mac_osx.hh"
 
 #include "hexago/HexagoScreenSaver.hpp"
@@ -28,7 +35,7 @@
      * window handle - it's basically a void pointer as far as C++ and
      * Objective-C++ are concerned)
      */
-    screensaver = new hexago::HexagoScreenSaver(self);
+    screensaver = new hexago::HexagoScreenSaver((__bridge_retained sf::WindowHandle)self);
 }
 
 - (void)stopAnimation {
