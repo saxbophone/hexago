@@ -155,10 +155,10 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     )
     # OSX Screensavers are built as bundles (a kind of library), as they need
     # to be loaded into the OS as a plugin rather than run of their own accord
-    add_library(hexago-mac "mac_osx.mm")
-    set_target_properties(hexago-mac PROPERTIES PREFIX "" MACOSX_BUNDLE TRUE)
+    add_library(Hexago MODULE "mac_osx.mm")
+    set_target_properties(Hexago PROPERTIES BUNDLE TRUE)
     # link it with hexago, as well as OSX Foundation and ScreenSaver frameworks
-    target_link_libraries(hexago-mac hexago ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER} objc)
+    target_link_libraries(Hexago hexago ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER} objc)
     # TODO: Set up creation of App Bundle containing dependencies for portability
 endif()
 
