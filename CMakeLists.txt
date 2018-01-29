@@ -149,14 +149,14 @@ endif()
 # include Mac OSX Screensaver if we're on Mac OSX
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     # make sure CMake passes the correct arguments to the compiler to build as
-    # objective-c++
+    # objective-c++, and to enable ARC (rather than garbage collection)
     set_source_files_properties(
-        "mac_osx.mm" PROPERTIES COMPILE_FLAGS "-x objective-c++"
+        "mac_osx.mm" PROPERTIES COMPILE_FLAGS "-x objective-c++ -fobjc-arc"
     )
     # OSX Screensavers are built as bundles (a kind of library), as they need
     # to be loaded into the OS as a plugin rather than run of their own accord
     add_library(hexago-mac "mac_osx.mm")
-    set_target_properties(hexago-mac PROPERTIES PREFIX "" MACOSX_BUNDLE TRUE SUFFIX ".saver")
+    set_target_properties(hexago-mac PROPERTIES PREFIX "" MACOSX_BUNDLE TRUE)
     # link it with hexago, as well as OSX Foundation and ScreenSaver frameworks
     target_link_libraries(hexago-mac hexago ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER} objc)
     # TODO: Set up creation of App Bundle containing dependencies for portability

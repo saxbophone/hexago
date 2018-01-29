@@ -1,6 +1,13 @@
 /*
  * This should compile, provided the target system has the appropriate headers
  */
+// check that ARC is enabled - we need it othwerwise our code is invalid
+#if ! __has_feature(objc_arc)
+#error "ARC is not enabled or supported. This file will not compile without it."
+#endif
+
+#include <SFML/Window.hpp>
+
 #import "mac_osx.hh"
 
 #include "hexago/HexagoScreenSaver.hpp"
@@ -28,7 +35,17 @@
      * window handle - it's basically a void pointer as far as C++ and
      * Objective-C++ are concerned)
      */
-    screensaver = new hexago::HexagoScreenSaver(self);
+    screensaver = new hexago::HexagoScreenSaver(
+        /*
+         * this is a bridged cast, a feature of ARC in objective-C and
+         * essentially means that, from here-on we're the owner of this
+         * pointer's memory and are responsible for it.
+         * However, given that `self` is the class instance itself, I'm not
+         * sure that we need to worry about releasing it with free() or
+         * CFRelease() at the end.
+         */
+        (__bridge_retained sf::WindowHandle)self
+    );
 }
 
 - (void)stopAnimation {
