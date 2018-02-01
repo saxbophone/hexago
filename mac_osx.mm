@@ -6,11 +6,11 @@
 #error "ARC is not enabled or supported. This file will not compile without it."
 #endif
 
-// #include <SFML/Window.hpp>
+#include <SFML/Window.hpp>
 
 #import "mac_osx.hh"
 
-// #include "hexago/HexagoScreenSaver.hpp"
+#include "hexago/HexagoScreenSaver.hpp"
 
 
 @implementation HexagoScreenSaverView
@@ -35,17 +35,17 @@
      * window handle - it's basically a void pointer as far as C++ and
      * Objective-C++ are concerned)
      */
-    // screensaver = new hexago::HexagoScreenSaver(
-        
-    //      * this is a bridged cast, a feature of ARC in objective-C and
-    //      * essentially means that, from here-on we're the owner of this
-    //      * pointer's memory and are responsible for it.
-    //      * However, given that `self` is the class instance itself, I'm not
-    //      * sure that we need to worry about releasing it with free() or
-    //      * CFRelease() at the end.
-         
-    //     (__bridge_retained sf::WindowHandle)self
-    // );
+    screensaver = new hexago::HexagoScreenSaver(
+        /*
+         * this is a bridged cast, a feature of ARC in objective-C and
+         * essentially means that, from here-on we're the owner of this
+         * pointer's memory and are responsible for it.
+         * However, given that `self` is the class instance itself, I'm not
+         * sure that we need to worry about releasing it with free() or
+         * CFRelease() at the end.
+         */
+        (__bridge_retained sf::WindowHandle)self
+    );
 }
 
 - (void)stopAnimation {
@@ -59,7 +59,7 @@
 
 - (void)animateOneFrame {
     // call screensaver.update() to render one frame
-    // screensaver->update();
+    screensaver->update();
 }
 
 - (BOOL)hasConfigureSheet {
@@ -74,7 +74,7 @@
 
 - (void)dealloc {
     // hook into dealloc message so we relinquish resources (our C++ object!)
-    // delete screensaver;
+    delete screensaver;
 }
 
 @end

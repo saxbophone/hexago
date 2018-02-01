@@ -3,7 +3,7 @@
  */
 #import <ScreenSaver/ScreenSaver.h>
 
-// #include "hexago/HexagoScreenSaver.hpp"
+#include "hexago/HexagoScreenSaver.hpp"
 
 
 @interface HexagoScreenSaverView : ScreenSaverView {
@@ -12,5 +12,5 @@
      * Objective-C++ cannot handle C++ objects with user-provided constructors
      * nor those with virtual methods, as statically allocated variables.
      */
-    // hexago::HexagoScreenSaver* screensaver;
+    hexago::HexagoScreenSaver* screensaver;
 } @end

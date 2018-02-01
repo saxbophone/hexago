@@ -165,7 +165,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         XCODE_ATTRIBUTE_INSTALL_PATH @executable_path/../Frameworks/
     )
     # link it with hexago, as well as OSX Foundation and ScreenSaver frameworks
-    target_link_libraries(hexago-mac ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER} objc)
+    target_link_libraries(hexago-mac hexago ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER} objc)
 endif()
 
 install(TARGETS hexago-demo DESTINATION bin)
