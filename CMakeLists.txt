@@ -162,7 +162,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         BUNDLE TRUE
         BUNDLE_EXTENSION "saver"
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/mac_osx_bundle_info.plist"
-        XCODE_ATTRIBUTE_INSTALL_PATH @executable_path/../Frameworks/
+        # XCODE_ATTRIBUTE_INSTALL_PATH @executable_path/../Frameworks/
     )
     # link it with hexago, as well as OSX Foundation and ScreenSaver frameworks
     target_link_libraries(hexago-mac hexago ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER} objc)
