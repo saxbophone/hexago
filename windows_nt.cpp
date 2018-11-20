@@ -65,7 +65,7 @@ extern "C" BOOL WINAPI ScreenSaverConfigureDialog(
     WPARAM wParam,
     LPARAM lParam
 ) {
-    // there currentl is no dialog so we return false
+    // there currently is no dialog so we return false
     return false;
 }
 
