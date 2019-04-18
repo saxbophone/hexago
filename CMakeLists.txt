@@ -111,6 +111,9 @@ add_library(hexago ${LIBHEXAGO_SOURCES})
 # window doesn't show up and get in the way
 if(WIN32)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-subsystem,windows")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    # On Mac OSX, we need "-headerpad_max_install_names" linker flag for when we meddle with the RPath
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -headerpad_max_install_names")
 endif()
 
 # here we link libhexago with its dependencies
