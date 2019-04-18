@@ -172,7 +172,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     add_custom_command(
         TARGET hexago-mac
         POST_BUILD COMMAND
-        ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../../Frameworks/"
+        ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@loader_path/../Frameworks/"
         $<TARGET_FILE:hexago-mac>
     )
     # create the Frameworks directory within the Screensaver bundle
