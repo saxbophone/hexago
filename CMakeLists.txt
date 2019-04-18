@@ -162,10 +162,46 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         BUNDLE TRUE
         BUNDLE_EXTENSION "saver"
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/mac_osx_bundle_info.plist"
-        # XCODE_ATTRIBUTE_INSTALL_PATH @executable_path/../Frameworks/
     )
     # link it with hexago, as well as OSX Foundation and ScreenSaver frameworks
     target_link_libraries(hexago-mac hexago ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER} objc)
+    # we need to fiddle with RPath of the OSX Screensaver so that it'll load the locally-bundled dependencies
+    add_custom_command(
+        TARGET hexago-mac
+        POST_BUILD COMMAND
+        ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@executable_path/../../Frameworks/"
+        $<TARGET_FILE:hexago-mac>
+    )
+    # create the Frameworks directory within the Screensaver bundle
+    add_custom_command(
+        TARGET hexago-mac POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+                "${CMAKE_BINARY_DIR}/Hexago.saver/Contents/Frameworks"
+    )
+    set(THINGS_TO_BUNDLE)
+    list(APPEND THINGS_TO_BUNDLE ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+    # now actually copy each framework dependency
+    foreach(DEPENDENCY_PATH ${THINGS_TO_BUNDLE})
+        if(IS_DIRECTORY ${DEPENDENCY_PATH})
+            message(${DEPENDENCY_PATH})
+            get_filename_component(DEPENDENCY_FILE ${DEPENDENCY_PATH} NAME)
+            add_custom_command(
+                TARGET hexago-mac POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                        ${DEPENDENCY_PATH}
+                        "${CMAKE_BINARY_DIR}/Hexago.saver/Contents/Frameworks/${DEPENDENCY_FILE}"
+            )
+        elseif(EXISTS ${DEPENDENCY_PATH})
+            message(${DEPENDENCY_PATH})
+            get_filename_component(DEPENDENCY_FILE ${DEPENDENCY_PATH} NAME)
+            add_custom_command(
+                TARGET hexago-mac POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                        ${DEPENDENCY_PATH}
+                        "${CMAKE_BINARY_DIR}/Hexago.saver/Contents/Frameworks/${DEPENDENCY_FILE}"
+            )
+        endif()
+    endforeach()
 endif()
 
 install(TARGETS hexago-demo DESTINATION bin)
