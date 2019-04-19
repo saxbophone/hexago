@@ -27,7 +27,11 @@ namespace hexago {
             sf::VideoMode::getFullscreenModes()[0],
             "Hexago Screensaver Demo",
             sf::Style::Fullscreen,
-            sf::ContextSettings(0, 0, config.antialiasing)
+            sf::ContextSettings(
+                0, // depth
+                0, // stencil
+                config.antialiasing
+            )
         )
       , internal_framelimit(internal_framelimit)
       , config(config)
@@ -44,7 +48,14 @@ namespace hexago {
         HexagoScreenSaverConfig config,
         bool internal_framelimit
     )
-      : window(window_handle, sf::ContextSettings(0, 0, config.antialiasing))
+      : window(
+            window_handle,
+            sf::ContextSettings(
+                0, // depth
+                0, // stencil
+                config.antialiasing
+            )
+        )
       , internal_framelimit(internal_framelimit)
       , config(config)
       , hexagon_factory(config, this->window_size(), this->scaling_dimension())
