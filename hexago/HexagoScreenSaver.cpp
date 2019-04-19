@@ -7,6 +7,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/ContextSettings.hpp>
 
 #include "HexagoScreenSaver.hpp"
 #include "HexagoScreenSaverConfig.hpp"
@@ -25,7 +26,8 @@ namespace hexago {
             // get first (best) fullscreen videomode and init window with it
             sf::VideoMode::getFullscreenModes()[0],
             "Hexago Screensaver Demo",
-            sf::Style::Fullscreen
+            sf::Style::Fullscreen,
+            sf::ContextSettings(0, 0, 8)
         )
       , internal_framelimit(internal_framelimit)
       , config(config)
@@ -42,7 +44,7 @@ namespace hexago {
         HexagoScreenSaverConfig config,
         bool internal_framelimit
     )
-      : window(window_handle)
+      : window(window_handle, sf::ContextSettings(0, 0, 8))
       , internal_framelimit(internal_framelimit)
       , config(config)
       , hexagon_factory(config, this->window_size(), this->scaling_dimension())
