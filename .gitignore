@@ -42,3 +42,6 @@ Testing
 build/*
 # allow .gitkeep file in build directory
 !build/.gitkeep
+
+# pesky macOS thumbnail cache file
+.DS_Store

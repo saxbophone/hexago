@@ -32,6 +32,7 @@ namespace hexago {
      */
     struct HexagoScreenSaverConfig: public HexagonFactoryConfig {
         unsigned int framerate; // used for SFML framerate-limiting
+        unsigned int antialiasing; // antialising level to use, 0 = disabled
         /*
          * this property specifies the minimum amount of the screen area which
          * should be covered by Hexagons at any point in time. Also given as a
@@ -53,6 +54,7 @@ namespace hexago {
             ParameterRange<colour_channel_t> f_colour_channel_range,
             ParameterRange<colour_channel_t> alpha_colour_channel_range,
             unsigned int framerate,
+            unsigned int antialising,
             double minimum_screen_cover,
             hexagon_spawn_mode_t spawn_mode,
             background_colour_t background_colour
@@ -62,6 +64,7 @@ namespace hexago {
         HexagoScreenSaverConfig(
             HexagonFactoryConfig sub_config,
             unsigned int framerate,
+            unsigned int antialising,
             double minimum_screen_cover,
             hexagon_spawn_mode_t spawn_mode,
             background_colour_t background_colour

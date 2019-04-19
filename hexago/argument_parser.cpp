@@ -81,7 +81,6 @@ namespace hexago {
         }
     }
 
-
     /*
      * module-private function for loading one command-line argument which
      * specifies the spawn mode to use
@@ -217,6 +216,9 @@ namespace hexago {
                 "-spawn", argument, next_argument, config.spawn_mode, advance
             ) || load_bg_arg(
                 "-bgcol", argument, next_argument, config.background_colour,
+                advance
+            ) || load_uint_arg(
+                "-alias", argument, next_argument, config.antialiasing,
                 advance
             );
         }

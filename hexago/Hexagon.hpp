@@ -1,12 +1,9 @@
 #ifndef SAXBOPHONE_HEXAGO_HEXAGON_HPP
 #define SAXBOPHONE_HEXAGO_HEXAGON_HPP
 
-#include <cstdint>
-
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/System/Clock.hpp>
-#include <SFML/System/Time.hpp>
 #include <SFML/System/Vector2.hpp>
 
 

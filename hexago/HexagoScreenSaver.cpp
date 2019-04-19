@@ -6,6 +6,7 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Window/ContextSettings.hpp>
 #include <SFML/Window/Event.hpp>
 
 #include "HexagoScreenSaver.hpp"
@@ -16,27 +17,52 @@
 
 namespace hexago {
 
-    // simple constructor
-    HexagoScreenSaver::HexagoScreenSaver(sf::RenderWindow& window)
-      : HexagoScreenSaver(window, resolved_default_config())
-      {}
-
-    // customisation constructor
+    // default constructor
     HexagoScreenSaver::HexagoScreenSaver(
-        sf::RenderWindow& window, HexagoScreenSaverConfig config
+        HexagoScreenSaverConfig config,
+        bool internal_framelimit
     )
-      : window(window)
+      : window(
+            // get first (best) fullscreen videomode and init window with it
+            sf::VideoMode::getFullscreenModes()[0],
+            "Hexago Screensaver Demo",
+            sf::Style::Fullscreen,
+            sf::ContextSettings(
+                0, // depth
+                0, // stencil
+                config.antialiasing
+            )
+        )
+      , internal_framelimit(internal_framelimit)
       , config(config)
       , hexagon_factory(config, this->window_size(), this->scaling_dimension())
       , hexagon_count(this->required_number_of_hexagons())
       , background_colour(this->resolve_background_colour())
       {
-        // set window framerate to what is given in config
-        window.setFramerateLimit(config.framerate);
-        // populate the array with Hexagon instances from the factory
-        for(size_t i = 0; i < this->hexagon_count; i++) {
-            this->hexagons.push_back(this->hexagon_factory.next());
-        }
+        this->init();
+    }
+
+    // window handle constructor
+    HexagoScreenSaver::HexagoScreenSaver(
+        sf::WindowHandle window_handle,
+        HexagoScreenSaverConfig config,
+        bool internal_framelimit
+    )
+      : window(
+            window_handle,
+            sf::ContextSettings(
+                0, // depth
+                0, // stencil
+                config.antialiasing
+            )
+        )
+      , internal_framelimit(internal_framelimit)
+      , config(config)
+      , hexagon_factory(config, this->window_size(), this->scaling_dimension())
+      , hexagon_count(this->required_number_of_hexagons())
+      , background_colour(this->resolve_background_colour())
+      {
+        this->init();
     }
 
     // this method returns the size of the window we're bound to
@@ -53,33 +79,6 @@ namespace hexago {
 
     // updates internal state and renders the hexagons to window
     void HexagoScreenSaver::update() {
-        sf::Event event;
-        while(this->window.pollEvent(event)) {
-            switch(event.type) {
-                /*
-                 * any of the following event types in this series of case
-                 * fall-throughs warrant a program exit.
-                 */
-                case sf::Event::Closed:
-                case sf::Event::LostFocus:
-                case sf::Event::KeyPressed:
-                case sf::Event::KeyReleased:
-                case sf::Event::MouseWheelScrolled:
-                case sf::Event::MouseButtonPressed:
-                case sf::Event::MouseButtonReleased:
-                case sf::Event::MouseMoved:
-                case sf::Event::MouseEntered:
-                case sf::Event::MouseLeft:
-                case sf::Event::TouchBegan:
-                case sf::Event::TouchMoved:
-                case sf::Event::TouchEnded:
-                    this->window.close();
-                    continue;
-                default:
-                    // do nothing;
-                    break;
-            }
-        }
         // clear the window with background colour if it's not set to NONE
         if(this->config.background_colour != BG_COLOUR_NONE) {
             this->window.clear(this->background_colour);
@@ -131,6 +130,7 @@ namespace hexago {
             // alpha_colour_channel_range
             ParameterRange<colour_channel_t>(100.0, 100.0),
             30, // framerate
+            8, // antialiasing
             (100.0 / 100.0), // minimum_screen_cover
             SPAWN_MODE_BOTTOM, // spawn_mode
             BG_COLOUR_GREY // background_mode
@@ -193,6 +193,17 @@ namespace hexago {
             case BG_COLOUR_GREY:
             default:
                 return sf::Color(127, 127, 127);
+        }
+    }
+
+    void HexagoScreenSaver::init() {
+        // populate the array with Hexagon instances from the factory
+        for(size_t i = 0; i < this->hexagon_count; i++) {
+            this->hexagons.push_back(this->hexagon_factory.next());
+        }
+        // set window framerate to what is given in config if enabled
+        if (this->internal_framelimit) {
+            this->window.setFramerateLimit(config.framerate);
         }
     }
 

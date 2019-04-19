@@ -1,9 +1,8 @@
 # begin basic metadata
 cmake_minimum_required(VERSION 3.0)
 
-project(hexago VERSION 0.7.0 LANGUAGES CXX)
-# set build number - this increments for any new version
-set(HEXAGO_VERSION_BUILD 10)
+# NOTE: the last number is the build number, which increments for any new version
+project(hexago VERSION 0.8.0.11 LANGUAGES CXX)
 
 set(
     HEXAGO_VERSION_STRING
@@ -16,7 +15,7 @@ set(HEXAGO_ESCAPED_VERSION_STRING "\"${HEXAGO_VERSION_STRING}\"")
 add_definitions(-DHEXAGO_VERSION_MAJOR=${PROJECT_VERSION_MAJOR})
 add_definitions(-DHEXAGO_VERSION_MINOR=${PROJECT_VERSION_MINOR})
 add_definitions(-DHEXAGO_VERSION_PATCH=${PROJECT_VERSION_PATCH})
-add_definitions(-DHEXAGO_VERSION_BUILD=${HEXAGO_VERSION_BUILD})
+add_definitions(-DHEXAGO_VERSION_BUILD=${PROJECT_VERSION_TWEAK})
 add_definitions(-DHEXAGO_VERSION_STRING=${HEXAGO_ESCAPED_VERSION_STRING})
 
 message(
@@ -84,12 +83,18 @@ unset(BUILD_SHARED_LIBS)
 # dependencies
 # add custom dependencies directory
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-# SDL2
-find_package(SFML 2 REQUIRED COMPONENTS audio graphics window system)
+# SFML 2
+# valid COMPONENTS are network audio graphics window system
+find_package(SFML 2 REQUIRED COMPONENTS graphics window system)
 include_directories(${SFML_INCLUDE_DIR})
 # COLRCV
 find_package(COLRCV 0.1 REQUIRED)
 include_directories(${COLRCV_INCLUDE_DIR})
+# if on OSX, then we also need to find the Foundation and Screensaver frameworks
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    find_library(OSX_FRAMEWORK_FOUNDATION Foundation)
+    find_library(OSX_FRAMEWORK_SCREENSAVER ScreenSaver)
+endif()
 
 # compile the bulk of Hexago into a library (libhexago)
 # this is then shared among the programs which depend on it
@@ -106,6 +111,9 @@ add_library(hexago ${LIBHEXAGO_SOURCES})
 # window doesn't show up and get in the way
 if(WIN32)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-subsystem,windows")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    # On Mac OSX, we need "-headerpad_max_install_names" linker flag for when we meddle with the RPath
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -headerpad_max_install_names")
 endif()
 
 # here we link libhexago with its dependencies
@@ -138,7 +146,65 @@ if(WIN32)
     add_executable(hexago-win "windows_nt.cpp")
     # make the executable file have a '.scr' file extension
     set_target_properties(hexago-win PROPERTIES SUFFIX ".scr")
-    target_link_libraries(hexago-win hexago)
+    # as well as hexago library, we also need to link to the windows scrnsave.lib library
+    target_link_libraries(hexago-win hexago scrnsave)
+endif()
+# include Mac OSX Screensaver if we're on Mac OSX
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    # make sure CMake passes the correct arguments to the compiler to build as
+    # objective-c++, and to enable ARC (rather than garbage collection)
+    set_source_files_properties(
+        "mac_osx.mm" PROPERTIES COMPILE_FLAGS "-x objective-c++ -fobjc-arc"
+    )
+    # OSX Screensavers are built as bundles (a kind of library), as they need
+    # to be loaded into the OS as a plugin rather than run of their own accord
+    add_library(hexago-mac MODULE "mac_osx.mm")
+    set_target_properties(
+        hexago-mac PROPERTIES
+        OUTPUT_NAME Hexago
+        BUNDLE TRUE
+        BUNDLE_EXTENSION "saver"
+        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/mac_osx_bundle_info.plist"
+    )
+    # link it with hexago, as well as OSX Foundation and ScreenSaver frameworks
+    target_link_libraries(hexago-mac hexago ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER} objc)
+    # we need to fiddle with RPath of the OSX Screensaver so that it'll load the locally-bundled dependencies
+    add_custom_command(
+        TARGET hexago-mac
+        POST_BUILD COMMAND
+        ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@loader_path/../Frameworks/"
+        $<TARGET_FILE:hexago-mac>
+    )
+    # create the Frameworks directory within the Screensaver bundle
+    add_custom_command(
+        TARGET hexago-mac POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+                "${CMAKE_BINARY_DIR}/Hexago.saver/Contents/Frameworks"
+    )
+    set(THINGS_TO_BUNDLE)
+    list(APPEND THINGS_TO_BUNDLE ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
+    # now actually copy each framework dependency
+    foreach(DEPENDENCY_PATH ${THINGS_TO_BUNDLE})
+        if(IS_DIRECTORY ${DEPENDENCY_PATH})
+            message(${DEPENDENCY_PATH})
+            get_filename_component(DEPENDENCY_FILE ${DEPENDENCY_PATH} NAME)
+            add_custom_command(
+                TARGET hexago-mac POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_directory
+                        ${DEPENDENCY_PATH}
+                        "${CMAKE_BINARY_DIR}/Hexago.saver/Contents/Frameworks/${DEPENDENCY_FILE}"
+            )
+        elseif(EXISTS ${DEPENDENCY_PATH})
+            message(${DEPENDENCY_PATH})
+            get_filename_component(DEPENDENCY_FILE ${DEPENDENCY_PATH} NAME)
+            add_custom_command(
+                TARGET hexago-mac POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy
+                        ${DEPENDENCY_PATH}
+                        "${CMAKE_BINARY_DIR}/Hexago.saver/Contents/Frameworks/${DEPENDENCY_FILE}"
+            )
+        endif()
+    endforeach()
 endif()
 
 install(TARGETS hexago-demo DESTINATION bin)
