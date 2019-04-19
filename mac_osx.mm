@@ -46,6 +46,8 @@
          */
         (__bridge_retained sf::WindowHandle)self
     );
+    // render the first frame (this prevents a brief flash of white background)
+    screensaver->update();
 }
 
 - (void)stopAnimation {
