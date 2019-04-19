@@ -84,8 +84,9 @@ unset(BUILD_SHARED_LIBS)
 # dependencies
 # add custom dependencies directory
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-# SDL2
-find_package(SFML 2 REQUIRED COMPONENTS audio graphics window system)
+# SFML 2
+# valid COMPONENTS are network audio graphics window system
+find_package(SFML 2 REQUIRED COMPONENTS graphics window system)
 include_directories(${SFML_INCLUDE_DIR})
 # COLRCV
 find_package(COLRCV 0.1 REQUIRED)
