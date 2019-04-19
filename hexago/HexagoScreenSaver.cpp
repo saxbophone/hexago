@@ -6,6 +6,7 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Window/ContextSettings.hpp>
 #include <SFML/Window/Event.hpp>
 
 #include "HexagoScreenSaver.hpp"
@@ -25,7 +26,12 @@ namespace hexago {
             // get first (best) fullscreen videomode and init window with it
             sf::VideoMode::getFullscreenModes()[0],
             "Hexago Screensaver Demo",
-            sf::Style::Fullscreen
+            sf::Style::Fullscreen,
+            sf::ContextSettings(
+                0, // depth
+                0, // stencil
+                config.antialiasing
+            )
         )
       , internal_framelimit(internal_framelimit)
       , config(config)
@@ -42,7 +48,14 @@ namespace hexago {
         HexagoScreenSaverConfig config,
         bool internal_framelimit
     )
-      : window(window_handle)
+      : window(
+            window_handle,
+            sf::ContextSettings(
+                0, // depth
+                0, // stencil
+                config.antialiasing
+            )
+        )
       , internal_framelimit(internal_framelimit)
       , config(config)
       , hexagon_factory(config, this->window_size(), this->scaling_dimension())
@@ -117,6 +130,7 @@ namespace hexago {
             // alpha_colour_channel_range
             ParameterRange<colour_channel_t>(100.0, 100.0),
             30, // framerate
+            8, // antialiasing
             (100.0 / 100.0), // minimum_screen_cover
             SPAWN_MODE_BOTTOM, // spawn_mode
             BG_COLOUR_GREY // background_mode
