@@ -53,6 +53,8 @@ int main(int argc, char* argv[]) {
      * true)
      */
     hexago::HexagoScreenSaver app(hexago::parse_arguments(argc, argv), true);
+    // hide the mouse cursor
+    app.window.setMouseCursorVisible(false);
     // loop while window should keep running
     while(keep_running(app.window)) {
         // call the update method to update internal state and draw the frame
