@@ -201,8 +201,6 @@ namespace hexago {
         for(size_t i = 0; i < this->hexagon_count; i++) {
             this->hexagons.push_back(this->hexagon_factory.next());
         }
-        // hide the mouse cursor
-        this->window.setMouseCursorVisible(false);
         // set window framerate to what is given in config if enabled
         if (this->internal_framelimit) {
             this->window.setFramerateLimit(config.framerate);
