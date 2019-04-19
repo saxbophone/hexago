@@ -1,9 +1,8 @@
 # begin basic metadata
 cmake_minimum_required(VERSION 3.0)
 
-project(hexago VERSION 0.7.0 LANGUAGES CXX)
-# set build number - this increments for any new version
-set(HEXAGO_VERSION_BUILD 10)
+# NOTE: the last number is the build number, which increments for any new version
+project(hexago VERSION 0.8.0.11 LANGUAGES CXX)
 
 set(
     HEXAGO_VERSION_STRING
@@ -16,7 +15,7 @@ set(HEXAGO_ESCAPED_VERSION_STRING "\"${HEXAGO_VERSION_STRING}\"")
 add_definitions(-DHEXAGO_VERSION_MAJOR=${PROJECT_VERSION_MAJOR})
 add_definitions(-DHEXAGO_VERSION_MINOR=${PROJECT_VERSION_MINOR})
 add_definitions(-DHEXAGO_VERSION_PATCH=${PROJECT_VERSION_PATCH})
-add_definitions(-DHEXAGO_VERSION_BUILD=${HEXAGO_VERSION_BUILD})
+add_definitions(-DHEXAGO_VERSION_BUILD=${PROJECT_VERSION_TWEAK})
 add_definitions(-DHEXAGO_VERSION_STRING=${HEXAGO_ESCAPED_VERSION_STRING})
 
 message(
