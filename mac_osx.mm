@@ -65,13 +65,24 @@
 }
 
 - (BOOL)hasConfigureSheet {
-    // There is no configuration dialog (yet)
-    return NO;
+    // There IS a Configure Sheet
+    return YES;
 }
 
 - (NSWindow*)configureSheet {
-    // TODO: Implement configuration dialog
-    return nil;
+    // load our Configure Sheet
+    if (!configSheet) {
+        if (![NSBundle loadNibNamed:@"ConfigureSheet" owner:self]) {
+            NSLog( @"Failed to load configure sheet." );
+            NSBeep();
+        }
+    }
+    return configSheet;
+}
+
+// Additional method, not required for ScreenSaverView but for testing Configure Sheet
+- (IBAction)cancelClick:(id)sender {
+    [[NSApplication sharedApplication] endSheet:configSheet];
 }
 
 - (void)dealloc {
