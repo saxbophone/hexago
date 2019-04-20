@@ -34,6 +34,17 @@
      * we can use self as ScreenSaverView inherits from NSView, which is a
      * window handle - it's basically a void pointer as far as C++ and
      * Objective-C++ are concerned)
+     *
+     * BUG: There is a memory leak at this point.
+     * Unbeknown to me, it turns out that startAnimation() may be called
+     * again after stopAnimation() for the same instance of a ScreenSaverView
+     * subclass (this happens for example in the System Preferences screen
+     * after finishing changing the settings of a ScreenSaver).
+     * I've tried to remediate the issue by delete-ing the object in
+     * stopAnimation(), but the trouble is that this crashes the entire thing.
+     * It is possible to delete C++ objects in Objective-C++ in this way, so
+     * there must be something wrong with my HexagoScreenSaver class which
+     * makes instances of it un-delete-able.
      */
     screensaver = new hexago::HexagoScreenSaver(
         /*
