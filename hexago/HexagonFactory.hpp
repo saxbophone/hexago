@@ -12,6 +12,7 @@
 
 #include "HexagonFactoryConfig.hpp"
 #include "Hexagon.hpp"
+#include "hexago.hpp"
 
 
 namespace hexago {
