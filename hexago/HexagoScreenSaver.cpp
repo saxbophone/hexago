@@ -184,6 +184,9 @@ namespace hexago {
                 return sf::Color::Black;
             case BG_COLOUR_WHITE:
                 return sf::Color::White;
+            case BG_COLOUR_MEDIAN:
+                // TODO: replace placeholder with code to calculate median
+                return sf::Color::Black;
             case BG_COLOUR_NONE:
                 /*
                  * no background means colour is not used - return full
