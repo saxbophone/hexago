@@ -54,6 +54,10 @@ sf::Color hexago::convert_colour_to_rgb(colour_t colour) {
         rgb.r,
         rgb.g,
         rgb.b,
-        colour.alpha_channel
+        /*
+         * alpha is given as range from 0..100 but SFML wants 0..255 so scale
+         * the alpha channel
+         */
+        colour.alpha_channel / 100.0 * 255
     );
 }

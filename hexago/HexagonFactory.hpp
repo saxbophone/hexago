@@ -63,14 +63,8 @@ namespace hexago {
             // gets a new random colour for a Hexagon
             sf::Color colour();
 
-            // generates a new RGB colour for a Hexagon
-            colrcv_rgb_t generate_rgb_colour();
-
-            // generates a new HSV colour for a Hexagon
-            colrcv_hsv_t generate_hsv_colour();
-
-            // generates a new LAB colour for a Hexagon
-            colrcv_lab_t generate_lab_colour();
+            // generates a new colour for a Hexagon
+            colour_t generate_colour();
     };
 
 }

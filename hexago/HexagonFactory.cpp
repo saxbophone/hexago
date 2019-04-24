@@ -10,6 +10,7 @@
 #include "HexagonFactory.hpp"
 #include "HexagonFactoryConfig.hpp"
 #include "Hexagon.hpp"
+#include "hexago.hpp"
 
 
 namespace hexago {
@@ -76,67 +77,19 @@ namespace hexago {
 
     // gets a new random colour for a Hexagon, based on the chosen colour model
     sf::Color HexagonFactory::colour() {
-        /*
-         * set the colour differently depending on what model is being used
-         * libcolrcv is used to achieve these conversions (if needed)
-         */
-        // colrcv rgb colour to be used later
-        colrcv_rgb_t rgb;
-        switch(this->colour_model) {
-            case hexago::COLOUR_MODEL_RGB: {
-                rgb = this->generate_rgb_colour();
-                break;
-            }
-            case hexago::COLOUR_MODEL_HSV: {
-                // create a new hsv colour
-                colrcv_hsv_t hsv = this->generate_hsv_colour();
-                // convert to rgb
-                rgb = colrcv_hsv_to_rgb(hsv);
-                break;
-            }
-            case hexago::COLOUR_MODEL_LAB: {
-                // create a new lab colour
-                colrcv_lab_t lab = this->generate_lab_colour();
-                // convert to rgb
-                rgb = colrcv_lab_to_rgb(lab);
-                break;
-            }
-        }
-        // convert colrcv rgb colour to an sf::Color instance and attach alpha
-        return sf::Color(
-            rgb.r,
-            rgb.g,
-            rgb.b,
-            // alpha is given as range from 0-100 so turn this into 0-255
-            alpha_colour_channel_range(this->random_number_engine) / 100.0 * 255
-        );
+        // convert a randomly-generated colour in a colour model to SFML Color
+        return convert_colour_to_rgb(this->generate_colour());
     }
 
-    colrcv_rgb_t HexagonFactory::generate_rgb_colour() {
-        colrcv_rgb_t rgb = {
+    colour_t HexagonFactory::generate_colour() {
+        colour_t colour = {
+            this->colour_model,
             d_colour_channel_range(this->random_number_engine),
             e_colour_channel_range(this->random_number_engine),
             f_colour_channel_range(this->random_number_engine),
+            alpha_colour_channel_range(this->random_number_engine)
         };
-        return rgb;
-    }
-
-    colrcv_hsv_t HexagonFactory::generate_hsv_colour() {
-        colrcv_hsv_t hsv = {
-            d_colour_channel_range(this->random_number_engine),
-            e_colour_channel_range(this->random_number_engine),
-            f_colour_channel_range(this->random_number_engine),
-        };
-        return hsv;
-    }
-
-    colrcv_lab_t HexagonFactory::generate_lab_colour() {
-        colrcv_lab_t lab = {
-            d_colour_channel_range(this->random_number_engine),
-            e_colour_channel_range(this->random_number_engine),
-            f_colour_channel_range(this->random_number_engine),
-        };
-        return lab;
+        return colour;
     }
 
 }
