@@ -29,7 +29,7 @@
     <key>CSResourcesFileMapped</key>
     <true/>
     <key>NSHumanReadableCopyright</key>
-    <string>Copyright © 2019 Joshua Saxby. All rights reserved.</string>
+    <string>${HEXAGO_COPYRIGHT_STRING}</string>
     <key>NSPrincipalClass</key>
     <string>HexagoScreenSaverView</string>
 </dict>
