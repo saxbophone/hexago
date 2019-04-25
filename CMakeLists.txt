@@ -107,9 +107,9 @@ file(GLOB LIBHEXAGO_HEADERS "hexago/*.hpp")
 # here we define the libhexago library
 add_library(hexago ${LIBHEXAGO_SOURCES})
 
-# if we're on windows, then set these additional linker options so the console
-# window doesn't show up and get in the way
-if(WIN32)
+# if we're building in release mode on windows, then set these additional
+# linker options so the console window doesn't show up and get in the way
+if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-subsystem,windows")
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     # On Mac OSX, we need "-headerpad_max_install_names" linker flag for when we meddle with the RPath
