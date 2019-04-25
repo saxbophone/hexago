@@ -12,6 +12,21 @@ set(HEXAGO_ESCAPED_VERSION_STRING "\"${HEXAGO_VERSION_STRING}\"")
 string(TIMESTAMP CURRENT_YEAR "%Y")
 set(HEXAGO_COPYRIGHT_STRING "Copyright (C) ${CURRENT_YEAR} Joshua Saxby. All rights reserved.")
 set(HEXAGO_ESCAPED_COPYRIGHT_STRING "\"${HEXAGO_COPYRIGHT_STRING}\"")
+
+# detect OS and set one set of variables for consistency
+if(WIN32)
+    set(HEXAGO_OS_WINDOWS_NT ON)
+    set(HEXAGO_OS_NAME "windows_nt")
+    set(HEXAGO_OS_MACRO "HEXAGO_OS_WINDOWS_NT")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(HEXAGO_OS_MAC_OSX ON)
+    set(HEXAGO_OS_NAME "mac_osx")
+    set(HEXAGO_OS_MACRO "HEXAGO_OS_MAC_OSX")
+else() # "other" --it's probably Linux, doesn't matter either way though
+    set(HEXAGO_OS_OTHER ON)
+    set(HEXAGO_OS_NAME "other")
+    set(HEXAGO_OS_MACRO "HEXAGO_OS_OTHER")
+endif()
 # end basic metadata
 
 # pass in version of program as preprocessor definitions
@@ -21,6 +36,7 @@ add_definitions(-DHEXAGO_VERSION_PATCH=${PROJECT_VERSION_PATCH})
 add_definitions(-DHEXAGO_VERSION_BUILD=${PROJECT_VERSION_TWEAK})
 add_definitions(-DHEXAGO_VERSION_STRING=${HEXAGO_ESCAPED_VERSION_STRING})
 add_definitions(-DHEXAGO_COPYRIGHT_STRING=${HEXAGO_ESCAPED_COPYRIGHT_STRING})
+add_definitions(-D${HEXAGO_OS_MACRO})
 
 message(
     STATUS
@@ -65,7 +81,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
 endif()
 
 # default build type is only static if on Windows
-if(WIN32)
+if(HEXAGO_OS_WINDOWS_NT)
     set(HEXAGO_STATIC_BUILD ON CACHE BOOL "")
 else()
     set(HEXAGO_STATIC_BUILD OFF CACHE BOOL "")
@@ -95,7 +111,7 @@ include_directories(${SFML_INCLUDE_DIR})
 find_package(COLRCV 0.1 REQUIRED)
 include_directories(${COLRCV_INCLUDE_DIR})
 # if on OSX, then we also need to find the Foundation and Screensaver frameworks
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(HEXAGO_OS_MAC_OSX)
     find_library(OSX_FRAMEWORK_FOUNDATION Foundation)
     find_library(OSX_FRAMEWORK_SCREENSAVER ScreenSaver)
 endif()
@@ -113,9 +129,9 @@ add_library(hexago ${LIBHEXAGO_SOURCES})
 
 # if we're building in release mode on windows, then set these additional
 # linker options so the console window doesn't show up and get in the way
-if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Release")
+if(HEXAGO_OS_WINDOWS_NT AND CMAKE_BUILD_TYPE STREQUAL "Release")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-subsystem,windows")
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif(HEXAGO_OS_MAC_OSX)
     # On Mac OSX, we need "-headerpad_max_install_names" linker flag for when we meddle with the RPath
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -headerpad_max_install_names")
 endif()
@@ -146,7 +162,7 @@ endif()
 add_executable(hexago-demo "demo.cpp")
 target_link_libraries(hexago-demo hexago)
 # include Windows NT Screensaver if we're on Windows NT
-if(WIN32)
+if(HEXAGO_OS_WINDOWS_NT)
     add_executable(hexago-win "windows_nt.cpp")
     # make the executable file have a '.scr' file extension
     set_target_properties(hexago-win PROPERTIES SUFFIX ".scr")
@@ -154,7 +170,7 @@ if(WIN32)
     target_link_libraries(hexago-win hexago scrnsave)
 endif()
 # include Mac OSX Screensaver if we're on Mac OSX
-if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(HEXAGO_OS_MAC_OSX)
     # make sure CMake passes the correct arguments to the compiler to build as
     # objective-c++, and to enable ARC (rather than garbage collection)
     set_source_files_properties(

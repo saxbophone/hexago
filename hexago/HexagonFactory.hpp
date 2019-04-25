@@ -3,6 +3,8 @@
 
 #include <random>
 
+#include <cstdint>
+
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 
@@ -58,6 +60,9 @@ namespace hexago {
             // alpha channel
             std::uniform_real_distribution<colour_channel_t>
                 alpha_colour_channel_range;
+
+            // returns a decent seed for the random number engine
+            static std::uint_fast32_t get_random_seed();
 
             // gets a new random colour for a Hexagon
             sf::Color colour();
