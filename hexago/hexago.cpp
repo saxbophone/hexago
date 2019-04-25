@@ -17,9 +17,7 @@ const hexago::version_t hexago::VERSION = {
 };
 
 // program copyright notice
-const char* hexago::copyright = (
-    "Copyright (c) 2017 Joshua Saxby. All rights reserved."
-);
+const char* hexago::copyright = HEXAGO_COPYRIGHT_STRING;
 
 sf::Color hexago::convert_colour_to_rgb(colour_t colour) {
     // use libcolrcv to convert from our supported colour models to RGB
