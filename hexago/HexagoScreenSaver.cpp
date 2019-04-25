@@ -203,7 +203,7 @@ namespace hexago {
                         this->config.f_colour_channel_range.max +
                         this->config.f_colour_channel_range.min
                     ) / 2.0,
-                    255 // always want full alpha for background colour
+                    100.0 // always want full alpha for background colour
                 };
                 return convert_colour_to_rgb(colour);
             }
