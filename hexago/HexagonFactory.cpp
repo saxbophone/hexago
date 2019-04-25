@@ -1,4 +1,11 @@
+#ifdef HEXAGO_OS_WINDOWS_NT
+#include <ctime>
+#include <Windows.h>
+#endif
+
 #include <random>
+
+#include <cstdint>
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -30,7 +37,7 @@ namespace hexago {
      * once for constructing the type
      * second for calling it, as that's what will give us random samples
      */
-      : random_number_engine(std::mt19937(std::random_device()()))
+      : random_number_engine(std::mt19937(get_random_seed()))
       , x_spawn_range(0.0, (double)window_size.x)
       , y_spawn_range(0.0, (double)window_size.y)
       , start_size_range(
@@ -72,6 +79,25 @@ namespace hexago {
             // use a new random colour
             this->colour()
         );
+    }
+
+    // returns a decent seed for the random number engine
+    std::uint_fast32_t HexagonFactory::get_random_seed() {
+        /*
+         * we compile with MinGW on Windows and that compiler has a
+         * deterministic implementation of std::random_device(), so a
+         * combination of GetTickCount() and time() is used instead.
+         * This is arguably more deterministic than std::random_device() but at
+         * least it's not the same value on every invocation!
+         */
+        #ifdef HEXAGO_OS_WINDOWS_NT
+        // XOR epoch time in seconds with uptime in milliseconds for seed
+        return (
+            (std::uint_fast32_t)time(NULL) ^ (std::uint_fast32_t)GetTickCount()
+        );
+        #else
+        return (std::uint_fast32_t)std::random_device()();
+        #endif
     }
 
     // gets a new random colour for a Hexagon, based on the chosen colour model
