@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.0)
 
 # NOTE: the last number is the build number, which increments for any new version
-project(hexago VERSION 0.8.0.11 LANGUAGES CXX)
+project(hexago VERSION 0.8.1.12 LANGUAGES CXX)
 
 set(
     HEXAGO_VERSION_STRING
@@ -41,7 +41,7 @@ add_definitions(-D${HEXAGO_OS_MACRO})
 message(
     STATUS
     "[hexago] Preparing to build Hexago v${HEXAGO_VERSION_STRING} "
-    "(build ${HEXAGO_VERSION_BUILD})"
+    "(build ${PROJECT_VERSION_TWEAK})"
 )
 
 # set default C++ standard to use (C++11)
