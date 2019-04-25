@@ -3,6 +3,8 @@
 
 #include <cstdint>
 
+#include <SFML/Graphics/Color.hpp>
+
 
 namespace hexago {
 
@@ -16,9 +18,40 @@ namespace hexago {
         const char* string;
     } version_t;
 
+    /*
+     * enum for expressing which colour model should be used to represent the
+     * colour ranges of the hexagons to be generated
+     */
+    enum colour_model_t {
+        COLOUR_MODEL_RGB, // RGB+Alpha
+        COLOUR_MODEL_HSV, // HSV+Alpha
+        COLOUR_MODEL_LAB, // LAB+Alpha
+    };
+
+    typedef double colour_channel_t;
+
+    /*
+     * convenience struct type to allow passing around colours in different
+     * models without tying the code to one data type
+     */
+    typedef struct colour_t {
+        colour_model_t model; // what model this colour is in
+        // the colour channels (see HexagonFactoryConfig.hpp for details)
+        colour_channel_t d_channel;
+        colour_channel_t e_channel;
+        colour_channel_t f_channel;
+        colour_channel_t alpha_channel;
+    } generic_colour_t;
+
     extern const version_t VERSION;
 
     extern const char* copyright;
+
+    /*
+     * Converts a colour in any one of the RGB, HSV or LAB colour spaces into
+     * an SFML-native RGB colour
+     */
+    sf::Color convert_colour_to_rgb(colour_t colour);
 
 }
 
