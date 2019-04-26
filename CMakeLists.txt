@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.0)
 
 # NOTE: the last number is the build number, which increments for any new version
-project(hexago VERSION 0.8.1.12 LANGUAGES CXX)
+project(hexago VERSION 0.9.0.13 LANGUAGES CXX)
 
 set(
     HEXAGO_VERSION_STRING
