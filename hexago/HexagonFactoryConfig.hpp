@@ -2,22 +2,11 @@
 #define SAXBOPHONE_HEXAGO_HEXAGON_FACTORY_CONFIG_HPP
 
 #include "ParameterRange.hpp"
+#include "hexago.hpp"
 #include "Hexagon.hpp"
 
 
 namespace hexago {
-
-    /*
-     * enum for expressing which colour model should be used to represent the
-     * colour ranges of the hexagons to be generated
-     */
-    enum colour_model_t {
-        COLOUR_MODEL_RGB, // RGB+Alpha
-        COLOUR_MODEL_HSV, // HSV+Alpha
-        COLOUR_MODEL_LAB, // LAB+Alpha
-    };
-
-    typedef double colour_channel_t;
 
     /*
      * A struct type used for holding all the parameters needed to initialise

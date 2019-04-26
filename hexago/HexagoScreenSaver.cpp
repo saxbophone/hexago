@@ -184,6 +184,29 @@ namespace hexago {
                 return sf::Color::Black;
             case BG_COLOUR_WHITE:
                 return sf::Color::White;
+            case BG_COLOUR_MEDIAN: {
+                /*
+                 * generate a colour made up of the median channel values and
+                 * convert it to an SFML Color
+                 */
+                colour_t colour = {
+                    this->config.colour_model,
+                    (
+                        this->config.d_colour_channel_range.max +
+                        this->config.d_colour_channel_range.min
+                    ) / 2.0,
+                    (
+                        this->config.e_colour_channel_range.max +
+                        this->config.e_colour_channel_range.min
+                    ) / 2.0,
+                    (
+                        this->config.f_colour_channel_range.max +
+                        this->config.f_colour_channel_range.min
+                    ) / 2.0,
+                    100.0 // always want full alpha for background colour
+                };
+                return convert_colour_to_rgb(colour);
+            }
             case BG_COLOUR_NONE:
                 /*
                  * no background means colour is not used - return full

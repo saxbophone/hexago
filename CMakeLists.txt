@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.0)
 
 # NOTE: the last number is the build number, which increments for any new version
-project(hexago VERSION 0.8.1.12 LANGUAGES CXX)
+project(hexago VERSION 0.9.0.13 LANGUAGES CXX)
 
 set(
     HEXAGO_VERSION_STRING
@@ -165,7 +165,7 @@ target_link_libraries(hexago-demo hexago)
 if(HEXAGO_OS_WINDOWS_NT)
     add_executable(hexago-win "windows_nt.cpp")
     # make the executable file have a '.scr' file extension
-    set_target_properties(hexago-win PROPERTIES SUFFIX ".scr")
+    set_target_properties(hexago-win PROPERTIES OUTPUT_NAME Hexago SUFFIX ".scr")
     # as well as hexago library, we also need to link to the windows scrnsave.lib library
     target_link_libraries(hexago-win hexago scrnsave)
 endif()
