@@ -1,6 +1,11 @@
 # begin basic metadata
 cmake_minimum_required(VERSION 3.0)
 
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+endif()
+
 # NOTE: the last number is the build number, which increments for any new version
 project(hexago VERSION 0.9.0.13 LANGUAGES CXX)
 
