@@ -73,6 +73,27 @@ namespace hexago {
             dupe.move(0.0f, -(float)this->window_size.y);
             shapes.push_back(dupe);
         }
+        // combined axis overlaps
+        if (this->centre.x < current_size and this->centre.y < current_size) {
+            sf::CircleShape dupe = shape;
+            dupe.move((float)this->window_size.x, (float)this->window_size.y);
+            shapes.push_back(dupe);
+        }
+        if (this->centre.x > (this->window_size.x - current_size) and this->centre.y < current_size) {
+            sf::CircleShape dupe = shape;
+            dupe.move(-(float)this->window_size.x, (float)this->window_size.y);
+            shapes.push_back(dupe);
+        }
+        if (this->centre.x < current_size and this->centre.y > (this->window_size.y - current_size)) {
+            sf::CircleShape dupe = shape;
+            dupe.move((float)this->window_size.x, -(float)this->window_size.y);
+            shapes.push_back(dupe);
+        }
+        if (this->centre.x > (this->window_size.x - current_size) and this->centre.y > (this->window_size.y - current_size)) {
+            sf::CircleShape dupe = shape;
+            dupe.move(-(float)this->window_size.x, -(float)this->window_size.y);
+            shapes.push_back(dupe);
+        }
         return shapes;
     }
 
