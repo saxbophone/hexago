@@ -5,6 +5,7 @@
 #include <cstdio>
 
 #include <SFML/Window.hpp>
+#include <SFML/Graphics/Texture.hpp>
 
 #include "hexago/hexago.hpp"
 #include "hexago/HexagoScreenSaver.hpp"
@@ -60,6 +61,11 @@ int main(int argc, char* argv[]) {
         // call the update method to update internal state and draw the frame
         app.update();
     }
+    // XXX: save image of screen frame before exit
+    sf::Texture texture;
+    texture.create(app.window.getSize().x, app.window.getSize().y);
+    texture.update(app.window);
+    texture.copyToImage().saveToFile("hexago_frame.png");
     // close window when finished
     app.window.close();
     return 0;
