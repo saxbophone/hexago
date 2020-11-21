@@ -1,6 +1,8 @@
 #ifndef SAXBOPHONE_HEXAGO_HEXAGON_HPP
 #define SAXBOPHONE_HEXAGO_HEXAGON_HPP
 
+#include <vector>
+
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/System/Clock.hpp>
@@ -23,13 +25,14 @@ namespace hexago {
         public:
             // constructor
             Hexagon(
+                sf::Vector2u window_size,
                 sf::Vector2f centre,
                 hexagon_size_t start_size,
                 hexagon_decay_t decay_rate,
                 sf::Color colour
             );
-            // returns a SFML shape which can be used to render this hexagon
-            sf::CircleShape shape() const;
+            // returns a vector of SFML shapes which can be used to render this hexagon
+            std::vector<sf::CircleShape> shapes() const;
             // returns true if this hexagon has finished shrinking
             bool is_dead() const;
         private:
@@ -44,6 +47,8 @@ namespace hexago {
              */
             hexagon_size_t current_size() const;
 
+            // window dimensions
+            sf::Vector2u window_size;
             // the location of the hexagon on screen
             sf::Vector2f centre;
             // the start size of the hexagon (radius in pixels)

@@ -38,6 +38,8 @@ namespace hexago {
         private:
             // the random number engine we'll be using
             std::mt19937 random_number_engine;
+            // window dimensions
+            sf::Vector2u window_size;
             // the x co-ordinate range within which Hexagons may be spawned
             std::uniform_real_distribution<double> x_spawn_range;
             // the y co-ordinate range within which Hexagons may be spawned

@@ -106,8 +106,10 @@ namespace hexago {
                     }
                 }
             }
-            // render the hexagon to screen
-            this->window.draw(this->hexagons[i].shape());
+            // render the hexagon's shapes to screen
+            for (auto shape : this->hexagons[i].shapes()) {
+                this->window.draw(shape);
+            }
         }
         // draw out the rendered frame
         this->window.display();

@@ -68,6 +68,8 @@ namespace hexago {
     // returns a randomly-generated Hexagon instance from the factory
     Hexagon HexagonFactory::next() {
         return Hexagon(
+            // pass in window dimensions
+            this->window_size,
             // random starting position
             sf::Vector2f(
                 x_spawn_range(this->random_number_engine),

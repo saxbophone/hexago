@@ -1,3 +1,5 @@
+#include <vector>
+
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -9,20 +11,22 @@ namespace hexago {
 
     // constructor
     Hexagon::Hexagon(
+        sf::Vector2u window_size,
         sf::Vector2f centre,
         hexagon_size_t start_size,
         hexagon_decay_t decay_rate,
         sf::Color colour
         // all the properties are set via an initialiser list
     )
-      : centre(centre)
+      : window_size(window_size)
+      , centre(centre)
       , start_size(start_size)
       , decay_rate(decay_rate)
       , colour(colour)
       {}
 
     // returns a SFML shape which can be used to render this hexagon
-    sf::CircleShape Hexagon::shape() const {
+    std::vector<sf::CircleShape> Hexagon::shapes() const {
         // grab the current size right now as it's used a few times
         hexagon_size_t current_size = this->current_size();
         /*
@@ -36,11 +40,19 @@ namespace hexago {
          * the centre is always the radius of the shape
          */
         shape.setOrigin(current_size, current_size);
-        // now set the shape's position to that of this Hexagon object's centre
-        shape.setPosition(this->centre);
-        // finally, set the fill colour of this shape before returning it
+        // set the shape fill colour --this never changes for all shapes
         shape.setFillColor(this->colour);
-        return shape;
+        /*
+         * vector to store all shapes for this Hexagon
+         * --we may need multiple shapes if the Hexagon overlaps any of the
+         * screen edges, as we want to make a tileable image
+         */
+        std::vector<sf::CircleShape> shapes(1);
+        // each Hexagon always has at least one shape with the centre position
+        shape.setPosition(this->centre);
+        shapes.push_back(shape);
+        // TODO: here's where we work out if we need additional shapes and add them
+        return std::vector<sf::CircleShape>(1, shape);
     }
 
     bool Hexagon::is_dead() const {
