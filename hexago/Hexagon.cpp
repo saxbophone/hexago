@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 
 #include <SFML/Graphics/Color.hpp>
@@ -47,12 +48,32 @@ namespace hexago {
          * --we may need multiple shapes if the Hexagon overlaps any of the
          * screen edges, as we want to make a tileable image
          */
-        std::vector<sf::CircleShape> shapes(1);
+        std::vector<sf::CircleShape> shapes;
         // each Hexagon always has at least one shape with the centre position
         shape.setPosition(this->centre);
         shapes.push_back(shape);
-        // TODO: here's where we work out if we need additional shapes and add them
-        return std::vector<sf::CircleShape>(1, shape);
+        // now, we check if the Hexagon overlaps the screen over any axis edge
+        if (this->centre.x < current_size) {
+            sf::CircleShape dupe = shape;
+            dupe.move((float)this->window_size.x, 0.0f);
+            shapes.push_back(dupe);
+        }
+        if (this->centre.x > (this->window_size.x - current_size)) {
+            sf::CircleShape dupe = shape;
+            dupe.move(-(float)this->window_size.x, 0.0f);
+            shapes.push_back(dupe);
+        }
+        if (this->centre.y < current_size) {
+            sf::CircleShape dupe = shape;
+            dupe.move(0.0f, (float)this->window_size.y);
+            shapes.push_back(dupe);
+        }
+        if (this->centre.y > (this->window_size.y - current_size)) {
+            sf::CircleShape dupe = shape;
+            dupe.move(0.0f, -(float)this->window_size.y);
+            shapes.push_back(dupe);
+        }
+        return shapes;
     }
 
     bool Hexagon::is_dead() const {

@@ -39,6 +39,7 @@ namespace hexago {
      * second for calling it, as that's what will give us random samples
      */
       : random_number_engine(std::mt19937(get_random_seed()))
+      , window_size(window_size)
       , x_spawn_range(0.0, (double)window_size.x)
       , y_spawn_range(0.0, (double)window_size.y)
       , start_size_range(
