@@ -46,6 +46,16 @@ namespace hexago {
                 HexagoScreenSaverConfig config=resolved_default_config(),
                 bool internal_framelimit=false
             );
+            /*
+             * this constructor takes a reference to an sf::RenderTarget
+             * (generic abstract base class of RenderWindow/RenderTexture) to
+             * support swappable rendering to a Window or Texture as required
+             */
+            HexagoScreenSaver(
+                sf::RenderTarget& render_target,
+                HexagoScreenSaverConfig config=resolved_default_config(),
+                bool internal_framelimit=false
+            );
             // returns the size of the window we're bound to
             sf::Vector2u window_size() const;
             // returns the size of the window dimension to use for scaling 
