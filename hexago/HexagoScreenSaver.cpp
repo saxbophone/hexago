@@ -65,12 +65,6 @@ namespace hexago {
         this->init();
     }
 
-    HexagoScreenSaver::HexagoScreenSaver(
-        sf::RenderTarget& render_target,
-        HexagoScreenSaverConfig config=resolved_default_config(),
-        bool internal_framelimit=false
-    ) {}
-
     // this method returns the size of the window we're bound to
     sf::Vector2u HexagoScreenSaver::window_size() const {
         return this->window.getSize();
