@@ -82,7 +82,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
     # enable 'extra' strict warnings
     enable_cxx_compiler_flag_if_supported("-Wextra")
     # convert all warnings into errors
-    enable_cxx_compiler_flag_if_supported("-Werror")
+    # enable_cxx_compiler_flag_if_supported("-Werror")
 endif()
 
 # default build type is only static if on Windows
@@ -119,6 +119,7 @@ include_directories(${COLRCV_INCLUDE_DIR})
 if(HEXAGO_OS_MAC_OSX)
     find_library(OSX_FRAMEWORK_FOUNDATION Foundation)
     find_library(OSX_FRAMEWORK_SCREENSAVER ScreenSaver)
+    find_library(OSX_FRAMEWORK_APPKIT AppKit)
 endif()
 
 # compile the bulk of Hexago into a library (libhexago)
@@ -181,6 +182,8 @@ if(HEXAGO_OS_MAC_OSX)
     set_source_files_properties(
         "mac_osx.mm" PROPERTIES COMPILE_FLAGS "-x objective-c++ -fobjc-arc"
     )
+    # Add our interface builder resources
+    set(RESOURCES ConfigureSheet.xib)
     # OSX Screensavers are built as bundles (a kind of library), as they need
     # to be loaded into the OS as a plugin rather than run of their own accord
     add_library(hexago-mac MODULE "mac_osx.mm")
@@ -190,9 +193,10 @@ if(HEXAGO_OS_MAC_OSX)
         BUNDLE TRUE
         BUNDLE_EXTENSION "saver"
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/mac_osx_bundle_info.plist"
+        # BUNDLE_RESOURCES "${RESOURCES}"
     )
     # link it with hexago, as well as OSX Foundation and ScreenSaver frameworks
-    target_link_libraries(hexago-mac hexago ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER} objc)
+    target_link_libraries(hexago-mac hexago ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER} ${OSX_FRAMEWORK_APPKIT} objc)
     # we need to fiddle with RPath of the OSX Screensaver so that it'll load the locally-bundled dependencies
     add_custom_command(
         TARGET hexago-mac
@@ -230,6 +234,18 @@ if(HEXAGO_OS_MAC_OSX)
             )
         endif()
     endforeach()
+    # lastly, create the Resources directory in the bundle and copy our ConfigureSheet.nib into it
+    add_custom_command(
+        TARGET hexago-mac POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+                "${CMAKE_BINARY_DIR}/Hexago.saver/Contents/Resources"
+    )
+    add_custom_command(
+        TARGET hexago-mac POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${CMAKE_SOURCE_DIR}/ConfigureSheet.nib"
+                "${CMAKE_BINARY_DIR}/Hexago.saver/Contents/Resources/ConfigureSheet.nib"
+    )
 endif()
 
 install(TARGETS hexago-demo DESTINATION bin)

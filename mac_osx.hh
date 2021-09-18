@@ -13,4 +13,9 @@
      * nor those with virtual methods, as statically allocated variables.
      */
     hexago::HexagoScreenSaver* screensaver;
+    // Configure Sheet stuff
+    IBOutlet id configSheet;
+    IBOutlet id drawFilledShapesOption;
+    IBOutlet id drawOutlinedShapesOption;
+    IBOutlet id drawBothOption;
 } @end

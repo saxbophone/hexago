@@ -76,18 +76,44 @@
 }
 
 - (BOOL)hasConfigureSheet {
-    // There is no configuration dialog (yet)
-    return NO;
+    // There IS a Configure Sheet
+    return YES;
 }
 
 - (NSWindow*)configureSheet {
-    // TODO: Implement configuration dialog
-    return nil;
+    // load our Configure Sheet
+    if (!configSheet) {
+        if (![NSBundle loadNibNamed:@"ConfigureSheet" owner:self]) {
+            NSLog( @"Failed to load configure sheet." );
+            NSBeep();
+        }
+    }
+    return configSheet;
 }
 
 - (void)dealloc {
     // hook into dealloc message so we relinquish resources (our C++ object!)
     delete screensaver;
 }
+
+/* here begins additional Cocoa event-handling stuff for the Configure Sheet */
+
+// closes the Configure Sheet
+- (void)closeConfigSheet {
+    [[NSApplication sharedApplication] endSheet:configSheet];
+}
+
+// event-handler for the "Cancel" button of the Configure Sheet
+- (IBAction)configureCancelClick:(id)sender {
+    [self closeConfigSheet];
+}
+
+// event-handler for the "OK" button of the Configure Sheet
+- (IBAction)configureOkClick:(id)sender {
+    // TODO: save the settings configured in the Configure Sheet!
+    [self closeConfigSheet];
+}
+
+/* here ends Cocoa event-handling stuff */
 
 @end
