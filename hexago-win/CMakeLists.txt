@@ -1,4 +1,3 @@
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-subsystem,windows")
 add_executable(hexago-win WIN32 "windows_nt.cpp")
 # make the executable file have a '.scr' file extension
 set_target_properties(hexago-win PROPERTIES OUTPUT_NAME Hexago SUFFIX ".scr")
