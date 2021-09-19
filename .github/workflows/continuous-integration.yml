@@ -20,16 +20,19 @@ jobs:
           - platform_name: linux
             os: ubuntu-20.04
             cxx: g++-10
+            cmake_generator: "Unix Makefiles"
           - platform_name: macos
             os: macos-10.15
             cxx: clang++
+            cmake_generator: "Unix Makefiles"
           # NOTE: CXX seems to be ignored on Windows, but specify it anyway for consistency
           - platform_name: windows
             os: windows-2019
             cxx: msvc
+            cmake_generator: ""
           - platform_name: windows_mingw
             os: windows-2019
-            override_cmake_generator: "MSYS Makefiles"
+            cmake_generator: "MSYS Makefiles"
 
     steps:
       - uses: actions/checkout@v2
@@ -69,15 +72,11 @@ jobs:
         shell: bash
         if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
         run: echo "BUILD_TYPE=Release" >> $GITHUB_ENV
-      # override CMAKE_GENERATOR when specified
-      - name: Override CMake Generator to use
-        shell: bash
-        if: ${{ env.override_cmake_generator }}
-        run: echo "CMAKE_GENERATOR=${{ env.override_cmake_generator }}" >> $GITHUB_ENV
 
       - name: Configure CMake
         env:
           CXX: ${{ matrix.cxx }}
+          CMAKE_GENERATOR: ${{ matrix.cmake_generator }}
         # Use a bash shell so we can use the same syntax for environment variable
         # access regardless of the host operating system
         shell: bash
