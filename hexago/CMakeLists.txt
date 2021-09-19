@@ -14,7 +14,7 @@ target_compile_definitions(
     -DHEXAGO_VERSION_BUILD=${PROJECT_VERSION_TWEAK}
     -DHEXAGO_VERSION_STRING=${HEXAGO_ESCAPED_VERSION_STRING}
     -DHEXAGO_COPYRIGHT_STRING=${HEXAGO_ESCAPED_COPYRIGHT_STRING}
-    # -D${HEXAGO_OS_MACRO}
+    -D${HEXAGO_OS_MACRO}
 )
 # inherit common project compiler options
 target_link_libraries(

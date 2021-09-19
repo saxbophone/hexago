@@ -68,6 +68,21 @@ set(HEXAGO_ESCAPED_VERSION_STRING "\"${HEXAGO_VERSION_STRING}\"")
 string(TIMESTAMP CURRENT_YEAR "%Y")
 set(HEXAGO_COPYRIGHT_STRING "Copyright (C) ${CURRENT_YEAR} Joshua Saxby. All rights reserved.")
 set(HEXAGO_ESCAPED_COPYRIGHT_STRING "\"${HEXAGO_COPYRIGHT_STRING}\"")
+
+# detect OS and set one set of variables for consistency
+if(WIN32)
+    set(HEXAGO_OS_WINDOWS_NT ON)
+    set(HEXAGO_OS_NAME "windows_nt")
+    set(HEXAGO_OS_MACRO "HEXAGO_OS_WINDOWS_NT")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(HEXAGO_OS_MAC_OSX ON)
+    set(HEXAGO_OS_NAME "mac_osx")
+    set(HEXAGO_OS_MACRO "HEXAGO_OS_MAC_OSX")
+else() # "other" --it's probably Linux, doesn't matter either way though
+    set(HEXAGO_OS_OTHER ON)
+    set(HEXAGO_OS_NAME "other")
+    set(HEXAGO_OS_MACRO "HEXAGO_OS_OTHER")
+endif()
 # end basic metadata
 
 # This is a special target which only exists to capture compilation options
@@ -143,4 +158,11 @@ add_subdirectory(hexago)
 # this is the cross-platform demo program
 add_executable(hexago-demo "demo.cpp")
 target_link_libraries(hexago-demo PRIVATE hexago-compiler-options hexago)
-# TODO: add OS-specific targets as add_subdirectory() calls
+# include Windows NT Screensaver if we're on Windows NT
+if(HEXAGO_OS_WINDOWS_NT)
+    add_subdirectory(hexago-win)
+endif()
+# include Mac OSX Screensaver if we're on Mac OSX
+if(HEXAGO_OS_MAC_OSX)
+    add_subdirectory(hexago-mac)
+endif()
