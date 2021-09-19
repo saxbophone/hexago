@@ -10,10 +10,6 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 
-#include <colrcv-0/models/rgb.h>
-#include <colrcv-0/models/hsv.h>
-#include <colrcv-0/models/lab.h>
-
 #include "HexagonFactory.hpp"
 #include "HexagonFactoryConfig.hpp"
 #include "Hexagon.hpp"

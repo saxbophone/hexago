@@ -1,9 +1,5 @@
 #include <cmath>
 
-#include <colrcv-0/models/rgb.h>
-#include <colrcv-0/models/hsv.h>
-#include <colrcv-0/models/lab.h>
-
 #include "ParameterRange.hpp"
 #include "HexagonFactoryConfig.hpp"
 #include "Hexagon.hpp"
@@ -18,41 +14,16 @@ namespace hexago {
         ParameterRange<colour_channel_t>& e_channel_bounds,
         ParameterRange<colour_channel_t>& f_channel_bounds
     ) {
-        switch(colour_model) {
-            case COLOUR_MODEL_RGB:
-                // r
-                d_channel_bounds.min = COLRCV_RGB_MIN_VALUE;
-                d_channel_bounds.max = COLRCV_RGB_MAX_VALUE;
-                // g
-                e_channel_bounds.min = COLRCV_RGB_MIN_VALUE;
-                e_channel_bounds.max = COLRCV_RGB_MAX_VALUE;
-                // b
-                f_channel_bounds.min = COLRCV_RGB_MIN_VALUE;
-                f_channel_bounds.max = COLRCV_RGB_MAX_VALUE;
-                break;
-            case COLOUR_MODEL_HSV:
-                // h
-                d_channel_bounds.min = COLRCV_HSV_MIN_VALUE;
-                d_channel_bounds.max = COLRCV_HSV_H_MAX_VALUE;
-                // s
-                e_channel_bounds.min = COLRCV_HSV_MIN_VALUE;
-                e_channel_bounds.max = COLRCV_HSV_S_MAX_VALUE;
-                // v
-                f_channel_bounds.min = COLRCV_HSV_MIN_VALUE;
-                f_channel_bounds.max = COLRCV_HSV_V_MAX_VALUE;
-                break;
-            case COLOUR_MODEL_LAB:
-                // l
-                d_channel_bounds.min = COLRCV_LAB_L_MIN_VALUE;
-                d_channel_bounds.max = COLRCV_LAB_MAX_VALUE;
-                // a
-                e_channel_bounds.min = COLRCV_LAB_A_MIN_VALUE;
-                e_channel_bounds.max = COLRCV_LAB_MAX_VALUE;
-                // b
-                f_channel_bounds.min = COLRCV_LAB_B_MIN_VALUE;
-                f_channel_bounds.max = COLRCV_LAB_MAX_VALUE;
-                break;
-        }
+        // XXX: disregard colour model --always RGB
+        // r
+        d_channel_bounds.min = 0;
+        d_channel_bounds.max = 255;
+        // g
+        e_channel_bounds.min = 0;
+        e_channel_bounds.max = 255;
+        // b
+        f_channel_bounds.min = 0;
+        f_channel_bounds.max = 255;
     }
 
     // sets a given channel value to the value of check if it is NAN

@@ -112,9 +112,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 # valid COMPONENTS are network audio graphics window system
 find_package(SFML 2 REQUIRED COMPONENTS graphics window system)
 include_directories(${SFML_INCLUDE_DIR})
-# COLRCV
-find_package(COLRCV 0.1 REQUIRED)
-include_directories(${COLRCV_INCLUDE_DIR})
 # if on OSX, then we also need to find the Foundation and Screensaver frameworks
 if(HEXAGO_OS_MAC_OSX)
     find_library(OSX_FRAMEWORK_FOUNDATION Foundation)
@@ -156,10 +153,10 @@ if(HEXAGO_STATIC_BUILD)
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
     endif()
     # if we're statically linking, then we need to manually link SFML's dependencies as well
-    target_link_libraries(hexago ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${COLRCV_LIBRARIES})
+    target_link_libraries(hexago ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
 else()
     # if we're dynamically linking, we only need to link SFML and COLRCV
-    target_link_libraries(hexago ${SFML_LIBRARIES} ${COLRCV_LIBRARIES})
+    target_link_libraries(hexago ${SFML_LIBRARIES})
 endif()
 
 # specify executables and link with the library
