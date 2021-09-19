@@ -10,10 +10,10 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
 
-#include "HexagonFactory.hpp"
-#include "HexagonFactoryConfig.hpp"
-#include "Hexagon.hpp"
-#include "hexago.hpp"
+#include "hexago/HexagonFactory.hpp"
+#include "hexago/HexagonFactoryConfig.hpp"
+#include "hexago/Hexagon.hpp"
+#include "hexago/hexago.hpp"
 
 
 namespace hexago {

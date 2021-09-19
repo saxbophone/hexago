@@ -2,7 +2,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/System/Vector2.hpp>
 
-#include "Hexagon.hpp"
+#include "hexago/Hexagon.hpp"
 
 
 namespace hexago {

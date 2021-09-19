@@ -1,8 +1,8 @@
 #include <cmath>
 
-#include "ParameterRange.hpp"
-#include "HexagonFactoryConfig.hpp"
-#include "Hexagon.hpp"
+#include "hexago/ParameterRange.hpp"
+#include "hexago/HexagonFactoryConfig.hpp"
+#include "hexago/Hexagon.hpp"
 
 
 namespace hexago {

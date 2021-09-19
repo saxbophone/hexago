@@ -2,9 +2,9 @@
 
 #include <cstdlib>
 
-#include "argument_parser.hpp"
-#include "HexagoScreenSaverConfig.hpp"
-#include "HexagoScreenSaver.hpp"
+#include "hexago/argument_parser.hpp"
+#include "hexago/HexagoScreenSaverConfig.hpp"
+#include "hexago/HexagoScreenSaver.hpp"
 
 
 namespace hexago {

@@ -1,6 +1,6 @@
 #include <SFML/Graphics/Color.hpp>
 
-#include "hexago.hpp"
+#include "hexago/hexago.hpp"
 
 
 // Version numbers are passed as preprocessor definitions by CMake

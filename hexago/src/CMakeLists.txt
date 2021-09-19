@@ -1,0 +1,11 @@
+target_sources(
+    hexago
+        PRIVATE
+            argument_parser.cpp
+            hexago.cpp
+            Hexagon.cpp
+            HexagonFactory.cpp
+            HexagonFactoryConfig.cpp
+            HexagoScreenSaver.cpp
+            HexagoScreenSaverConfig.cpp
+)
