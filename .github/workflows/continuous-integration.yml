@@ -27,6 +27,9 @@ jobs:
           - platform_name: windows
             os: windows-2019
             cxx: msvc
+          - platform_name: windows_mingw
+            os: windows-2019
+            override_cmake_generator: "MSYS Makefiles"
 
     steps:
       - uses: actions/checkout@v2
@@ -66,6 +69,11 @@ jobs:
         shell: bash
         if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
         run: echo "BUILD_TYPE=Release" >> $GITHUB_ENV
+      # override CMAKE_GENERATOR when specified
+      - name: Override CMake Generator to use
+        shell: bash
+        if: ${{ env.override_cmake_generator }}
+        run: echo "CMAKE_GENERATOR=${{ env.override_cmake_generator }}" >> $GITHUB_ENV
 
       - name: Configure CMake
         env:
