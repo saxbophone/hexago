@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # - uses: msys2/setup-msys2@v2
+      - uses: msys2/setup-msys2@v2
 
       - name: Cache CMake dependency source code
         uses: actions/cache@v2
@@ -75,9 +75,9 @@ jobs:
         if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
         run: echo "BUILD_TYPE=Release" >> $GITHUB_ENV
 
-      - name: Install MinGW-w64 toolchain
-        shell: bash
-        run: pacman -S $MINGW_PACKAGE_PREFIX-toolchain
+      # - name: Install MinGW-w64 toolchain
+      #   shell: bash
+      #   run: pacman -S $MINGW_PACKAGE_PREFIX-toolchain
 
       - name: Configure CMake
         env:
