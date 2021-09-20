@@ -18,22 +18,28 @@ jobs:
       matrix:
         # specify a specific compiler to build with each OS separately
         include:
+          # TODO: install SFML's dependencies manually to allow building on Linux
           # - platform_name: linux
           #   os: ubuntu-20.04
           #   cxx: g++-10
           #   cmake_generator: "Unix Makefiles"
-          # - platform_name: macos
-          #   os: macos-10.15
-          #   cxx: clang++
-          #   cmake_generator: "Unix Makefiles"
-          # # NOTE: CXX seems to be ignored on Windows, but specify it anyway for consistency
-          # - platform_name: windows
-          #   os: windows-2019
-          #   cxx: msvc
-          #   cmake_generator: ""
-          - platform_name: windows_mingw
+          - platform_name: macos
+            os: macos-10.15
+            cxx: clang++
+            cmake_generator: "Unix Makefiles"
+          # NOTE: CXX seems to be ignored on Windows, but specify it anyway for consistency
+          - platform_name: windows
             os: windows-2019
-            cmake_generator: "MSYS Makefiles"
+            cxx: msvc
+            cmake_generator: ""
+          # XXX: Broken! The MinGW system that ships with Github Actions cannot
+          # link Hexago.scr properly to the Windows screensaver libraries.
+          # I know for a fact that this project can build with MinGW on Windows
+          # (I can do this successfully in my Win10 VM).
+          # TODO: Fix this or find a different non-MSVC build process on Windows
+          # - platform_name: windows_mingw
+          #   os: windows-2019
+          #   cmake_generator: "MSYS Makefiles"
 
     steps:
       - uses: actions/checkout@v2
