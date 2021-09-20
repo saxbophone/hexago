@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: msys2/setup-msys2@v2
+      # - uses: msys2/setup-msys2@v2
 
       - name: Cache CMake dependency source code
         uses: actions/cache@v2
