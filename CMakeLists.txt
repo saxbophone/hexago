@@ -95,7 +95,7 @@ if(MINGW)
     # of libgcc or libstdc++ on their machine that we can link to at runtime)
     #
     # This is allowed as per the GCC Runtime Exception.
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -static-libgcc -static-libstdc++")
 endif()
 
 # This is a special target which only exists to capture compilation options
