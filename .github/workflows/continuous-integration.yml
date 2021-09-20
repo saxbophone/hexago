@@ -32,12 +32,10 @@ jobs:
           #   cmake_generator: ""
           - platform_name: windows_mingw
             os: windows-2019
-            cmake_generator: "MSYS Makefiles"
+            cmake_generator: "MinGW Makefiles"
 
     steps:
       - uses: actions/checkout@v2
-
-      - uses: msys2/setup-msys2@v2
 
       - name: Cache CMake dependency source code
         uses: actions/cache@v2
@@ -75,28 +73,24 @@ jobs:
         if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
         run: echo "BUILD_TYPE=Release" >> $GITHUB_ENV
 
-      # - name: Install MinGW-w64 toolchain
-      #   shell: bash
-      #   run: pacman -S $MINGW_PACKAGE_PREFIX-toolchain
-
       - name: Configure CMake
         env:
           CXX: ${{ matrix.cxx }}
           CMAKE_GENERATOR: ${{ matrix.cmake_generator }}
         # Use a bash shell so we can use the same syntax for environment variable
         # access regardless of the host operating system
-        shell: bash
+        shell: cmd
         working-directory: ${{github.workspace}}/build
         # Note the current convention is to use the -S and -B options here to specify source 
         # and build directories, but this is only available with CMake 3.13 and higher.  
         # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_INSTALL_PREFIX:PATH=$GITHUB_WORKSPACE/test_install
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
         working-directory: ${{github.workspace}}/build
-        shell: bash
+        shell: cmd
         # Execute the build.  You can specify a specific target with "--target <NAME>"
-        run: cmake --build . -j5 --config $BUILD_TYPE
+        run: cmake --build . -j5 --config Release
 
       # - name: Test Install
       #   working-directory: ${{github.workspace}}/build
