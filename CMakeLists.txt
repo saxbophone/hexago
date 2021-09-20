@@ -85,18 +85,18 @@ else() # "other" --it's probably Linux, doesn't matter either way though
 endif()
 # end basic metadata
 
-if(MINGW)
-    # if we're using MinGW then these are the flags we need to use to enable
-    # statically linking the C and C++ standard libraries
-    #
-    # this is useful when it's unlikely a recipient of the software will
-    # have the correct versions of these on their system (e.g. MinGW compiling
-    # for Windows --recipients who aren't developers probably don't have a copy
-    # of libgcc or libstdc++ on their machine that we can link to at runtime)
-    #
-    # This is allowed as per the GCC Runtime Exception.
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
-endif()
+# if(MINGW)
+#     # if we're using MinGW then these are the flags we need to use to enable
+#     # statically linking the C and C++ standard libraries
+#     #
+#     # this is useful when it's unlikely a recipient of the software will
+#     # have the correct versions of these on their system (e.g. MinGW compiling
+#     # for Windows --recipients who aren't developers probably don't have a copy
+#     # of libgcc or libstdc++ on their machine that we can link to at runtime)
+#     #
+#     # This is allowed as per the GCC Runtime Exception.
+#     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+# endif()
 
 # This is a special target which only exists to capture compilation options
 # used for hexago and its tests. This is to avoid setting global compiler
