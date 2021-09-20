@@ -46,13 +46,13 @@ jobs:
 
       - uses: msys2/setup-msys2@v2
         with:
-          msystem: mingw32
+          msystem: mingw64
           update: true
           install: >-
             git
             make
-            mingw-w64-i686-toolchain
-            mingw-w64-i686-cmake
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-cmake
 
       - name: Cache CMake dependency source code
         uses: actions/cache@v2
