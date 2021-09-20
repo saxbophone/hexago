@@ -12,24 +12,25 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       BUILD_TYPE: Release
+      VERBOSE: 10
     strategy:
       fail-fast: false
       matrix:
         # specify a specific compiler to build with each OS separately
         include:
-          - platform_name: linux
-            os: ubuntu-20.04
-            cxx: g++-10
-            cmake_generator: "Unix Makefiles"
-          - platform_name: macos
-            os: macos-10.15
-            cxx: clang++
-            cmake_generator: "Unix Makefiles"
-          # NOTE: CXX seems to be ignored on Windows, but specify it anyway for consistency
-          - platform_name: windows
-            os: windows-2019
-            cxx: msvc
-            cmake_generator: ""
+          # - platform_name: linux
+          #   os: ubuntu-20.04
+          #   cxx: g++-10
+          #   cmake_generator: "Unix Makefiles"
+          # - platform_name: macos
+          #   os: macos-10.15
+          #   cxx: clang++
+          #   cmake_generator: "Unix Makefiles"
+          # # NOTE: CXX seems to be ignored on Windows, but specify it anyway for consistency
+          # - platform_name: windows
+          #   os: windows-2019
+          #   cxx: msvc
+          #   cmake_generator: ""
           - platform_name: windows_mingw
             os: windows-2019
             cmake_generator: "MSYS Makefiles"
