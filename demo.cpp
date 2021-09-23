@@ -1,3 +1,4 @@
+#include <iostream>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -52,15 +53,17 @@ int main(int argc, char* argv[]) {
      * HexagoScreenSaver object from the config (and set internal framelimit to
      * true)
      */
-    hexago::HexagoScreenSaver app(hexago::parse_arguments(argc, argv), true);
+    hexago::HexagoScreenSaver* app = new hexago::HexagoScreenSaver(hexago::parse_arguments(argc, argv), true);
     // hide the mouse cursor
-    app.window.setMouseCursorVisible(false);
+    app->window.setMouseCursorVisible(false);
     // loop while window should keep running
-    while(keep_running(app.window)) {
+    while(keep_running(app->window)) {
         // call the update method to update internal state and draw the frame
-        app.update();
+        app->update();
     }
     // close window when finished
-    app.window.close();
+    app->window.close();
+    delete app;
+    std::cin.get();
     return 0;
 }

@@ -95,7 +95,7 @@ namespace hexago {
                      * for both of the other spawn modes, we remove the dead
                      * Hexagon from its current position first
                      */
-                    this->hexagons.erase(this->hexagons.begin() + i);
+                    this->hexagons.erase(this->hexagons.begin() + (ssize_t)i);
                     // now, we put it at top or bottom depending on spawn mode
                     if(this->config.spawn_mode == SPAWN_MODE_BOTTOM) {
                         // add its replacement at the start of the deque

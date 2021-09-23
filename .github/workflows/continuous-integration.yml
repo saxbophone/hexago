@@ -11,7 +11,7 @@ jobs:
   continuous-integration:
     runs-on: ${{ matrix.os }}
     env:
-      BUILD_TYPE: Release
+      BUILD_TYPE: Debug
       VERBOSE: 10
     strategy:
       fail-fast: false
