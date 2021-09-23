@@ -62,6 +62,9 @@
 }
 
 - (void)stopAnimation {
+    // XXX: untested attempt to avoid memory crash on delete of screensaver
+    (__bridge_transfer id)self; // bridged cast of self back to ARC pointer
+    delete screensaver;
     [super stopAnimation];
 }
 
@@ -85,9 +88,9 @@
     return nil;
 }
 
-- (void)dealloc {
-    // hook into dealloc message so we relinquish resources (our C++ object!)
-    delete screensaver;
-}
+// - (void)dealloc {
+//     // hook into dealloc message so we relinquish resources (our C++ object!)
+//     delete screensaver;
+// }
 
 @end
