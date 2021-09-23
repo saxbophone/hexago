@@ -18,11 +18,10 @@ jobs:
       matrix:
         # specify a specific compiler to build with each OS separately
         include:
-          # TODO: install SFML's dependencies manually to allow building on Linux
-          # - platform_name: linux
-          #   os: ubuntu-20.04
-          #   cxx: g++-10
-          #   cmake_generator: "Unix Makefiles"
+          - platform_name: linux
+            os: ubuntu-20.04
+            cxx: g++-10
+            cmake_generator: "Unix Makefiles"
           - platform_name: macos
             os: macos-10.15
             cxx: clang++
@@ -43,6 +42,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Install Linux Dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev
 
       - name: Cache CMake dependency source code
         uses: actions/cache@v2
