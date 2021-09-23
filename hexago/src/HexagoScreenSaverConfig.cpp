@@ -1,9 +1,9 @@
 #include <cstdint>
 
-#include "HexagoScreenSaverConfig.hpp"
-#include "ParameterRange.hpp"
-#include "Hexagon.hpp"
-#include "HexagonFactoryConfig.hpp"
+#include "hexago/HexagoScreenSaverConfig.hpp"
+#include "hexago/ParameterRange.hpp"
+#include "hexago/Hexagon.hpp"
+#include "hexago/HexagonFactoryConfig.hpp"
 
 
 namespace hexago {

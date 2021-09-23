@@ -9,10 +9,10 @@
 #include <SFML/Window/ContextSettings.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include "HexagoScreenSaver.hpp"
-#include "HexagoScreenSaverConfig.hpp"
-#include "ParameterRange.hpp"
-#include "Hexagon.hpp"
+#include "hexago/HexagoScreenSaver.hpp"
+#include "hexago/HexagoScreenSaverConfig.hpp"
+#include "hexago/ParameterRange.hpp"
+#include "hexago/Hexagon.hpp"
 
 
 namespace hexago {

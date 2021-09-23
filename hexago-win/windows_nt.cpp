@@ -23,7 +23,7 @@
 static hexago::HexagoScreenSaver* screensaver = NULL;
 
 // this is the main event-handling function of the windows screensaver framework
-extern "C" LONG WINAPI ScreenSaverProc(
+extern "C" LRESULT WINAPI ScreenSaverProc(
     HWND hWnd,
     UINT message,
     WPARAM wParam,
