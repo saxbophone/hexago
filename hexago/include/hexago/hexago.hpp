@@ -21,6 +21,7 @@ namespace hexago {
     /*
      * enum for expressing which colour model should be used to represent the
      * colour ranges of the hexagons to be generated
+     * NOTE: currently ignored, colours are always in RGB
      */
     enum colour_model_t {
         COLOUR_MODEL_RGB, // RGB+Alpha
@@ -50,6 +51,8 @@ namespace hexago {
     /*
      * Converts a colour in any one of the RGB, HSV or LAB colour spaces into
      * an SFML-native RGB colour
+     * Note colour_t is currently always RGB, regardless of what colour model
+     * it is labelled as.
      */
     sf::Color convert_colour_to_rgb(colour_t colour);
 

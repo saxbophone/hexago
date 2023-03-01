@@ -1,8 +1,64 @@
 # begin basic metadata
-cmake_minimum_required(VERSION 3.0)
+# minimum CMake version required for C++20 support, among other things
+cmake_minimum_required(VERSION 3.15)
 
-# NOTE: the last number is the build number, which increments for any new version
-project(hexago VERSION 0.9.0.13 LANGUAGES CXX)
+# detect if MyHovercraftIsFullOfEels is being used as a sub-project of another CMake project
+if(NOT DEFINED PROJECT_NAME)
+    set(HEXAGO_SUBPROJECT OFF)
+else()
+    set(HEXAGO_SUBPROJECT ON)
+endif()
+
+project(hexago VERSION 0.10.0.14 LANGUAGES CXX)
+
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+endif()
+
+# Set a default build type if none was specified
+set(DEFAULT_BUILD_TYPE "Debug")
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE "${DEFAULT_BUILD_TYPE}" CACHE STRING "Choose the type of build." FORCE)
+    # Set the possible values of build type for cmake-gui
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
+
+# set some handy custom variables to detect Release-type builds from Debug-type ones
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(HEXAGO_BUILD_DEBUG ON)
+    set(HEXAGO_BUILD_RELEASE OFF)
+else()
+    set(HEXAGO_BUILD_DEBUG OFF)
+    set(HEXAGO_BUILD_RELEASE ON)
+endif()
+
+message(STATUS "[hexago] Build Mode: ${CMAKE_BUILD_TYPE}")
+
+# set the C++ standard to use to C++11 always
+set(HEXAGO_CXX_STANDARD "11")
+message(STATUS "[hexago] C++ Standard set to C++${HEXAGO_CXX_STANDARD}")
+set(CMAKE_CXX_STANDARD ${HEXAGO_CXX_STANDARD})
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+include(CMakeDependentOption)
+# if building in Release mode, provide an option to explicitly enable tests if desired (always ON for other builds, OFF by default for Release builds)
+cmake_dependent_option(ENABLE_TESTS "Build the unit tests in release mode?" OFF HEXAGO_BUILD_RELEASE ON)
+
+# Premature Optimisation causes problems. Commented out code below allows detection and enabling of LTO.
+# It's not being used currently because it seems to cause linker errors with Clang++ on Ubuntu if the library
+# is compiled with LTO but the unit tests are not. This suggests LTO may force some downstream software into
+# using LTO also if it's enabled. The plan is to reënable LTO as an option in the future, possibly done much
+# more optionally (and probably not by default).
+
+# include(CheckIPOSupported)
+# check_ipo_supported(RESULT IPO_SUPPORTED)
+# # If we're in Release mode, set HEXAGO_USE_IPO to ON by default if it's detected as supported (user can always explicitly enable it in Release mode)
+# cmake_dependent_option(HEXAGO_USE_IPO "Use Link-Time/Inter-Procedural Optimisation?" ${IPO_SUPPORTED} HEXAGO_BUILD_RELEASE OFF)
+# if(HEXAGO_USE_IPO)
+#     message(STATUS "[hexago] Link-Time-Optimisation Enabled")
+# endif()
 
 set(
     HEXAGO_VERSION_STRING
@@ -29,202 +85,97 @@ else() # "other" --it's probably Linux, doesn't matter either way though
 endif()
 # end basic metadata
 
-# pass in version of program as preprocessor definitions
-add_definitions(-DHEXAGO_VERSION_MAJOR=${PROJECT_VERSION_MAJOR})
-add_definitions(-DHEXAGO_VERSION_MINOR=${PROJECT_VERSION_MINOR})
-add_definitions(-DHEXAGO_VERSION_PATCH=${PROJECT_VERSION_PATCH})
-add_definitions(-DHEXAGO_VERSION_BUILD=${PROJECT_VERSION_TWEAK})
-add_definitions(-DHEXAGO_VERSION_STRING=${HEXAGO_ESCAPED_VERSION_STRING})
-add_definitions(-DHEXAGO_COPYRIGHT_STRING=${HEXAGO_ESCAPED_COPYRIGHT_STRING})
-add_definitions(-D${HEXAGO_OS_MACRO})
-
-message(
-    STATUS
-    "[hexago] Preparing to build Hexago v${HEXAGO_VERSION_STRING} "
-    "(build ${PROJECT_VERSION_TWEAK})"
-)
-
-# set default C++ standard to use (C++11)
-set(HEXAGO_CXX_STANDARD "11")
-# if env variable HEXAGO_CXX_STANDARD is set, override version
-if(DEFINED ENV{HEXAGO_CXX_STANDARD})
-    set(HEXAGO_CXX_STANDARD "$ENV{HEXAGO_CXX_STANDARD}")
+if(MINGW)
+    # if we're using MinGW then these are the flags we need to use to enable
+    # statically linking the C and C++ standard libraries
+    #
+    # this is useful when it's unlikely a recipient of the software will
+    # have the correct versions of these on their system (e.g. MinGW compiling
+    # for Windows --recipients who aren't developers probably don't have a copy
+    # of libgcc or libstdc++ on their machine that we can link to at runtime)
+    #
+    # This is allowed as per the GCC Runtime Exception.
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
 endif()
-message(STATUS "[hexago] C++ Standard set to C++${HEXAGO_CXX_STANDARD}")
-set(CMAKE_CXX_STANDARD ${HEXAGO_CXX_STANDARD})
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# This is a special target which only exists to capture compilation options
+# used for hexago and its tests. This is to avoid setting global compiler
+# options which would be inherited by dependencies as well, which is bad
+# because hexago uses strict compiler warning options which not all other
+# projects can build successfully with.
+# Any target linked with this one will inherit the compiler options used for
+# hexago.
+add_library(hexago-compiler-options INTERFACE)
 
 # used for enabling additional compiler options if supported
 include(CheckCXXCompilerFlag)
 
 function(enable_cxx_compiler_flag_if_supported flag)
-    string(FIND "${CMAKE_CXX_FLAGS}" "${flag}" flag_already_set)
-    if(flag_already_set EQUAL -1)
-        check_cxx_compiler_flag("${flag}" flag_supported)
-        if(flag_supported)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${flag}" PARENT_SCOPE)
-        endif()
+    message(STATUS "[hexago] Checking if compiler supports warning flag '${flag}'")
+    check_cxx_compiler_flag("${flag}" flag_supported)
+    if(flag_supported)
+        message(STATUS "[hexago] Enabling warning flag '${flag}'")
+        target_compile_options(hexago-compiler-options INTERFACE "${flag}")
     endif()
+    unset(flag_supported CACHE)
 endfunction()
 
-# enable extra flags (warnings) if we're not in release mode
-if(CMAKE_BUILD_TYPE STREQUAL "Debug" OR CMAKE_BUILD_TYPE STREQUAL "")
-    message(STATUS "[hexago] Warnings Enabled")
+# enable a large amount of extra warnings, regardless of build mode
+if (MSVC) # MSVC supports different warning options to GCC/Clang
+    enable_cxx_compiler_flag_if_supported("/W3")  # set warning level 3
+    # if tests are enabled, enable converting all warnings to errors too
+    if (ENABLE_TESTS)
+        # add_compile_options(/WX)
+        enable_cxx_compiler_flag_if_supported("/WX")
+    endif()
+else() # GCC/Clang warning option
+    # NOTE: GCC and Clang support most of the same options, but neither supports all
+    # of the others'. By only enabling them if supported, we get graceful failure
+    # when trying to enable unsupported flags
+    # e.g. at the time of writing, GCC does not support -Wdocumentation
+    #
     # enable all warnings about 'questionable constructs'
     enable_cxx_compiler_flag_if_supported("-Wall")
     # issue 'pedantic' warnings for strict ISO compliance
     enable_cxx_compiler_flag_if_supported("-pedantic")
     # enable 'extra' strict warnings
     enable_cxx_compiler_flag_if_supported("-Wextra")
-    # convert all warnings into errors
-    enable_cxx_compiler_flag_if_supported("-Werror")
-endif()
-
-# default build type is only static if on Windows
-if(HEXAGO_OS_WINDOWS_NT)
-    set(HEXAGO_STATIC_BUILD ON CACHE BOOL "")
-else()
-    set(HEXAGO_STATIC_BUILD OFF CACHE BOOL "")
-endif()
-
-# do necessary things if static build was requested
-if(HEXAGO_STATIC_BUILD)
-    message(STATUS "[hexago] Performing a Static Build")
-    set(SFML_STATIC_LIBRARIES ON)
-endif()
-
-# unset BUILD_SHARED_LIBS, in case it was set
-# this affects whether *we* build as static or shared
-# in this instance, we always want to build libhexago as a static library as
-# we're not going to install it separately at all and want to bundle it with
-# all executables that depend on it
-unset(BUILD_SHARED_LIBS)
-
-# dependencies
-# add custom dependencies directory
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-# SFML 2
-# valid COMPONENTS are network audio graphics window system
-find_package(SFML 2 REQUIRED COMPONENTS graphics window system)
-include_directories(${SFML_INCLUDE_DIR})
-# COLRCV
-find_package(COLRCV 0.1 REQUIRED)
-include_directories(${COLRCV_INCLUDE_DIR})
-# if on OSX, then we also need to find the Foundation and Screensaver frameworks
-if(HEXAGO_OS_MAC_OSX)
-    find_library(OSX_FRAMEWORK_FOUNDATION Foundation)
-    find_library(OSX_FRAMEWORK_SCREENSAVER ScreenSaver)
-endif()
-
-# compile the bulk of Hexago into a library (libhexago)
-# this is then shared among the programs which depend on it
-
-# libhexago C++ Sources
-file(GLOB LIBHEXAGO_SOURCES "hexago/*.cpp")
-# libhexago Headers
-file(GLOB LIBHEXAGO_HEADERS "hexago/*.hpp")
-
-# here we define the libhexago library
-add_library(hexago ${LIBHEXAGO_SOURCES})
-
-# if we're building in release mode on windows, then set these additional
-# linker options so the console window doesn't show up and get in the way
-if(HEXAGO_OS_WINDOWS_NT AND CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-subsystem,windows")
-elseif(HEXAGO_OS_MAC_OSX)
-    # On Mac OSX, we need "-headerpad_max_install_names" linker flag for when we meddle with the RPath
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -headerpad_max_install_names")
-endif()
-
-# here we link libhexago with its dependencies
-# we need to do additional linking steps if it's a static build
-if(HEXAGO_STATIC_BUILD)
-    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-        # if we're using GCC then these are the flags we need to use to enable
-        # statically linking the C and C++ standard libraries
-        #
-        # this is useful if it's unlikely a recipient of the software will
-        # have the correct versions of these on their system (e.g. MinGW
-        # compiling for Windows)
-        #
-        # This is allowed as per the GCC Runtime Exception.
-        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+    # enable sign conversion warnings
+    enable_cxx_compiler_flag_if_supported("-Wsign-conversion")
+    # enable warnings about mistakes in Doxygen documentation
+    enable_cxx_compiler_flag_if_supported("-Wdocumentation")
+    # if tests are enabled, enable converting all warnings to errors too
+    if (ENABLE_TESTS)
+        enable_cxx_compiler_flag_if_supported("-Werror")
+        # exclude the following kinds of warnings from being converted into errors
+        # unknown-pragma is useful to have as a warning but not as an error, if you have
+        # pragmas which are for the consumption of one compiler only
+        enable_cxx_compiler_flag_if_supported("-Wno-error=unknown-pragmas")
+        # unused variable and function warnings are helpful but we don't need them as errors
+        enable_cxx_compiler_flag_if_supported("-Wno-error=unused-function")
+        enable_cxx_compiler_flag_if_supported("-Wno-error=unused-variable")
+        enable_cxx_compiler_flag_if_supported("-Wno-error=unused-parameter")
+        enable_cxx_compiler_flag_if_supported("-Wno-error=unused-private-field")
+        enable_cxx_compiler_flag_if_supported("-Wno-error=unused-but-set-variable")
     endif()
-    # if we're statically linking, then we need to manually link SFML's dependencies as well
-    target_link_libraries(hexago ${SFML_LIBRARIES} ${SFML_DEPENDENCIES} ${COLRCV_LIBRARIES})
-else()
-    # if we're dynamically linking, we only need to link SFML and COLRCV
-    target_link_libraries(hexago ${SFML_LIBRARIES} ${COLRCV_LIBRARIES})
 endif()
 
-# specify executables and link with the library
+# add custom dependencies directory
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/")
+
+# a better way to load dependencies
+include(CPM)
+
+# library
+add_subdirectory(hexago)
 # this is the cross-platform demo program
 add_executable(hexago-demo "demo.cpp")
-target_link_libraries(hexago-demo hexago)
+target_link_libraries(hexago-demo PRIVATE hexago-compiler-options hexago)
 # include Windows NT Screensaver if we're on Windows NT
 if(HEXAGO_OS_WINDOWS_NT)
-    add_executable(hexago-win "windows_nt.cpp")
-    # make the executable file have a '.scr' file extension
-    set_target_properties(hexago-win PROPERTIES OUTPUT_NAME Hexago SUFFIX ".scr")
-    # as well as hexago library, we also need to link to the windows scrnsave.lib library
-    target_link_libraries(hexago-win hexago scrnsave)
+    add_subdirectory(hexago-win)
 endif()
 # include Mac OSX Screensaver if we're on Mac OSX
 if(HEXAGO_OS_MAC_OSX)
-    # make sure CMake passes the correct arguments to the compiler to build as
-    # objective-c++, and to enable ARC (rather than garbage collection)
-    set_source_files_properties(
-        "mac_osx.mm" PROPERTIES COMPILE_FLAGS "-x objective-c++ -fobjc-arc"
-    )
-    # OSX Screensavers are built as bundles (a kind of library), as they need
-    # to be loaded into the OS as a plugin rather than run of their own accord
-    add_library(hexago-mac MODULE "mac_osx.mm")
-    set_target_properties(
-        hexago-mac PROPERTIES
-        OUTPUT_NAME Hexago
-        BUNDLE TRUE
-        BUNDLE_EXTENSION "saver"
-        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/mac_osx_bundle_info.plist"
-    )
-    # link it with hexago, as well as OSX Foundation and ScreenSaver frameworks
-    target_link_libraries(hexago-mac hexago ${OSX_FRAMEWORK_FOUNDATION} ${OSX_FRAMEWORK_SCREENSAVER} objc)
-    # we need to fiddle with RPath of the OSX Screensaver so that it'll load the locally-bundled dependencies
-    add_custom_command(
-        TARGET hexago-mac
-        POST_BUILD COMMAND
-        ${CMAKE_INSTALL_NAME_TOOL} -add_rpath "@loader_path/../Frameworks/"
-        $<TARGET_FILE:hexago-mac>
-    )
-    # create the Frameworks directory within the Screensaver bundle
-    add_custom_command(
-        TARGET hexago-mac POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory
-                "${CMAKE_BINARY_DIR}/Hexago.saver/Contents/Frameworks"
-    )
-    set(THINGS_TO_BUNDLE)
-    list(APPEND THINGS_TO_BUNDLE ${SFML_LIBRARIES} ${SFML_DEPENDENCIES})
-    # now actually copy each framework dependency
-    foreach(DEPENDENCY_PATH ${THINGS_TO_BUNDLE})
-        if(IS_DIRECTORY ${DEPENDENCY_PATH})
-            message(${DEPENDENCY_PATH})
-            get_filename_component(DEPENDENCY_FILE ${DEPENDENCY_PATH} NAME)
-            add_custom_command(
-                TARGET hexago-mac POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_directory
-                        ${DEPENDENCY_PATH}
-                        "${CMAKE_BINARY_DIR}/Hexago.saver/Contents/Frameworks/${DEPENDENCY_FILE}"
-            )
-        elseif(EXISTS ${DEPENDENCY_PATH})
-            message(${DEPENDENCY_PATH})
-            get_filename_component(DEPENDENCY_FILE ${DEPENDENCY_PATH} NAME)
-            add_custom_command(
-                TARGET hexago-mac POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy
-                        ${DEPENDENCY_PATH}
-                        "${CMAKE_BINARY_DIR}/Hexago.saver/Contents/Frameworks/${DEPENDENCY_FILE}"
-            )
-        endif()
-    endforeach()
+    add_subdirectory(hexago-mac)
 endif()
-
-install(TARGETS hexago-demo DESTINATION bin)
